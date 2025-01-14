@@ -7,7 +7,7 @@ import { debounce } from './utils/debounce'
 import { request } from '../../utils/request'
 import { ProductCard } from './components/post-card/product-card'
 import { useDispatch, useSelector } from 'react-redux'
-import { productsSelector } from '../../selectors/app-selectors/products-selector'
+import { productsSelector } from '../../selectors/products-selectors/products-selector'
 import { setProductsAsync } from '../../actions/set-products-async'
 
 const MainContainer = ({ className }) => {
@@ -46,14 +46,13 @@ const MainContainer = ({ className }) => {
 				/>
 				{products?.length > 0 ? (
 					<div className='post-list'>
-						{products.map(({ id, title, imageUrl, publishedAt, content }) => (
+						{products.map(({ id, title, cost, imageUrl }) => (
 							<ProductCard
 								key={id}
 								id={id}
 								title={title}
 								imageUrl={imageUrl}
-								publishedAt={publishedAt}
-								content={content}
+								cost={cost + '₽'}
 							/>
 						))}
 					</div>

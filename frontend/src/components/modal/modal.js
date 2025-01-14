@@ -1,16 +1,37 @@
 import styled from 'styled-components'
 import { Button } from '../button/button'
-import { useSelector } from 'react-redux'
-import { selectModalText } from '../../selectors/select-modal-text'
-import { selectModalIsOpen } from '../../selectors/select-modal-is-open'
-import { selectModalOnConfirm } from '../../selectors/select-modal-on-confirm'
-import { selectModalOnCancel } from '../../selectors/select-modal-on-cancel'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectModalIsOpen } from '../../selectors/modal-selectors/select-modal-is-open'
+import { useState } from 'react'
+import { CLOSE_MODAL } from '../../actions/close-modal'
+import { selectModalOnConfirm } from '../../selectors/modal-selectors/select-modal-on-confirm'
+import { editProductIdSelector } from '../../selectors/modal-selectors/edit-product-id-selector'
 
 const ModalContainer = ({ className }) => {
 	const isOpen = useSelector(selectModalIsOpen)
-	const text = useSelector(selectModalText)
 	const onConfirm = useSelector(selectModalOnConfirm)
-	const onCancel = useSelector(selectModalOnCancel)
+	const editProductId = useSelector(editProductIdSelector)
+
+	const dispatch = useDispatch()
+
+	const [title, setTitle] = useState('')
+	const [category, setCategory] = useState('')
+	const [cost, setCost] = useState('')
+	const [amount, setAmount] = useState('')
+	const [imageUrl, setImageUrl] = useState('')
+
+	const resetInputs = () => {
+		setTitle('')
+		setCategory('')
+		setCost('')
+		setAmount('')
+		setImageUrl('')
+	}
+
+	const onCancel = () => {
+		dispatch(CLOSE_MODAL)
+		resetInputs()
+	}
 
 	if (!isOpen) {
 		return null
@@ -20,12 +41,67 @@ const ModalContainer = ({ className }) => {
 		<div className={className}>
 			<div className='overlay'></div>
 			<div className='box'>
-				<h3>{text}</h3>
+				<h3>Добавление товара</h3>
+
+				<div className='modal-inputs'>
+					<div>
+						<span>Название</span>
+						<input
+							value={title}
+							placeholder='Введите название товара'
+							onChange={({ target }) => setTitle(target.value)}
+						/>
+					</div>
+					<div>
+						<span>Категория</span>
+						<input
+							value={category}
+							placeholder='Введите категорию товара'
+							onChange={({ target }) => setCategory(target.value)}
+						/>
+					</div>
+					<div>
+						<span>Стоимость</span>
+						<input
+							value={cost}
+							placeholder='Введите стоимость товара'
+							onChange={({ target }) => setCost(target.value)}
+						/>
+					</div>
+					<div>
+						<span>Количество</span>
+						<input
+							value={amount}
+							placeholder='Введите количество товара'
+							onChange={({ target }) => setAmount(target.value)}
+						/>
+					</div>
+					<div>
+						<span>Изображение</span>
+						<input
+							value={imageUrl}
+							placeholder='Введите url картинки товара'
+							onChange={({ target }) => setImageUrl(target.value)}
+						/>
+					</div>
+				</div>
 				<div className='buttons'>
 					<Button
 						width='120px'
-						onClick={onConfirm}>
-						Да
+						onClick={() =>
+							onConfirm(
+								editProductId,
+								{
+									title,
+									category,
+									cost,
+									amount,
+									imageUrl,
+								},
+								resetInputs
+							)
+						}>
+						Сохранить
 					</Button>
 					<Button
 						width='120px'
@@ -46,6 +122,28 @@ export const Modal = styled(ModalContainer)`
 	bottom: 0;
 	left: 0;
 
+	& input {
+		padding: 10px;
+		width: 300px;
+	}
+
+	& span {
+		display: block;
+		font-weight: 500;
+		margin-bottom: 5px;
+	}
+
+	& h3 {
+		margin: 0 0 20px 0;
+	}
+
+	& .modal-inputs {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		margin-bottom: 20px;
+	}
+
 	& .overlay {
 		position: absolute;
 		background-color: rgba(0, 0, 0, 0.7);
@@ -59,9 +157,10 @@ export const Modal = styled(ModalContainer)`
 		transform: translate(0, -50%);
 		width: 400px;
 		margin: 0 auto;
-		padding: 0 20px 20px;
+		padding: 30px;
 		background-color: #fff;
-		border: 3px solid #000;
+		/* border: 1px solid #000; */
+		border-radius: 15px;
 		z-index: 30;
 		text-align: center;
 	}
@@ -69,9 +168,9 @@ export const Modal = styled(ModalContainer)`
 	& .buttons {
 		display: flex;
 		justify-content: center;
+		gap: 15px;
 	}
-
 	& .buttons button {
-		margin: 0 5px;
+		border-radius: 5px;
 	}
 `

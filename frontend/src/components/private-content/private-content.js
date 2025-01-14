@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { Error } from '../error/error'
-import { selectUserRole } from '../../selectors/select-user-role'
+import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 import { ERROR } from '../../constants/error'
 import { checkAccess } from '../../utils/check-access'
 import PropTypes from 'prop-types'

@@ -13,6 +13,8 @@ const IconContainer = ({ className, id, inactive, ...props }) => (
 
 export const Icon = styled(IconContainer)`
 	font-size: ${({ size = '24px' }) => size};
+	height: ${({ height = 'inherit' }) => height};
+	width: ${({ width = 'inherit' }) => width};
 	margin: ${({ margin = '0' }) => margin};
 	color: ${({ disabled }) => (disabled ? '#ccc' : '#000')};
 	cursor: ${({ inactive }) => (inactive ? 'default' : 'pointer')};

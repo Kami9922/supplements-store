@@ -40,51 +40,44 @@ router.get('/', async (req, res) => {
 // 	res.send({ data: mapOrder(newComment) })
 // })
 
-// router.delete(
-// 	'/:postId/comments/:commentId',
-// 	authenticated,
-// 	hasRole([ROLES.ADMIN, ROLES.MODERATOR]),
-// 	async (req, res) => {
-// 		await deleteComment(req.params.postId, req.params.commentId)
+router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
+	const newProduct = await addProduct({
+		title: req.body.title,
+		category: req.body.category,
+		cost: req.body.cost,
+		amount: req.body.amount,
+		image: req.body.imageUrl,
+	})
 
-// 		res.send({ error: null })
-// 	}
-// )
+	res.send({ data: mapProduct(newProduct) })
+})
 
-// router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-// 	const newPost = await addPost({
-// 		title: req.body.title,
-// 		content: req.body.content,
-// 		image: req.body.imageUrl,
-// 	})
+router.patch(
+	'/:id',
+	authenticated,
+	hasRole([ROLES.ADMIN]),
+	async (req, res) => {
+		const updatedProduct = await editProduct(req.params.id, {
+			title: req.body.title,
+			category: req.body.category,
+			cost: req.body.cost,
+			amount: req.body.amount,
+			image: req.body.imageUrl,
+		})
 
-// 	res.send({ data: mapProduct(newPost) })
-// })
+		res.send({ data: mapProduct(updatedProduct) })
+	}
+)
 
-// router.patch(
-// 	'/:id',
-// 	authenticated,
-// 	hasRole([ROLES.ADMIN]),
-// 	async (req, res) => {
-// 		const updatedPost = await editPost(req.params.id, {
-// 			title: req.body.title,
-// 			content: req.body.content,
-// 			image: req.body.imageUrl,
-// 		})
+router.delete(
+	'/:id',
+	authenticated,
+	hasRole([ROLES.ADMIN]),
+	async (req, res) => {
+		await deleteProduct(req.params.id)
 
-// 		res.send({ data: mapProduct(updatedPost) })
-// 	}
-// )
-
-// router.delete(
-// 	'/:id',
-// 	authenticated,
-// 	hasRole([ROLES.ADMIN]),
-// 	async (req, res) => {
-// 		await deletePost(req.params.id)
-
-// 		res.send({ error: null })
-// 	}
-// )
+		res.send({ error: null })
+	}
+)
 
 module.exports = router

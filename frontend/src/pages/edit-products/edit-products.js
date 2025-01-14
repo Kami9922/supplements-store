@@ -10,4 +10,6 @@ export const EditProductsContainer = ({ className }) => {
 	)
 }
 
-export const EditProducts = styled(EditProductsContainer)``
+export const EditProducts = styled(EditProductsContainer)`
+	padding-top: 10px;
+`

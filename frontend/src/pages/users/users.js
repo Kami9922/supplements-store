@@ -7,7 +7,7 @@ import { PrivateContent } from '../../components/private-content/private-content
 import { ROLE } from '../../constants/role'
 import { checkAccess } from '../../utils/check-access'
 import { useSelector } from 'react-redux'
-import { selectUserRole } from '../../selectors/select-user-role'
+import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 import { request } from '../../utils/request'
 
 const UsersContainer = ({ className }) => {

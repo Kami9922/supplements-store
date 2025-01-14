@@ -6,19 +6,19 @@ const addProduct = async (product) => {
 	return newProduct
 }
 
-// const editProduct = async (id, post) => {
-// 	const newProduct = await Post.findByIdAndUpdate(id, post, {
-// 		returnDocument: 'after',
-// 	})
+const editProduct = async (id, product) => {
+	const newProduct = await Product.findByIdAndUpdate(id, product, {
+		returnDocument: 'after',
+	})
 
-// 	await newProduct.populate({ path: 'comments', populate: 'purchaser' })
+	// await newProduct.populate({ path: 'comments', populate: 'purchaser' })
 
-// 	return newProduct
-// }
+	return newProduct
+}
 
-// const deletePost = (id) => {
-// 	return Post.deleteOne({ _id: id })
-// }
+const deleteProduct = (id) => {
+	return Product.deleteOne({ _id: id })
+}
 
 const getProducts = async (search = '', limit = 10, page = 1) => {
 	const [products, count] = await Promise.all([
@@ -45,8 +45,8 @@ const getProduct = (id) => {
 
 module.exports = {
 	addProduct,
-	// editPost,
-	// deletePost,
+	editProduct,
+	deleteProduct,
 	getProducts,
 	getProduct,
 }
