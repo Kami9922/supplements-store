@@ -2,6 +2,7 @@ import { ACTION_TYPE } from '../actions/action-type'
 
 const initialAppState = {
 	wasLogout: false,
+	isLoading: false,
 }
 
 export const appReducer = (state = initialAppState, { type, payload }) => {
@@ -10,6 +11,11 @@ export const appReducer = (state = initialAppState, { type, payload }) => {
 			return {
 				...state,
 				wasLogout: !state.wasLogout,
+			}
+		case ACTION_TYPE.SET_IS_LOADING:
+			return {
+				...state,
+				isLoading: payload,
 			}
 
 		default:

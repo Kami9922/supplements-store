@@ -36,10 +36,11 @@ const getProducts = async (search = '', limit = 10, page = 1) => {
 }
 
 const getProduct = (id) => {
-	return Product.findById(id).populate({
-		path: 'product',
-		populate: 'purchaser',
-	})
+	return Product.findById(id)
+	// .populate({
+	// 	path: 'product',
+	// 	populate: 'purchaser',
+	// })
 }
 // possible mistakes
 

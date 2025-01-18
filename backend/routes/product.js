@@ -25,11 +25,11 @@ router.get('/', async (req, res) => {
 	res.send({ data: { lastPage, products: products.map(mapProduct) } })
 })
 
-// router.get('/:id', async (req, res) => {
-// 	const post = await getProduct(req.params.id)
+router.get('/:id', async (req, res) => {
+	const post = await getProduct(req.params.id)
 
-// 	res.send({ data: mapProduct(post) })
-// })
+	res.send({ data: mapProduct(post) })
+})
 
 // router.post('/:id/comments', authenticated, async (req, res) => {
 // 	const newComment = await addComment(req.params.id, {
@@ -47,6 +47,7 @@ router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
 		cost: req.body.cost,
 		amount: req.body.amount,
 		image: req.body.imageUrl,
+		info: req.body.info,
 	})
 
 	res.send({ data: mapProduct(newProduct) })
@@ -63,6 +64,7 @@ router.patch(
 			cost: req.body.cost,
 			amount: req.body.amount,
 			image: req.body.imageUrl,
+			info: req.body.info,
 		})
 
 		res.send({ data: mapProduct(updatedProduct) })

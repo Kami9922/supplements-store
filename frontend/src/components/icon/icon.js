@@ -18,6 +18,9 @@ export const Icon = styled(IconContainer)`
 	margin: ${({ margin = '0' }) => margin};
 	color: ${({ disabled }) => (disabled ? '#ccc' : '#000')};
 	cursor: ${({ inactive }) => (inactive ? 'default' : 'pointer')};
+	/* &:hover {
+		box-shadow: inset 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
+	} */
 `
 Icon.propTypes = {
 	id: PropTypes.string.isRequired,

@@ -2,6 +2,7 @@ import { ACTION_TYPE } from '../actions/action-type'
 
 const initialProductsState = {
 	products: [],
+	lastPage: 1,
 }
 
 export const productsReducer = (
@@ -20,11 +21,14 @@ export const productsReducer = (
 				products: state.products.filter((product) => product.id !== payload),
 			}
 		case ACTION_TYPE.ADD_PRODUCT:
-			console.log(payload)
-
 			return {
 				...state,
 				products: [...state.products, payload],
+			}
+		case ACTION_TYPE.SET_LAST_PAGE:
+			return {
+				...state,
+				lastPage: payload,
 			}
 		default:
 			return state

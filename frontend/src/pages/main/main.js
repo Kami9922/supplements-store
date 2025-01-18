@@ -4,29 +4,29 @@ import { PAGINTATION_LIMIT } from '../../constants/pagination-limit'
 import { Pagination } from './components/pagination/pagination'
 import { Search } from './search'
 import { debounce } from './utils/debounce'
-import { request } from '../../utils/request'
-import { ProductCard } from './components/post-card/product-card'
+import { ProductCard } from './components/product-card/product-card'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsSelector } from '../../selectors/products-selectors/products-selector'
 import { setProductsAsync } from '../../actions/set-products-async'
+import { setIsLoading } from '../../actions/set-is-loading'
+import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-selector'
+import { Loader } from '../../components/loader/loader'
+import { lastPageSelector } from '../../selectors/products-selectors/last-page-selector'
 
 const MainContainer = ({ className }) => {
-	// const [products, setProducts] = useState([])
 	const [page, setPage] = useState(1)
-	const [lastPage, setLastPage] = useState(1)
 	const [searchPhrase, setSearchPhrase] = useState('')
 	const [shouldSearch, setShouldSearch] = useState(false)
 
+	const isLoading = useSelector(isLoadingSelector)
+	const lastPage = useSelector(lastPageSelector)
 	const products = useSelector(productsSelector)
+
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		request(
-			`/products?search=${searchPhrase}&page=${page}&limit=${PAGINTATION_LIMIT}`
-		).then(({ data: { products, lastPage } }) => {
-			dispatch(setProductsAsync(products))
-			setLastPage(lastPage)
-		})
+		dispatch(setProductsAsync(searchPhrase, page, PAGINTATION_LIMIT))
+		dispatch(setIsLoading(true))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [page, shouldSearch])
 
@@ -44,7 +44,9 @@ const MainContainer = ({ className }) => {
 					searchPhrase={searchPhrase}
 					onChange={onSearch}
 				/>
-				{products?.length > 0 ? (
+				{isLoading ? (
+					<Loader size='40px' />
+				) : products?.length > 0 ? (
 					<div className='post-list'>
 						{products.map(({ id, title, cost, imageUrl }) => (
 							<ProductCard

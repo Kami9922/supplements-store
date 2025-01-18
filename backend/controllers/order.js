@@ -3,7 +3,7 @@ const Order = require('../models/Order')
 const addOrder = async (products) => {
 	const newOrder = await Order.create(products)
 
-	await newOrder.populate('purchaser')
+	// await newOrder.populate('purchaser')
 
 	return newOrder
 }

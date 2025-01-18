@@ -7,6 +7,7 @@ const initialProductState = {
 	cost: '',
 	amount: '',
 	imageUrl: '',
+	info: '',
 	publishedAt: '',
 }
 

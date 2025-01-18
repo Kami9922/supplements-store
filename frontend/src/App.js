@@ -13,6 +13,7 @@ import { Main } from './pages/main/main'
 import { Error } from './components/error/error'
 import { ERROR } from './constants/error'
 import { EditProducts } from './pages/edit-products/edit-products'
+import { Product } from './pages/product/product'
 
 const AppColumn = styled.div`
 	display: flex;
@@ -73,11 +74,11 @@ const App = () => {
 						path='/editProducts'
 						element={<EditProducts />}
 					/>
-					{/* <Route
-						path='/post/:id'
-						element={<Post />}
-					/>
 					<Route
+						path='/product/:id'
+						element={<Product />}
+					/>
+					{/* <Route
 						path='/post/:id/edit'
 						element={<Post />}
 					/> */}

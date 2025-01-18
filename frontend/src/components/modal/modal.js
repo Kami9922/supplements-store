@@ -2,23 +2,35 @@ import styled from 'styled-components'
 import { Button } from '../button/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectModalIsOpen } from '../../selectors/modal-selectors/select-modal-is-open'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CLOSE_MODAL } from '../../actions/close-modal'
 import { selectModalOnConfirm } from '../../selectors/modal-selectors/select-modal-on-confirm'
-import { editProductIdSelector } from '../../selectors/modal-selectors/edit-product-id-selector'
+import { productSelector } from '../../selectors/product-selectors/product-selector'
 
 const ModalContainer = ({ className }) => {
 	const isOpen = useSelector(selectModalIsOpen)
 	const onConfirm = useSelector(selectModalOnConfirm)
-	const editProductId = useSelector(editProductIdSelector)
+	const product = useSelector(productSelector)
 
 	const dispatch = useDispatch()
 
-	const [title, setTitle] = useState('')
-	const [category, setCategory] = useState('')
-	const [cost, setCost] = useState('')
-	const [amount, setAmount] = useState('')
-	const [imageUrl, setImageUrl] = useState('')
+	const [title, setTitle] = useState(product.title)
+	const [category, setCategory] = useState(product.category)
+	const [cost, setCost] = useState(product.cost)
+	const [amount, setAmount] = useState(product.amount)
+	const [imageUrl, setImageUrl] = useState(product.imageUrl)
+	const [info, setInfo] = useState(product.info)
+
+	useEffect(() => {
+		if (product) {
+			setTitle(product.title)
+			setCategory(product.category)
+			setCost(product.cost)
+			setAmount(product.amount)
+			setImageUrl(product.imageUrl)
+			setInfo(product.info)
+		}
+	}, [product])
 
 	const resetInputs = () => {
 		setTitle('')
@@ -26,6 +38,7 @@ const ModalContainer = ({ className }) => {
 		setCost('')
 		setAmount('')
 		setImageUrl('')
+		setInfo('')
 	}
 
 	const onCancel = () => {
@@ -42,7 +55,6 @@ const ModalContainer = ({ className }) => {
 			<div className='overlay'></div>
 			<div className='box'>
 				<h3>Добавление товара</h3>
-
 				<div className='modal-inputs'>
 					<div>
 						<span>Название</span>
@@ -84,19 +96,28 @@ const ModalContainer = ({ className }) => {
 							onChange={({ target }) => setImageUrl(target.value)}
 						/>
 					</div>
+					<div>
+						<span>Описание</span>
+						<textarea
+							value={info}
+							placeholder='Введите описание товара'
+							onChange={({ target }) => setInfo(target.value)}
+						/>
+					</div>
 				</div>
 				<div className='buttons'>
 					<Button
 						width='120px'
 						onClick={() =>
 							onConfirm(
-								editProductId,
+								product.id,
 								{
 									title,
 									category,
 									cost,
 									amount,
 									imageUrl,
+									info,
 								},
 								resetInputs
 							)
@@ -135,6 +156,12 @@ export const Modal = styled(ModalContainer)`
 
 	& h3 {
 		margin: 0 0 20px 0;
+	}
+
+	& textarea {
+		resize: none;
+		padding: 10px;
+		width: 300px;
 	}
 
 	& .modal-inputs {

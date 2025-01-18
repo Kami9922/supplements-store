@@ -6,6 +6,7 @@ const Discription = styled.div`
 	font-style: italic;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 `
 
 const HeaderContainer = ({ className }) => (

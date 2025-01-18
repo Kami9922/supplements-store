@@ -12,8 +12,8 @@ const reducer = combineReducers({
 	app: appReducer,
 	user: userReducer,
 	products: productsReducer,
-	modal: modalReducer,
 	product: productReducer,
+	modal: modalReducer,
 })
 
 export const store = createStore(

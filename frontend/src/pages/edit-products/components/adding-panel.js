@@ -16,7 +16,6 @@ const AddingPanelContainer = ({ className }) => {
 					dispatch(addProductAsync(product))
 					dispatch(CLOSE_MODAL)
 					reset()
-					console.log('!')
 				},
 			})
 		)
@@ -24,21 +23,21 @@ const AddingPanelContainer = ({ className }) => {
 
 	return (
 		<div className={className}>
-			<div>
-				<Icon
-					className='add-product-icon'
-					size='32px'
-					id='fa-plus-square-o'
-					margin='0px 0px 10px 0px'
-					onClick={onAddProduct}
-				/>
-			</div>
+			<Icon
+				className='add-product-icon'
+				size='32px'
+				id='fa-plus-square-o'
+				margin='10px 0px 20px 0px'
+				onClick={onAddProduct}
+			/>
 		</div>
 	)
 }
 
 export const AddingPanel = styled(AddingPanelContainer)`
 	.add-product-icon {
-		text-align: center;
+		display: flex;
+		justify-self: center;
+		width: 32px;
 	}
 `

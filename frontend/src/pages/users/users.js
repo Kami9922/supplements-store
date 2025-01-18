@@ -6,9 +6,12 @@ import { useEffect, useState } from 'react'
 import { PrivateContent } from '../../components/private-content/private-content'
 import { ROLE } from '../../constants/role'
 import { checkAccess } from '../../utils/check-access'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 import { request } from '../../utils/request'
+import { Loader } from '../../components/loader/loader'
+import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-selector'
+import { setIsLoading } from '../../actions/set-is-loading'
 
 const UsersContainer = ({ className }) => {
 	const [users, setUsers] = useState([])
@@ -17,14 +20,18 @@ const UsersContainer = ({ className }) => {
 	const [shouldUpdateUserList, setShouldUpdateUserList] = useState(false)
 
 	const userRole = useSelector(selectUserRole)
+	const isLoading = useSelector(isLoadingSelector)
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		if (!checkAccess([ROLE.ADMIN], userRole)) {
 			return
 		}
 
-		Promise.all([request('/users'), request('/users/roles')]).then(
-			([usersRes, rolesRes]) => {
+		dispatch(setIsLoading(true))
+
+		Promise.all([request('/users'), request('/users/roles')])
+			.then(([usersRes, rolesRes]) => {
 				if (usersRes.error || rolesRes.error) {
 					setErrorMessage(usersRes.error || rolesRes.error)
 					return
@@ -33,9 +40,9 @@ const UsersContainer = ({ className }) => {
 				setUsers(usersRes.data)
 
 				setRoles(rolesRes.data)
-			}
-		)
-	}, [shouldUpdateUserList, userRole])
+			})
+			.finally(() => dispatch(setIsLoading(false)))
+	}, [shouldUpdateUserList, userRole, dispatch])
 
 	const onUserRemove = (userId) => {
 		if (!checkAccess([ROLE.ADMIN], userRole)) {
@@ -60,17 +67,21 @@ const UsersContainer = ({ className }) => {
 						<div className='role-column'>Роль</div>
 					</TableRow>
 
-					{users.map(({ id, login, registeredAt, roleId }) => (
-						<UserRow
-							id={id}
-							key={id}
-							login={login}
-							registeredAt={registeredAt}
-							roleId={roleId}
-							roles={roles.filter(({ id: roleId }) => roleId !== ROLE.GUEST)}
-							onUserRemove={() => onUserRemove(id)}
-						/>
-					))}
+					{isLoading ? (
+						<Loader size='40px' />
+					) : (
+						users.map(({ id, login, registeredAt, roleId }) => (
+							<UserRow
+								id={id}
+								key={id}
+								login={login}
+								registeredAt={registeredAt}
+								roleId={roleId}
+								roles={roles.filter(({ id: roleId }) => roleId !== ROLE.GUEST)}
+								onUserRemove={() => onUserRemove(id)}
+							/>
+						))
+					)}
 				</div>
 			</div>
 		</PrivateContent>
