@@ -5,9 +5,10 @@ const initialProductState = {
 	title: '',
 	category: '',
 	cost: '',
-	amount: '',
+	storeAmount: '',
 	imageUrl: '',
 	info: '',
+	quantity: 1,
 	publishedAt: '',
 }
 

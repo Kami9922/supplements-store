@@ -28,6 +28,8 @@ export const Search = styled(SearchContainer)`
 
 	& > input {
 		padding: 10px 35px 10px 10px;
+		border-radius: 15px;
+		border: 1px solid rgb(146, 146, 146);
 	}
 
 	& > div {

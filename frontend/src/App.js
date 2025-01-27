@@ -14,22 +14,10 @@ import { Error } from './components/error/error'
 import { ERROR } from './constants/error'
 import { EditProducts } from './pages/edit-products/edit-products'
 import { Product } from './pages/product/product'
+import { Cart } from './pages/cart/cart'
+import { ShoppingCart } from './components/shopping-cart/shopping-cart'
 
-const AppColumn = styled.div`
-	display: flex;
-	position: relative;
-	flex-direction: column;
-	justify-content: space-between;
-	width: 1000px;
-	min-height: 100%;
-	background-color: #fff;
-	margin: 0 auto;
-`
-const Page = styled.div`
-	padding: 120px 0 20px;
-`
-
-const App = () => {
+const AppContainer = ({ className }) => {
 	const dispatch = useDispatch()
 
 	useLayoutEffect(() => {
@@ -50,48 +38,66 @@ const App = () => {
 	}, [dispatch])
 
 	return (
-		<AppColumn>
-			<Header />
-			<Page>
-				<Routes>
-					<Route
-						path='/'
-						element={<Main />}
-					/>
-					<Route
-						path='/login'
-						element={<Authorization />}
-					/>
-					<Route
-						path='/register'
-						element={<Registration />}
-					/>
-					<Route
-						path='/users'
-						element={<Users />}
-					/>
-					<Route
-						path='/editProducts'
-						element={<EditProducts />}
-					/>
-					<Route
-						path='/product/:id'
-						element={<Product />}
-					/>
-					{/* <Route
-						path='/post/:id/edit'
-						element={<Post />}
-					/> */}
-					<Route
-						path='*'
-						element={<Error error={ERROR.PAGE_NOT_EXIST} />}
-					/>
-				</Routes>
-			</Page>
-			<Footer />
-			<Modal />
-		</AppColumn>
+		<div className={className}>
+			<div className='app-container'>
+				<Header />
+				<div className='page'>
+					<Routes>
+						<Route
+							path='/'
+							element={<Main />}
+						/>
+						<Route
+							path='/login'
+							element={<Authorization />}
+						/>
+						<Route
+							path='/register'
+							element={<Registration />}
+						/>
+						<Route
+							path='/users'
+							element={<Users />}
+						/>
+						<Route
+							path='/editProducts'
+							element={<EditProducts />}
+						/>
+						<Route
+							path='/product/:id'
+							element={<Product />}
+						/>
+						<Route
+							path='/cart'
+							element={<Cart />}
+						/>
+						<Route
+							path='*'
+							element={<Error error={ERROR.PAGE_NOT_EXIST} />}
+						/>
+					</Routes>
+				</div>
+				<Footer />
+				<Modal />
+				<ShoppingCart />
+			</div>
+		</div>
 	)
 }
 
-export default App
+export const App = styled(AppContainer)`
+	& .app-container {
+		min-height: 100vh;
+		display: flex;
+		position: relative;
+		flex-direction: column;
+		justify-content: space-between;
+		width: 1000px;
+		background-color: #fff;
+		margin: 0 auto;
+	}
+
+	& .page {
+		padding: 120px 0 20px;
+	}
+`

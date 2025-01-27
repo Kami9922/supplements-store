@@ -14,7 +14,7 @@ export const setProductsAsync =
 		)
 			.then(({ data }) => {
 				dispatch(setProducts(data.products))
-				dispatch(setLastPage(data.lastPage))
+				page && dispatch(setLastPage(data.lastPage))
 			})
-			.finally(() => dispatch(setIsLoading(false)))
+			.finally(() => dispatch(setIsLoading(false, false)))
 	}

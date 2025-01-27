@@ -17,9 +17,13 @@ export const Button = styled(ButtonContainer)`
 	align-items: center;
 	font-size: 18px;
 	width: ${({ width = '100%' }) => width};
-	height: 32px;
-	border: 1px solid #000;
-	background-color: #eee;
+	height: ${({ height = '32px' }) => height};
+	border: none;
+	border-radius: 10px;
+	/* background-color: #eee; */
+	color: ${({ color }) => (color ? color : 'rgb(255, 255, 255)')};
+	background-color: ${({ background }) =>
+		background ? background : ' #005bff'};
 	cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
 `
 

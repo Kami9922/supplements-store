@@ -12,25 +12,53 @@ import { setIsLoading } from '../../actions/set-is-loading'
 import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-selector'
 import { Loader } from '../../components/loader/loader'
 import { lastPageSelector } from '../../selectors/products-selectors/last-page-selector'
+import { Button } from '../../components/button/button'
 
 const MainContainer = ({ className }) => {
-	const [page, setPage] = useState(1)
-	const [searchPhrase, setSearchPhrase] = useState('')
-	const [shouldSearch, setShouldSearch] = useState(false)
-
 	const isLoading = useSelector(isLoadingSelector)
 	const lastPage = useSelector(lastPageSelector)
 	const products = useSelector(productsSelector)
+
+	const [page, setPage] = useState(1)
+	const [searchPhrase, setSearchPhrase] = useState('')
+	const [shouldSearch, setShouldSearch] = useState(false)
+	const [isAscending, setIsAscending] = useState(true)
+	const [isSorting, setIsSorting] = useState(false)
+	const [mainProducts, setMainProducts] = useState([])
+	const [originalProducts, setOriginalProducts] = useState([]) // Состояние для оригинальных продуктов
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
 		dispatch(setProductsAsync(searchPhrase, page, PAGINTATION_LIMIT))
-		dispatch(setIsLoading(true))
+		dispatch(setIsLoading(true, true))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [page, shouldSearch])
+	}, [page, shouldSearch, dispatch])
 
 	const startDelayedSearch = useMemo(() => debounce(setShouldSearch, 2000), [])
+
+	useEffect(() => {
+		setOriginalProducts(products)
+		setMainProducts(products)
+	}, [products])
+
+	const sortProductsByCost = () => {
+		const newProducts = [...mainProducts].sort((a, b) => {
+			if (isAscending) {
+				return a.cost - b.cost
+			} else {
+				return b.cost - a.cost
+			}
+		})
+		setMainProducts(newProducts)
+		setIsAscending(!isAscending)
+		setIsSorting(true)
+	}
+
+	const resetSorting = () => {
+		setMainProducts(originalProducts)
+		setIsSorting(false)
+	}
 
 	const onSearch = ({ target }) => {
 		setSearchPhrase(target.value)
@@ -39,16 +67,40 @@ const MainContainer = ({ className }) => {
 
 	return (
 		<div className={className}>
-			<div className='posts-and-search'>
+			<div className='products-and-search'>
 				<Search
 					searchPhrase={searchPhrase}
 					onChange={onSearch}
 				/>
-				{isLoading ? (
+
+				<div className='sort-buttons'>
+					<Button
+						className='sort-button'
+						background='transparent'
+						color='#000'
+						height='40px'
+						width='260px'
+						onClick={sortProductsByCost}>
+						Сортировать по стоимости
+					</Button>
+
+					{isSorting && (
+						<Button
+							className='reset-button'
+							color='rgb(129, 129, 129)'
+							background='transparent'
+							width='100px'
+							onClick={resetSorting}>
+							Сбросить
+						</Button>
+					)}
+				</div>
+
+				{isLoading.loader ? (
 					<Loader size='40px' />
 				) : products?.length > 0 ? (
-					<div className='post-list'>
-						{products.map(({ id, title, cost, imageUrl }) => (
+					<div className='product-list'>
+						{mainProducts.map(({ id, title, cost, imageUrl }) => (
 							<ProductCard
 								key={id}
 								id={id}
@@ -59,7 +111,7 @@ const MainContainer = ({ className }) => {
 						))}
 					</div>
 				) : (
-					<div className='no-posts-found'>Статьи не найдены</div>
+					<div className='no-products-found'>Статьи не найдены</div>
 				)}
 			</div>
 			{lastPage > 1 && products.length > 0 && (
@@ -74,20 +126,46 @@ const MainContainer = ({ className }) => {
 }
 
 export const Main = styled(MainContainer)`
-	& .post-list {
+	& .product-list {
 		display: flex;
 		flex-wrap: wrap;
 		padding: 20px 20px 80px;
 	}
-	& .posts-and-search {
+	& .products-and-search {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 	}
 
-	& .no-posts-found {
+	& .no-products-found {
 		text-align: center;
 		font-size: 18px;
 		margin-top: 40px;
+	}
+
+	& .sort-buttons {
+		display: flex;
+		flex-direction: column;
+		/* margin: 0 auto; */
+		padding-top: 30px;
+		padding-left: 40px;
+		gap: 5px;
+		/* align-items: center; */
+	}
+
+	& .sort-button {
+		padding: 5px;
+		border: 1px solid rgb(211, 211, 211);
+	}
+	& .sort-button:hover {
+		border: 1px solid rgb(121, 121, 121);
+	}
+
+	& .reset-button {
+		padding-left: 10px;
+	}
+
+	& .reset-button:hover {
+		color: rgb(199, 199, 199);
 	}
 `

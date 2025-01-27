@@ -9,4 +9,4 @@ export const loadProductAsync = (productId) => (dispatch) =>
 				dispatch(setProductData(productData.data))
 			}
 		})
-		.finally(() => dispatch(setIsLoading(false)))
+		.finally(() => dispatch(setIsLoading(false, false)))

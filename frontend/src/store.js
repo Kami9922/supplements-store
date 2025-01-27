@@ -5,6 +5,7 @@ import { appReducer } from './reducers/app-reducer'
 import { modalReducer } from './reducers/modal-reducer'
 import { productsReducer } from './reducers/products-reducer'
 import { productReducer } from './reducers/product-reducer'
+import { cartReducer } from './reducers/cart-reducer'
 
 const composeEnchancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
@@ -14,6 +15,7 @@ const reducer = combineReducers({
 	products: productsReducer,
 	product: productReducer,
 	modal: modalReducer,
+	cart: cartReducer,
 })
 
 export const store = createStore(

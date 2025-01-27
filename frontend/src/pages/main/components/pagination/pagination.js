@@ -1,58 +1,66 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button } from '../../../../components/button/button'
 import PropTypes from 'prop-types'
+import { Icon } from '../../../../components/icon/icon'
 
 const PaginationContainer = ({ className, page, lastPage, setPage }) => {
 	return (
 		<div className={className}>
-			<Button
+			<Icon
+				size='45px'
+				className='pagination-icon'
 				disabled={page === 1}
-				onClick={() => setPage(1)}>
-				В начало
-			</Button>
-			<Button
+				id='fa-angle-double-left'
+				onClick={() => setPage(1)}></Icon>
+			<Icon
+				size='45px'
+				className='pagination-icon'
 				disabled={page === 1}
-				onClick={() => setPage(page - 1)}>
-				Предыдущая
-			</Button>
-			<div className='current-page'>Страница: {page}</div>
-			<Button
+				id='fa-angle-left'
+				onClick={() => setPage(page - 1)}></Icon>
+
+			<div className='current-page'>{page}</div>
+			<Icon
+				size='45px'
+				className='pagination-icon'
 				disabled={page === lastPage}
-				onClick={() => setPage(page + 1)}>
-				Следующая
-			</Button>
-			<Button
+				id='fa-angle-right'
+				onClick={() => setPage(page + 1)}></Icon>
+			<Icon
+				size='45px'
+				className='pagination-icon'
 				disabled={page === lastPage}
-				onClick={() => setPage(lastPage)}>
-				В конец
-			</Button>
+				id='fa-angle-double-right'
+				onClick={() => setPage(lastPage)}></Icon>
 		</div>
 	)
 }
 
 export const Pagination = styled(PaginationContainer)`
-	display: flex;
 	position: absolute;
-	justify-content: center;
-	margin: 0 0 20px;
+	display: flex;
 	padding: 0 35px;
+	bottom: 165px;
 	width: 100%;
-	bottom: 140px;
+	justify-content: center;
+	gap: 30px;
 
-	& button {
-		margin: 0 5px;
+	& .pagination-icon {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	& .current-page {
-		width: 100%;
+		padding-top: 3px;
 		height: 32px;
 		margin: 0 5px;
-		font-size: 18px;
+		font-size: 34px;
 		font-weight: 500;
 		line-height: 26px;
 		text-align: center;
-		border: 1px solid #000;
 	}
 `
 Pagination.propTypes = {

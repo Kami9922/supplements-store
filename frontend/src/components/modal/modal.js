@@ -17,7 +17,7 @@ const ModalContainer = ({ className }) => {
 	const [title, setTitle] = useState(product.title)
 	const [category, setCategory] = useState(product.category)
 	const [cost, setCost] = useState(product.cost)
-	const [amount, setAmount] = useState(product.amount)
+	const [storeAmount, setStoreAmount] = useState(product.storeAmount)
 	const [imageUrl, setImageUrl] = useState(product.imageUrl)
 	const [info, setInfo] = useState(product.info)
 
@@ -26,7 +26,7 @@ const ModalContainer = ({ className }) => {
 			setTitle(product.title)
 			setCategory(product.category)
 			setCost(product.cost)
-			setAmount(product.amount)
+			setStoreAmount(product.storeAmount)
 			setImageUrl(product.imageUrl)
 			setInfo(product.info)
 		}
@@ -36,7 +36,7 @@ const ModalContainer = ({ className }) => {
 		setTitle('')
 		setCategory('')
 		setCost('')
-		setAmount('')
+		setStoreAmount('')
 		setImageUrl('')
 		setInfo('')
 	}
@@ -83,9 +83,9 @@ const ModalContainer = ({ className }) => {
 					<div>
 						<span>Количество</span>
 						<input
-							value={amount}
+							value={storeAmount}
 							placeholder='Введите количество товара'
-							onChange={({ target }) => setAmount(target.value)}
+							onChange={({ target }) => setStoreAmount(target.value)}
 						/>
 					</div>
 					<div>
@@ -115,7 +115,7 @@ const ModalContainer = ({ className }) => {
 									title,
 									category,
 									cost,
-									amount,
+									storeAmount,
 									imageUrl,
 									info,
 								},

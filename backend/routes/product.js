@@ -6,11 +6,9 @@ const {
 	editProduct,
 	deleteProduct,
 } = require('../controllers/product')
-const { addOrder, deleteOrder } = require('../controllers/order')
 const authenticated = require('../middlewares/authenticated')
 const hasRole = require('../middlewares/hasRole')
 const mapProduct = require('../helpers/mapProduct')
-const mapOrder = require('../helpers/mapOrder')
 const ROLES = require('../constants/roles')
 
 const router = express.Router({ mergeParams: true })
@@ -37,7 +35,7 @@ router.get('/:id', async (req, res) => {
 // 		author: req.user.id,
 // 	})
 
-// 	res.send({ data: mapOrder(newComment) })
+// 	res.send({ data: mapCart(newComment) })
 // })
 
 router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
@@ -45,7 +43,7 @@ router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
 		title: req.body.title,
 		category: req.body.category,
 		cost: req.body.cost,
-		amount: req.body.amount,
+		storeAmount: req.body.storeAmount,
 		image: req.body.imageUrl,
 		info: req.body.info,
 	})
@@ -62,7 +60,7 @@ router.patch(
 			title: req.body.title,
 			category: req.body.category,
 			cost: req.body.cost,
-			amount: req.body.amount,
+			storeAmount: req.body.storeAmount,
 			image: req.body.imageUrl,
 			info: req.body.info,
 		})

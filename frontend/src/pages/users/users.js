@@ -28,7 +28,7 @@ const UsersContainer = ({ className }) => {
 			return
 		}
 
-		dispatch(setIsLoading(true))
+		dispatch(setIsLoading(true, true))
 
 		Promise.all([request('/users'), request('/users/roles')])
 			.then(([usersRes, rolesRes]) => {
@@ -41,7 +41,7 @@ const UsersContainer = ({ className }) => {
 
 				setRoles(rolesRes.data)
 			})
-			.finally(() => dispatch(setIsLoading(false)))
+			.finally(() => dispatch(setIsLoading(false, false)))
 	}, [shouldUpdateUserList, userRole, dispatch])
 
 	const onUserRemove = (userId) => {
@@ -67,7 +67,7 @@ const UsersContainer = ({ className }) => {
 						<div className='role-column'>Роль</div>
 					</TableRow>
 
-					{isLoading ? (
+					{isLoading.loader ? (
 						<Loader size='40px' />
 					) : (
 						users.map(({ id, login, registeredAt, roleId }) => (

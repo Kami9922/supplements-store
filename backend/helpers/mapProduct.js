@@ -4,7 +4,7 @@ module.exports = (product) => ({
 	category: product.category,
 	cost: product.cost,
 	info: product.info,
-	amount: product.amount,
+	storeAmount: product.storeAmount,
 	imageUrl: product.image,
 	publishedAt: product.createdAt,
 })

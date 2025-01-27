@@ -26,10 +26,11 @@ export const Header = styled(HeaderContainer)`
 	justify-content: space-between;
 	height: 120px;
 	padding: 20px 40px;
-	box-shadow: 0px -2px 17px #000;
+	/* box-shadow: 0px -2px 17px #000; */
 	position: fixed;
 	top: 0;
 	width: 1000px;
-	background-color: #fff;
+	background-color: rgb(255, 255, 255);
 	z-index: 10;
+	border-bottom: 1px solid rgb(211, 211, 211);
 `

@@ -14,7 +14,7 @@ const ProductSchema = mongoose.Schema({
 		type: Number,
 		required: true,
 	},
-	amount: {
+	storeAmount: {
 		type: Number,
 		required: true,
 	},

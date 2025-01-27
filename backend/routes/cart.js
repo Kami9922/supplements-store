@@ -1,26 +1,40 @@
 const express = require('express')
-const mapOrder = require('../helpers/mapOrder')
-const { addOrder } = require('../controllers/order')
+const mapCart = require('../helpers/mapCart')
+const {
+	addCartProduct,
+	getCartProducts,
+	deleteCartProduct,
+	editCartProduct,
+} = require('../controllers/cart')
 const authenticated = require('../middlewares/authenticated')
 
 const router = express.Router({ mergeParams: true })
 
-router.get('/', async (req, res) => {
-	const orders = await getOrders()
+router.get('/', authenticated, async (req, res) => {
+	const cartProducts = await getCartProducts()
 
-	res.send({ data: { orders: orders.map(mapOrder) } })
+	res.send({ data: { cartProducts: cartProducts.map(mapCart) } })
 })
 
-// possible mistakes
+router.post('/', authenticated, async (req, res) => {
+	const newCartProduct = await addCartProduct({ id: req.body.id })
 
-router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-	const newOrder = await addOrder({
-		title: req.body.title,
-		content: req.body.content,
-		image: req.body.imageUrl,
+	res.send({ data: mapCart(newCartProduct) })
+})
+
+router.patch('/:id', authenticated, async (req, res) => {
+	const updatedCartProduct = await editCartProduct(req.params.id, {
+		quantity: req.body.quantity,
+		operation: req.body.operation,
 	})
 
-	res.send({ data: mapOrder(newOrder) })
+	res.send({ data: mapCart(updatedCartProduct) })
+})
+
+router.delete('/:id', authenticated, async (req, res) => {
+	await deleteCartProduct(req.params.id)
+
+	res.send({ error: null })
 })
 
 module.exports = router

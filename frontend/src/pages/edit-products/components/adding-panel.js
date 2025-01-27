@@ -27,7 +27,7 @@ const AddingPanelContainer = ({ className }) => {
 				className='add-product-icon'
 				size='32px'
 				id='fa-plus-square-o'
-				margin='10px 0px 20px 0px'
+				margin='0px 0px 10px 0px'
 				onClick={onAddProduct}
 			/>
 		</div>

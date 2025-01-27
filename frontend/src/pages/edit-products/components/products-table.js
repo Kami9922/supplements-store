@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsSelector } from '../../../selectors/products-selectors/products-selector'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { setProductsAsync } from '../../../actions/set-products-async'
 import { Icon } from '../../../components/icon/icon'
 import { AddingPanel } from './adding-panel'
@@ -9,7 +9,6 @@ import { removeProductAsync } from '../../../actions/remove-product-async'
 import { editProductAsync } from '../../../actions/edit-product-async'
 import { openModal } from '../../../actions/open-modal'
 import { CLOSE_MODAL } from '../../../actions/close-modal'
-import { selectModalIsOpen } from '../../../selectors/modal-selectors/select-modal-is-open'
 import { setIsLoading } from '../../../actions/set-is-loading'
 import { isLoadingSelector } from '../../../selectors/app-selectors/is-loading-selector'
 import { Loader } from '../../../components/loader/loader'
@@ -17,18 +16,18 @@ import { setProductData } from '../../../actions/set-product-data'
 
 export const ProductsTableContainer = ({ className }) => {
 	const products = useSelector(productsSelector)
-	const isOpen = useSelector(selectModalIsOpen)
 	const isLoading = useSelector(isLoadingSelector)
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
+		dispatch(setIsLoading(true, true))
 		dispatch(setProductsAsync())
-		dispatch(setIsLoading(true))
-	}, [dispatch, isOpen])
+	}, [dispatch])
 
 	const onRemoveProduct = (id) => {
 		dispatch(removeProductAsync(id))
+		dispatch(setIsLoading(true, true))
 	}
 	const onEditProduct = (product) => {
 		dispatch(setProductData(product))
@@ -45,8 +44,10 @@ export const ProductsTableContainer = ({ className }) => {
 
 	return (
 		<div className={className}>
+			<h3>Таблица товаров</h3>
 			<AddingPanel />
-			{isLoading ? (
+
+			{isLoading.loader ? (
 				<Loader size='40px' />
 			) : (
 				<table>
@@ -68,7 +69,7 @@ export const ProductsTableContainer = ({ className }) => {
 								<td>{product.title}</td>
 								<td>{product.category}</td>
 								<td>{product.cost + '₽'}</td>
-								<td>{product.amount}</td>
+								<td>{product.storeAmount}</td>
 								<td className='td-info'>{product.info}</td>
 								{/* <td className='td-image'>{product.imageUrl}</td> */}
 								<td className='td-actions'>
@@ -98,6 +99,14 @@ export const ProductsTableContainer = ({ className }) => {
 
 export const ProductsTable = styled(ProductsTableContainer)`
 	padding: 5px;
+
+	& h3 {
+		text-align: center;
+		font-size: 30px;
+		padding-top: 15px;
+		margin: 0 0 25px 0;
+	}
+
 	& table {
 		table-layout: fixed;
 		width: 100%;
@@ -114,8 +123,6 @@ export const ProductsTable = styled(ProductsTableContainer)`
 		text-align: center;
 	}
 	& .td-info {
-		/* cursor: pointer; */
-		font-style: italic;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;

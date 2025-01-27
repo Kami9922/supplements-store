@@ -8,21 +8,26 @@ import { productSelector } from '../../selectors/product-selectors/product-selec
 import { setIsLoading } from '../../actions/set-is-loading'
 import { Loader } from '../../components/loader/loader'
 import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-selector'
+import { onAddCartProduct } from '../../utils/on-add-cart-product'
+import { cartProductsSelector } from '../../selectors/cart-selectors/cart-products-selector'
 
 const ProductContainer = ({ className }) => {
+	const params = useParams()
+
+	const dispatch = useDispatch()
+
 	const product = useSelector(productSelector)
 	const isLoading = useSelector(isLoadingSelector)
-	const params = useParams()
-	const dispatch = useDispatch()
+	const cartProducts = useSelector(cartProductsSelector)
 
 	useEffect(() => {
 		dispatch(loadProductAsync(params.id))
-		dispatch(setIsLoading(true))
+		dispatch(setIsLoading(true, true))
 	}, [params.id, dispatch])
 
 	return (
 		<div className={className}>
-			{isLoading ? (
+			{isLoading.loader ? (
 				<Loader />
 			) : (
 				<>
@@ -34,13 +39,15 @@ const ProductContainer = ({ className }) => {
 									src={product.imageUrl}
 								/>
 								<div className='product-consise-description'>
-									<span className='declarative-span'>О товаре</span>
+									<span className='about-span'>О товаре</span>
 									<div>
-										<span className='bold-span'>{product.title}</span>
+										<span className='bold-span product-title'>
+											{product.title}
+										</span>
 									</div>
 									<div className='description-span'>
 										<span className='bold-span'>Осталось в магазине: </span>
-										<span>{product.amount + ' ед.'}</span>
+										<span>{product.storeAmount + ' ед.'}</span>
 									</div>
 									<div className='description-span'>
 										<span className='bold-span'>Категория: </span>
@@ -59,7 +66,19 @@ const ProductContainer = ({ className }) => {
 						</div>
 					</div>
 					<div className='product-button'>
-						<Button width='250px'>Купить</Button>
+						<Button
+							disabled={isLoading.status}
+							width='250px'
+							onClick={() =>
+								onAddCartProduct(
+									dispatch,
+									cartProducts,
+									product.title,
+									product.id
+								)
+							}>
+							В корзину
+						</Button>
 					</div>
 				</>
 			)}
@@ -74,9 +93,10 @@ export const Product = styled(ProductContainer)`
 	min-height: 70vh;
 	justify-content: space-between;
 
-	& .declarative-span {
+	& .about-span {
 		font-weight: bold;
-		font-size: 25px;
+		font-size: 24px;
+		color: rgb(158, 158, 158);
 	}
 
 	& p {
@@ -85,6 +105,10 @@ export const Product = styled(ProductContainer)`
 
 	& img {
 		width: 450px;
+	}
+
+	& .product-title {
+		font-size: 24px;
 	}
 
 	& .bold-span {
@@ -110,7 +134,12 @@ export const Product = styled(ProductContainer)`
 		display: flex;
 		padding-bottom: 45px;
 		border-bottom: 1px solid #000;
+
 		/* justify-content: space-between; */
+	}
+
+	& img {
+		border-radius: 10px;
 	}
 
 	& .product-container {
