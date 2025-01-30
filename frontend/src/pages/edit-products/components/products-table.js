@@ -22,7 +22,7 @@ export const ProductsTableContainer = ({ className }) => {
 
 	useEffect(() => {
 		dispatch(setIsLoading(true, true))
-		dispatch(setProductsAsync())
+		dispatch(setProductsAsync(false))
 	}, [dispatch])
 
 	const onRemoveProduct = (id) => {

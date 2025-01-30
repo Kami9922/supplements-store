@@ -1,8 +1,8 @@
 import { request } from '../utils/request'
-import { setProductData } from './set-product-data'
+import { editProduct } from './edit-product'
 
 export const editProductAsync = (id, productData) => (dispatch) => {
-	request(`/products/${id}`, 'PATCH', productData).then(() =>
-		dispatch(setProductData(productData.data))
+	request(`/products/${id}`, 'PATCH', productData).then((product) =>
+		dispatch(editProduct(product.data))
 	)
 }

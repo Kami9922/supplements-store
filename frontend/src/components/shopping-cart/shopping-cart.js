@@ -10,7 +10,6 @@ const ShoppingCartContainer = ({ className }) => {
 	const cartProducts = useSelector(cartProductsSelector)
 
 	const dispatch = useDispatch()
-
 	useEffect(() => {
 		dispatch(setCartProductsAsync())
 	}, [dispatch])

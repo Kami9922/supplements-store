@@ -29,15 +29,6 @@ router.get('/:id', async (req, res) => {
 	res.send({ data: mapProduct(post) })
 })
 
-// router.post('/:id/comments', authenticated, async (req, res) => {
-// 	const newComment = await addComment(req.params.id, {
-// 		content: req.body.content,
-// 		author: req.user.id,
-// 	})
-
-// 	res.send({ data: mapCart(newComment) })
-// })
-
 router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
 	const newProduct = await addProduct({
 		title: req.body.title,

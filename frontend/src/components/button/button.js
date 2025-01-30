@@ -20,7 +20,6 @@ export const Button = styled(ButtonContainer)`
 	height: ${({ height = '32px' }) => height};
 	border: none;
 	border-radius: 10px;
-	/* background-color: #eee; */
 	color: ${({ color }) => (color ? color : 'rgb(255, 255, 255)')};
 	background-color: ${({ background }) =>
 		background ? background : ' #005bff'};

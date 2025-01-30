@@ -12,7 +12,7 @@ import { setIsLoading } from '../../actions/set-is-loading'
 import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-selector'
 import { Loader } from '../../components/loader/loader'
 import { lastPageSelector } from '../../selectors/products-selectors/last-page-selector'
-import { Button } from '../../components/button/button'
+import { SortButtons } from './components/sort-buttons/sort-buttons'
 
 const MainContainer = ({ className }) => {
 	const isLoading = useSelector(isLoadingSelector)
@@ -25,12 +25,13 @@ const MainContainer = ({ className }) => {
 	const [isAscending, setIsAscending] = useState(true)
 	const [isSorting, setIsSorting] = useState(false)
 	const [mainProducts, setMainProducts] = useState([])
-	const [originalProducts, setOriginalProducts] = useState([]) // Состояние для оригинальных продуктов
+	const [isChoosingCategory, setIsChoosingCategory] = useState(false)
+	const [originalProducts, setOriginalProducts] = useState([])
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		dispatch(setProductsAsync(searchPhrase, page, PAGINTATION_LIMIT))
+		dispatch(setProductsAsync(true, searchPhrase, page, PAGINTATION_LIMIT))
 		dispatch(setIsLoading(true, true))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [page, shouldSearch, dispatch])
@@ -55,9 +56,25 @@ const MainContainer = ({ className }) => {
 		setIsSorting(true)
 	}
 
+	const onCategoriesClick = () => {
+		setIsSorting(true)
+		setIsChoosingCategory(true)
+	}
+
+	const sortProductsByCategory = (products, categoryToCompare) => {
+		console.log(categoryToCompare)
+		const updatedProducts = products.filter(
+			(item) => item.category === categoryToCompare
+		)
+		console.log(updatedProducts)
+
+		setMainProducts(updatedProducts)
+	}
+
 	const resetSorting = () => {
 		setMainProducts(originalProducts)
 		setIsSorting(false)
+		setIsChoosingCategory(false)
 	}
 
 	const onSearch = ({ target }) => {
@@ -73,28 +90,14 @@ const MainContainer = ({ className }) => {
 					onChange={onSearch}
 				/>
 
-				<div className='sort-buttons'>
-					<Button
-						className='sort-button'
-						background='transparent'
-						color='#000'
-						height='40px'
-						width='260px'
-						onClick={sortProductsByCost}>
-						Сортировать по стоимости
-					</Button>
-
-					{isSorting && (
-						<Button
-							className='reset-button'
-							color='rgb(129, 129, 129)'
-							background='transparent'
-							width='100px'
-							onClick={resetSorting}>
-							Сбросить
-						</Button>
-					)}
-				</div>
+				<SortButtons
+					isChoosingCategory={isChoosingCategory}
+					sortProductsByCategory={sortProductsByCategory}
+					onCategoriesClick={onCategoriesClick}
+					resetSorting={resetSorting}
+					sortProductsByCost={sortProductsByCost}
+					isSorting={isSorting}
+				/>
 
 				{isLoading.loader ? (
 					<Loader size='40px' />
@@ -141,31 +144,5 @@ export const Main = styled(MainContainer)`
 		text-align: center;
 		font-size: 18px;
 		margin-top: 40px;
-	}
-
-	& .sort-buttons {
-		display: flex;
-		flex-direction: column;
-		/* margin: 0 auto; */
-		padding-top: 30px;
-		padding-left: 40px;
-		gap: 5px;
-		/* align-items: center; */
-	}
-
-	& .sort-button {
-		padding: 5px;
-		border: 1px solid rgb(211, 211, 211);
-	}
-	& .sort-button:hover {
-		border: 1px solid rgb(121, 121, 121);
-	}
-
-	& .reset-button {
-		padding-left: 10px;
-	}
-
-	& .reset-button:hover {
-		color: rgb(199, 199, 199);
 	}
 `

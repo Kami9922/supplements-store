@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Icon } from '../../../icon/icon'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Button } from '../../../button/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUserRole } from '../../../../selectors/user-selectors/select-user-role'
@@ -22,8 +22,6 @@ const Username = styled.div`
 `
 
 const ControlPanelContainer = ({ className }) => {
-	const navigate = useNavigate()
-
 	const dispatch = useDispatch()
 
 	const roleId = useSelector(selectUserRole)
@@ -56,12 +54,6 @@ const ControlPanelContainer = ({ className }) => {
 				)}
 			</RightAligned>
 			<RightAligned>
-				<Icon
-					onClick={() => navigate(-1)}
-					id='fa-backward'
-					margin='10px 0px 0px 0px'
-				/>
-
 				{isAdmin && (
 					<>
 						<Link to='/EditProducts'>

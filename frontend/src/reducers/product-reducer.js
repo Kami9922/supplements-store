@@ -8,7 +8,6 @@ const initialProductState = {
 	storeAmount: '',
 	imageUrl: '',
 	info: '',
-	quantity: 1,
 	publishedAt: '',
 }
 

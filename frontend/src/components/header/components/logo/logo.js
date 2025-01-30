@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom'
 
 const LargeText = styled.div`
 	font-size: 48px;
@@ -10,11 +10,20 @@ const LargeText = styled.div`
 `
 
 const LogoContainer = ({ className }) => {
+	const mainMatch = useMatch('/')
+
+	const handleRefresh = () => {
+		if (mainMatch) {
+			window.location.reload()
+		}
+	}
 	return (
 		<Link
 			className={className}
 			to='/'>
-			<div className='logo-container'>
+			<div
+				className='logo-container'
+				onClick={handleRefresh}>
 				<LargeText>Dietary Supplements</LargeText>
 			</div>
 			<div className='circle-medium'></div>
