@@ -3,9 +3,10 @@ import { setCartProducts } from './set-cart-products'
 import { setIsLoading } from './set-is-loading'
 
 export const setCartProductsAsync = () => (dispatch) => {
-	request(`/carts`)
-		.then(({ data }) => {
-			dispatch(setCartProducts(data.cartProducts))
+	return request(`/carts`)
+		.then(({ data }) => dispatch(setCartProducts(data.cartProducts)))
+		.catch((error) => {
+			console.error('Ошибка при получении продуктов из корзины:', error)
 		})
 		.finally(() => dispatch(setIsLoading(false, false)))
 }

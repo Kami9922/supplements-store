@@ -18,14 +18,26 @@ const editProduct = async (id, product) => {
 
 const deleteProduct = (id) => Product.deleteOne({ _id: id })
 
-const getProducts = async (search = '', limit = Infinity, page = 1) => {
+const getProducts = async (
+	search = '',
+	limit = Infinity,
+	page = 1,
+	sortBy = {},
+	filterBy = {}
+) => {
+	const query = {
+		title: { $regex: search, $options: 'i' },
+		...filterBy,
+	}
+
 	const [products, count] = await Promise.all([
-		Product.find({ title: { $regex: search, $options: 'i' } })
+		Product.find(query)
 			.limit(limit)
 			.skip((page - 1) * limit)
-			.sort({ createdAt: -1 }),
-		Product.countDocuments({ title: { $regex: search, $options: 'i' } }),
+			.sort(sortBy),
+		Product.countDocuments(query),
 	])
+
 	return {
 		products,
 		lastPage: Math.ceil(count / limit),
@@ -34,12 +46,7 @@ const getProducts = async (search = '', limit = Infinity, page = 1) => {
 
 const getProduct = (id) => {
 	return Product.findById(id)
-	// .populate({
-	// 	path: 'product',
-	// 	populate: 'purchaser',
-	// })
 }
-// possible mistakes
 
 module.exports = {
 	addProduct,

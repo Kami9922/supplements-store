@@ -131,6 +131,10 @@ export const CartProductCard = styled(CartProductCardContainer)`
 		display: flex;
 		justify-content: center;
 	}
+	& .cart-remove-icon:hover {
+		font-size: 45px;
+		transform: translate(0px, -5px);
+	}
 
 	& .cart-image {
 		display: flex;

@@ -9,6 +9,8 @@ export const TableRow = styled(TableRowContainer)`
 	display: flex;
 	align-items: center;
 	border: ${({ border }) => (border ? '1px solid #000;' : 'none')};
+	border-radius: 10px;
+
 	& > div {
 		display: flex;
 		padding: 0 10px;
@@ -16,6 +18,7 @@ export const TableRow = styled(TableRowContainer)`
 
 	& .login-column {
 		width: 172px;
+		font-weight: 500;
 	}
 	& .registered-at-column {
 		width: 213px;

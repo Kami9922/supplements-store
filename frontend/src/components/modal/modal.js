@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import { Button } from '../button/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectModalIsOpen } from '../../selectors/modal-selectors/select-modal-is-open'
-import { useEffect, useState } from 'react'
-import { CLOSE_MODAL } from '../../actions/close-modal'
 import { selectModalOnConfirm } from '../../selectors/modal-selectors/select-modal-on-confirm'
 import { productSelector } from '../../selectors/product-selectors/product-selector'
+import { useEffect, useState } from 'react'
+import { CLOSE_MODAL } from '../../actions/close-modal'
+import { Button } from '../button/button'
 
 const ModalContainer = ({ className }) => {
 	const isOpen = useSelector(selectModalIsOpen)

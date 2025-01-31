@@ -22,64 +22,49 @@ const MainContainer = ({ className }) => {
 	const [page, setPage] = useState(1)
 	const [searchPhrase, setSearchPhrase] = useState('')
 	const [shouldSearch, setShouldSearch] = useState(false)
-	const [isAscending, setIsAscending] = useState(true)
-	const [isSorting, setIsSorting] = useState(false)
-	const [mainProducts, setMainProducts] = useState([])
+	const [sortBy, setSortBy] = useState(null)
+	const [selectedCategory, setSelectedCategory] = useState(null)
 	const [isChoosingCategory, setIsChoosingCategory] = useState(false)
-	const [originalProducts, setOriginalProducts] = useState([])
+	const [isChoosingSortType, setIsChoosingSortType] = useState(false)
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		dispatch(setProductsAsync(true, searchPhrase, page, PAGINTATION_LIMIT))
+		dispatch(
+			setProductsAsync(
+				true,
+				searchPhrase,
+				page,
+				PAGINTATION_LIMIT,
+				sortBy,
+				selectedCategory
+			)
+		)
 		dispatch(setIsLoading(true, true))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [page, shouldSearch, dispatch])
+	}, [page, shouldSearch, sortBy, selectedCategory, dispatch])
 
-	const startDelayedSearch = useMemo(() => debounce(setShouldSearch, 2000), [])
-
-	useEffect(() => {
-		setOriginalProducts(products)
-		setMainProducts(products)
-	}, [products])
-
-	const sortProductsByCost = () => {
-		const newProducts = [...mainProducts].sort((a, b) => {
-			if (isAscending) {
-				return a.cost - b.cost
-			} else {
-				return b.cost - a.cost
-			}
-		})
-		setMainProducts(newProducts)
-		setIsAscending(!isAscending)
-		setIsSorting(true)
-	}
-
-	const onCategoriesClick = () => {
-		setIsSorting(true)
-		setIsChoosingCategory(true)
-	}
-
-	const sortProductsByCategory = (products, categoryToCompare) => {
-		console.log(categoryToCompare)
-		const updatedProducts = products.filter(
-			(item) => item.category === categoryToCompare
-		)
-		console.log(updatedProducts)
-
-		setMainProducts(updatedProducts)
-	}
-
-	const resetSorting = () => {
-		setMainProducts(originalProducts)
-		setIsSorting(false)
-		setIsChoosingCategory(false)
-	}
+	const startDelayedSearch = useMemo(() => debounce(setShouldSearch, 600), [])
 
 	const onSearch = ({ target }) => {
 		setSearchPhrase(target.value)
 		startDelayedSearch(!shouldSearch)
+	}
+
+	const sortProductsByCost = (order) => {
+		setSortBy(order === 'asc' ? 'costAsc' : 'costDesc')
+	}
+
+	const sortProductsByCategory = (category) => {
+		setPage(1)
+		setSelectedCategory(category)
+	}
+
+	const resetSorting = () => {
+		setSortBy(null)
+		setIsChoosingCategory(false)
+		setIsChoosingSortType(false)
+		setSelectedCategory(null)
 	}
 
 	return (
@@ -91,19 +76,21 @@ const MainContainer = ({ className }) => {
 				/>
 
 				<SortButtons
-					isChoosingCategory={isChoosingCategory}
-					sortProductsByCategory={sortProductsByCategory}
-					onCategoriesClick={onCategoriesClick}
-					resetSorting={resetSorting}
+					setIsChoosingSortType={setIsChoosingSortType}
+					isChoosingSortType={isChoosingSortType}
 					sortProductsByCost={sortProductsByCost}
-					isSorting={isSorting}
+					sortProductsByCategory={sortProductsByCategory}
+					resetSorting={resetSorting}
+					sortBy={sortBy}
+					isChoosingCategory={isChoosingCategory}
+					setIsChoosingCategory={setIsChoosingCategory}
 				/>
 
 				{isLoading.loader ? (
 					<Loader size='40px' />
 				) : products?.length > 0 ? (
 					<div className='product-list'>
-						{mainProducts.map(({ id, title, cost, imageUrl }) => (
+						{products.map(({ id, title, cost, imageUrl }) => (
 							<ProductCard
 								key={id}
 								id={id}

@@ -1,16 +1,17 @@
 const express = require('express')
 const { register, login } = require('../controllers/user')
 const mapUser = require('../helpers/mapUser')
+const { addNewCart } = require('../controllers/cart')
 
 const router = express.Router({ mergeParams: true })
 
 router.post('/register', async (req, res) => {
 	try {
 		const { user, token } = await register(req.body.login, req.body.password)
-
+		const newCart = await addNewCart(user._id)
 		res
 			.cookie('token', token, { httpOnly: true })
-			.send({ error: null, user: mapUser(user) })
+			.send({ error: null, user: mapUser(user), newCart })
 	} catch (e) {
 		res.send({ error: e.message || 'Unknown error' })
 	}

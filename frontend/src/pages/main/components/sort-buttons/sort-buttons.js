@@ -2,32 +2,64 @@ import styled from 'styled-components'
 import { Button } from '../../../../components/button/button'
 import { useSelector } from 'react-redux'
 import { categoriesSelector } from '../../../../selectors/categories-selectors/categories-selector'
-import { allProductsSelector } from '../../../../selectors/products-selectors/all-products-selector'
+import { Icon } from '../../../../components/icon/icon'
 
 const SortButtonsContainer = ({
 	isChoosingCategory,
-	onCategoriesClick,
 	resetSorting,
 	sortProductsByCost,
-	isSorting,
 	sortProductsByCategory,
+	setIsChoosingCategory,
+	sortBy,
+	isChoosingSortType,
+	setIsChoosingSortType,
 	className,
 }) => {
 	const categories = useSelector(categoriesSelector)
-	const products = useSelector(allProductsSelector)
 
 	return (
 		<div className={className}>
 			<div className='sort-buttons'>
-				<Button
-					className='sort-button'
-					background='transparent'
-					color='#000'
-					height='40px'
-					width='260px'
-					onClick={sortProductsByCost}>
-					Сортировать по стоимости
-				</Button>
+				{!isChoosingSortType ? (
+					<Button
+						className='sort-button'
+						background='transparent'
+						color='#000'
+						height='40px'
+						width='260px'
+						onClick={() => setIsChoosingSortType(true)}>
+						Сортировать по стоимости
+					</Button>
+				) : (
+					<div className='choice-cost-sort-buttons'>
+						<Button
+							className='choice-cost-sort-button'
+							background='transparent'
+							color='#000'
+							onClick={() => sortProductsByCost('asc')}>
+							<Icon
+								size='40px'
+								className='sort-icon'
+								height='24px'
+								id='fa-sort-asc'
+								margin='2px 0px 0px 0px'
+							/>
+						</Button>
+						<Button
+							className='choice-cost-sort-button'
+							background='transparent'
+							color='#000'
+							// width='100px'
+							onClick={() => sortProductsByCost('desc')}>
+							<Icon
+								size='40px'
+								className='sort-icon'
+								id='fa-sort-desc'
+								margin='0px 0px 25px 0px'
+							/>
+						</Button>
+					</div>
+				)}
 
 				{!isChoosingCategory ? (
 					<Button
@@ -36,7 +68,7 @@ const SortButtonsContainer = ({
 						color='#000'
 						height='40px'
 						width='260px'
-						onClick={onCategoriesClick}>
+						onClick={() => setIsChoosingCategory(true)}>
 						Категории
 					</Button>
 				) : (
@@ -44,19 +76,19 @@ const SortButtonsContainer = ({
 						{categories.map((category, index) => (
 							<Button
 								className='category-button'
+								key={index}
 								color='rgb(0, 0, 0)'
 								background='transparent'
 								width='120px'
 								height='44px'
-								key={index}
-								onClick={() => sortProductsByCategory(products, category)}>
+								onClick={() => sortProductsByCategory(category)}>
 								{category}
 							</Button>
 						))}
 					</div>
 				)}
 			</div>
-			{isSorting && (
+			{(isChoosingSortType || isChoosingCategory) && (
 				<Button
 					className='reset-button'
 					color='rgb(129, 129, 129)'
@@ -75,14 +107,33 @@ export const SortButtons = styled(SortButtonsContainer)`
 	padding: 30px 40px 0;
 	flex-direction: column;
 
+	& .sort-icon {
+		display: flex;
+		align-self: center;
+	}
+
 	& .category-sort-buttons {
 		display: flex;
+	}
+	& .choice-cost-sort-buttons {
+		display: flex;
+		gap: 5px;
+	}
+
+	& .choice-cost-sort-button {
+		padding: 5px;
+		border: 1px solid rgb(211, 211, 211);
+		display: flex;
+		align-self: center;
+	}
+	& .choice-cost-sort-button:hover {
+		border: 1px solid rgb(121, 121, 121);
 	}
 
 	& .category-button {
 		display: flex;
 		align-self: center;
-		font-weight: bold;
+		font-weight: 600;
 		border-left: 1px solid rgb(197, 197, 197);
 		border-bottom: 1px solid rgb(197, 197, 197);
 	}
@@ -99,6 +150,8 @@ export const SortButtons = styled(SortButtonsContainer)`
 	& .sort-button {
 		padding: 5px;
 		border: 1px solid rgb(211, 211, 211);
+		display: flex;
+		align-self: center;
 	}
 	& .sort-button:hover {
 		border: 1px solid rgb(121, 121, 121);

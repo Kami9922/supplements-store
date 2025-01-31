@@ -32,13 +32,6 @@ const authFormSchema = yup.object().shape({
 		.max(30, 'Неверный пароль. Максиум 30 символов'),
 })
 
-const StyledLink = styled(Link)`
-	text-align: center;
-	text-decoration: underline;
-	margin: 20px 0;
-	font-size: 18px;
-`
-
 const AuthorizationContainer = ({ className }) => {
 	const dispatch = useDispatch()
 
@@ -82,7 +75,7 @@ const AuthorizationContainer = ({ className }) => {
 
 	return (
 		<div className={className}>
-			<H2>Авторизация</H2>
+			<h2>Авторизация</h2>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<input
 					type='text'
@@ -99,12 +92,17 @@ const AuthorizationContainer = ({ className }) => {
 					})}
 				/>
 				<Button
+					height='40px'
 					type='submit'
 					disabled={!!formError}>
 					Авторизоваться
 				</Button>
 				{errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}
-				<StyledLink to='/register'>Регистрация</StyledLink>
+				<Link
+					className='to-register-link'
+					to='/register'>
+					Регистрация
+				</Link>
 			</form>
 		</div>
 	)
@@ -115,9 +113,32 @@ export const Authorization = styled(AuthorizationContainer)`
 	align-items: center;
 	flex-direction: column;
 
+	& input {
+		padding: 10px;
+		border-radius: 10px;
+		border: 1px solid black;
+		font-size: 14px;
+	}
+
+	& > h2 {
+		font-size: 30px;
+		padding-top: 150px;
+		margin: 0 0 30px 0;
+	}
+
 	& > form {
-		width: 260px;
+		width: 320px;
 		display: flex;
 		flex-direction: column;
+		gap: 15px;
+	}
+
+	& .to-register-link {
+		color: rgb(179, 179, 179);
+		text-decoration: underline;
+		text-align: center;
+	}
+	& .to-register-link:hover {
+		color: rgb(146, 146, 146);
 	}
 `

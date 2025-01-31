@@ -8,7 +8,6 @@ import { Users } from './pages/users/users'
 import { useLayoutEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setUser } from './actions/set-user'
-import { Modal } from './components/modal/modal'
 import { Main } from './pages/main/main'
 import { Error } from './components/error/error'
 import { ERROR } from './constants/error'
@@ -16,6 +15,7 @@ import { EditProducts } from './pages/edit-products/edit-products'
 import { Product } from './pages/product/product'
 import { Cart } from './pages/cart/cart'
 import { ShoppingCart } from './components/shopping-cart/shopping-cart'
+import { Modal } from './components/modal/modal'
 
 const AppContainer = ({ className }) => {
 	const dispatch = useDispatch()

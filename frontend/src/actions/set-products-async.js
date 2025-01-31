@@ -10,14 +10,17 @@ const filterCategories = (products) => [
 ]
 
 export const setProductsAsync =
-	(paginate, searchPhrase, page, PAGINTATION_LIMIT) => (dispatch) => {
-		const pathWithSearch = `/products?search=${searchPhrase}&page=${page}&limit=${PAGINTATION_LIMIT}`
+	(paginate, searchPhrase, page, PAGINTATION_LIMIT, sortBy, category) =>
+	(dispatch) => {
+		const pathWithSearch = `/products?search=${searchPhrase}&page=${page}&limit=${PAGINTATION_LIMIT}${
+			sortBy ? `&sortBy=${sortBy}` : ''
+		}${category ? `&category=${category}` : ''}`
 		const pathWithoutSearch = `/products`
+
 		request(paginate ? pathWithSearch : pathWithoutSearch)
 			.then(({ data }) => {
 				const products = data.products
 				dispatch(setProducts(products))
-
 				page && dispatch(setLastPage(data.lastPage))
 			})
 			.finally(() => dispatch(setIsLoading(false, false)))

@@ -1,42 +1,70 @@
 const Cart = require('../models/Cart')
+const CartProduct = require('../models/CartProduct')
 const Product = require('../models/Product')
 
-const addCartProduct = async (productId) => {
+const addNewCart = async (userId) => {
+	return await Cart.create({ purchaser: userId })
+}
+
+const addCartProduct = async (userId, productId) => {
 	const { id } = productId
 
 	const { title, cost, image } = await Product.findById(id)
-
 	let quantity = 1
 
-	return await Cart.create({ title, cost, image, quantity })
+	const cart = await Cart.findOne({ purchaser: userId })
+	if (!cart) {
+		throw new Error('Cart not found')
+	}
+
+	const cartProduct = await CartProduct.create({ title, cost, image, quantity })
+	cart.cartProducts.push(cartProduct._id)
+	await cart.save()
+
+	return cartProduct
 }
 
 // await newCart.populate('purchaser')
 
-const getCartProducts = async () => await Cart.find()
-// .populate({ path: 'purchaser', populate: 'login' })
-
-const deleteCartProduct = async (cartId) => {
-	await Cart.deleteOne({ _id: cartId })
+const getCartProducts = async (userId) => {
+	const cart = await Cart.findOne({ purchaser: userId }).populate(
+		'cartProducts'
+	)
+	if (!cart) {
+		return []
+	}
+	return cart.cartProducts
 }
 
-const editCartProduct = async (id, { quantity, operation }) => {
+const deleteCartProduct = async (userId, cartProductId) => {
+	const cart = await Cart.findOne({ purchaser: userId })
+	if (cart) {
+		cart.cartProducts.pull(cartProductId)
+		await cart.save()
+		await CartProduct.deleteOne({ _id: cartProductId })
+	}
+}
+
+const editCartProduct = async (userId, id, { quantity, operation }) => {
+	const cart = await Cart.findOne({ purchaser: userId })
+	if (!cart) {
+		throw new Error('Cart not found')
+	}
+
 	let updatedQuantity
+	const cartProduct = await CartProduct.findById(id)
 
 	if (operation === 'increase') {
-		updatedQuantity = quantity + 1
+		updatedQuantity = cartProduct.quantity + 1
 	}
-
 	if (operation === 'reduce') {
-		updatedQuantity = quantity - 1
+		updatedQuantity = cartProduct.quantity - 1
 	}
 
-	const updatedCartProduct = await Cart.findByIdAndUpdate(
+	const updatedCartProduct = await CartProduct.findByIdAndUpdate(
 		id,
 		{ quantity: updatedQuantity },
-		{
-			new: true,
-		}
+		{ new: true }
 	)
 	return updatedCartProduct
 }
@@ -46,4 +74,5 @@ module.exports = {
 	deleteCartProduct,
 	getCartProducts,
 	editCartProduct,
+	addNewCart,
 }

@@ -1,31 +1,49 @@
 import styled from 'styled-components'
 import { Icon } from '../icon/icon'
-import { Link } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { cartProductsSelector } from '../../selectors/cart-selectors/cart-products-selector'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { setCartProductsAsync } from '../../actions/set-cart-products-async'
+import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
+import { ROLE } from '../../constants/role'
 
 const ShoppingCartContainer = ({ className }) => {
+	const [isCartLoading, setIsCartLoading] = useState(true)
+
 	const cartProducts = useSelector(cartProductsSelector)
+	const roleId = useSelector(selectUserRole)
+
+	const editProductsMatch = useMatch('/editProducts')
+	const usersMatch = useMatch('/users')
 
 	const dispatch = useDispatch()
+
 	useEffect(() => {
-		dispatch(setCartProductsAsync())
-	}, [dispatch])
+		if (roleId !== ROLE.GUEST) {
+			setIsCartLoading(true)
+			dispatch(setCartProductsAsync()).finally(() => {
+				setIsCartLoading(false)
+			})
+		}
+	}, [dispatch, roleId])
+
+	if (roleId === ROLE.GUEST || editProductsMatch || usersMatch) {
+		return null
+	}
 
 	return (
 		<Link
 			className={className}
 			to='/cart'>
-			<div>
+			<div className='cart-container'>
 				<Icon
 					size='70px'
 					className='cart-icon'
 					id='fa fa-shopping-cart'
 					margin='0px 5px 0px 0px'
 				/>
-				{cartProducts.length > 0 && (
+				{!isCartLoading && cartProducts.length && (
 					<div className='cart-products-count'>{cartProducts.length}</div>
 				)}
 			</div>
@@ -64,5 +82,10 @@ export const ShoppingCart = styled(ShoppingCartContainer)`
 		align-items: center;
 		width: 70px;
 		height: 70px;
+	}
+
+	&:hover {
+		width: 108px;
+		height: 108px;
 	}
 `

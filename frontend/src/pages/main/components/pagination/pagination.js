@@ -10,12 +10,16 @@ const PaginationContainer = ({ className, page, lastPage, setPage }) => {
 				size='45px'
 				className='pagination-icon'
 				disabled={page === 1}
+				inactive={page === 1 ? true : undefined}
+				active={page !== 1 ? true : undefined}
 				id='fa-angle-double-left'
 				onClick={() => setPage(1)}></Icon>
 			<Icon
 				size='45px'
 				className='pagination-icon'
 				disabled={page === 1}
+				inactive={page === 1 ? true : undefined}
+				active={page !== 1 ? true : undefined}
 				id='fa-angle-left'
 				onClick={() => setPage(page - 1)}></Icon>
 
@@ -24,12 +28,16 @@ const PaginationContainer = ({ className, page, lastPage, setPage }) => {
 				size='45px'
 				className='pagination-icon'
 				disabled={page === lastPage}
+				inactive={page === lastPage ? true : undefined}
+				active={page !== lastPage ? true : undefined}
 				id='fa-angle-right'
 				onClick={() => setPage(page + 1)}></Icon>
 			<Icon
 				size='45px'
 				className='pagination-icon'
 				disabled={page === lastPage}
+				inactive={page === lastPage ? true : undefined}
+				active={page !== lastPage ? true : undefined}
 				id='fa-angle-double-right'
 				onClick={() => setPage(lastPage)}></Icon>
 		</div>

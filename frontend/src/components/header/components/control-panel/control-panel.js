@@ -38,41 +38,63 @@ const ControlPanelContainer = ({ className }) => {
 		<div className={className}>
 			<RightAligned>
 				{roleId === ROLE.GUEST ? (
-					<Button>
+					<Button
+						background='transparent'
+						color='rgb(194, 194, 194)'
+						className='login-button'>
 						<Link to='/login'>Войти</Link>
 					</Button>
 				) : (
 					<>
 						<Username>{login}</Username>
-
 						<Icon
 							id='fa-sign-out'
 							margin='0px 0px 0px 10px'
 							onClick={onLogout}
+							transActive={true}
 						/>
 					</>
 				)}
 			</RightAligned>
 			<RightAligned>
 				{isAdmin && (
-					<>
+					<div className='links-panel'>
 						<Link to='/EditProducts'>
 							<Icon
 								id='fa-pencil-square-o'
 								margin='10px 0px 0px 16px'
+								transActive={true}
 							/>
 						</Link>
 						<Link to='/users'>
 							<Icon
+								transActive={true}
 								id='fa-users'
 								margin='10px 0px 0px 16px'
 							/>
 						</Link>
-					</>
+					</div>
 				)}
 			</RightAligned>
 		</div>
 	)
 }
 
-export const ControlPanel = styled(ControlPanelContainer)``
+export const ControlPanel = styled(ControlPanelContainer)`
+	& .login-button {
+		font-size: 24px;
+		padding: 20px;
+
+		border-left: 2px solid rgb(197, 197, 197);
+		border-bottom: 2px solid rgb(197, 197, 197);
+	}
+
+	& .links-panel {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	& .login-button:hover {
+		background-color: rgb(197, 197, 197);
+	}
+`

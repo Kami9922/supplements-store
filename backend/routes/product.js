@@ -14,10 +14,26 @@ const ROLES = require('../constants/roles')
 const router = express.Router({ mergeParams: true })
 
 router.get('/', async (req, res) => {
+	const { search, limit, page, sortBy, category } = req.query
+
+	const sort = {}
+	if (sortBy === 'costAsc') {
+		sort.cost = 1
+	} else if (sortBy === 'costDesc') {
+		sort.cost = -1
+	}
+
+	const filter = {}
+	if (category) {
+		filter.category = category
+	}
+
 	const { products, lastPage } = await getProducts(
-		req.query.search,
-		req.query.limit,
-		req.query.page
+		search,
+		limit,
+		page,
+		sort,
+		filter
 	)
 
 	res.send({ data: { lastPage, products: products.map(mapProduct) } })

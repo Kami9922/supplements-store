@@ -5,5 +5,12 @@ export const request = (path, method, data) => {
 		},
 		method: method || 'GET',
 		body: data ? JSON.stringify(data) : undefined,
-	}).then((res) => res.json())
+	}).then((res) => {
+		if (!res.ok) {
+			return Promise.reject(
+				new Error(`Ошибка ${res.status}: ${res.statusText}`)
+			)
+		}
+		return res.json()
+	})
 }

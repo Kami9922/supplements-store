@@ -62,9 +62,12 @@ const UsersContainer = ({ className }) => {
 				<H2>Пользователи</H2>
 				<div>
 					<TableRow>
-						<div className='login-column'>Логин</div>
-						<div className='registered-at-column'>Дата регистрации</div>
-						<div className='role-column'>Роль</div>
+						<div className='login-column column-title'>Логин</div>
+						<div className='registered-at-column column-title'>
+							Дата регистрации
+						</div>
+
+						<div className='role-column column-title'>Роль</div>
 					</TableRow>
 
 					{isLoading.loader ? (
@@ -95,4 +98,11 @@ export const Users = styled(UsersContainer)`
 	margin: 0 auto;
 	flex-direction: column;
 	width: 570px;
+
+	& .column-title {
+		font-weight: bold;
+		font-size: 20px;
+		margin-bottom: 10px;
+		color: rgb(116, 116, 116);
+	}
 `

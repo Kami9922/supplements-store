@@ -35,9 +35,11 @@ const UserRowContainer = ({
 	return (
 		<div className={className}>
 			<TableRow border={true}>
-				<div className='login-column'>{login}</div>
+				<div className='login-column '>{login}</div>
+				<span className='deco-stripe'></span>
 				<div className='registered-at-column'>{formatDate(registeredAt)}</div>
-				<div className='role-column'>
+				<span className='deco-stripe'></span>
+				<div className='role-column '>
 					<select
 						value={selectedRoleId}
 						onChange={onRoleChange}>
@@ -78,8 +80,13 @@ export const UserRow = styled(UserRowContainer)`
 		display: flex;
 		align-self: center;
 	}
-
+	& .deco-stripe {
+		border-right: 1px solid rgb(0, 0, 0);
+		display: flex;
+		height: 25px;
+	}
 	& select {
+		border-radius: 5px;
 		font-size: 16px;
 		padding: 0 5px;
 	}

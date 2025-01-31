@@ -84,7 +84,7 @@ const RegistrationContainer = ({ className }) => {
 
 	return (
 		<div className={className}>
-			<H2>Регистрация</H2>
+			<h2>Регистрация</h2>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<input
 					type='text'
@@ -108,6 +108,7 @@ const RegistrationContainer = ({ className }) => {
 					})}
 				/>
 				<Button
+					height='40px'
 					type='submit'
 					disabled={!!formError}>
 					Зарегистрироваться
@@ -122,9 +123,24 @@ export const Registration = styled(RegistrationContainer)`
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+
 	& > form {
-		width: 260px;
+		width: 320px;
 		display: flex;
 		flex-direction: column;
+		gap: 15px;
+	}
+
+	& > h2 {
+		font-size: 30px;
+		padding-top: 150px;
+		margin: 0 0 30px 0;
+	}
+
+	& input {
+		padding: 10px;
+		border-radius: 10px;
+		border: 1px solid black;
+		font-size: 14px;
 	}
 `

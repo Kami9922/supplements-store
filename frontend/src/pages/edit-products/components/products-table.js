@@ -76,6 +76,7 @@ export const ProductsTableContainer = ({ className }) => {
 									<Icon
 										width='100%'
 										className='td-icon'
+										background='rgb(209, 209, 209)'
 										id='fa-pencil-square-o'
 										margin='2px 0px 0px 0px'
 										onClick={() => onEditProduct(product)}
@@ -83,6 +84,8 @@ export const ProductsTableContainer = ({ className }) => {
 									<Icon
 										width='100%'
 										className='td-icon'
+										background='rgb(247, 68, 68)'
+										color='rgb(0, 0, 0)'
 										id='fa fa-times'
 										margin='2px 0px 0px 0px'
 										onClick={() => onRemoveProduct(product.id)}
@@ -142,6 +145,9 @@ export const ProductsTable = styled(ProductsTableContainer)`
 		align-items: center;
 		padding: 3px;
 		justify-content: center;
+	}
+	& .td-icon:hover {
+		transform: translate(1px, -1px);
 	}
 
 	& .th-actions {
