@@ -125,6 +125,7 @@ export const SortButtons = styled(SortButtonsContainer)`
 		border: 1px solid rgb(211, 211, 211);
 		display: flex;
 		align-self: center;
+		transition: border 0.5s;
 	}
 	& .choice-cost-sort-button:hover {
 		border: 1px solid rgb(121, 121, 121);
@@ -152,6 +153,7 @@ export const SortButtons = styled(SortButtonsContainer)`
 		border: 1px solid rgb(211, 211, 211);
 		display: flex;
 		align-self: center;
+		transition: border 0.5s;
 	}
 	& .sort-button:hover {
 		border: 1px solid rgb(121, 121, 121);
@@ -159,6 +161,7 @@ export const SortButtons = styled(SortButtonsContainer)`
 
 	& .reset-button {
 		margin: 0 auto;
+		transition: color 0.5s;
 	}
 
 	& .reset-button:hover {

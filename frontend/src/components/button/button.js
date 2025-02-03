@@ -24,6 +24,7 @@ export const Button = styled(ButtonContainer)`
 	background-color: ${({ background }) =>
 		background ? background : ' #005bff'};
 	cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+	transition: background-color 0.5s;
 `
 
 Button.propTypes = {

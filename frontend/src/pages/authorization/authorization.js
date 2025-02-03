@@ -5,7 +5,6 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '../../components/button/button'
 import { Link, Navigate } from 'react-router-dom'
-import { H2 } from '../../components/h2/h2'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../../actions/set-user'
 import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
@@ -137,6 +136,7 @@ export const Authorization = styled(AuthorizationContainer)`
 		color: rgb(179, 179, 179);
 		text-decoration: underline;
 		text-align: center;
+		transition: color 0.3s;
 	}
 	& .to-register-link:hover {
 		color: rgb(146, 146, 146);

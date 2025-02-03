@@ -43,7 +43,7 @@ const ShoppingCartContainer = ({ className }) => {
 					id='fa fa-shopping-cart'
 					margin='0px 5px 0px 0px'
 				/>
-				{!isCartLoading && cartProducts.length && (
+				{!isCartLoading && cartProducts.length > 0 && (
 					<div className='cart-products-count'>{cartProducts.length}</div>
 				)}
 			</div>

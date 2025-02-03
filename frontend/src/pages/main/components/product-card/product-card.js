@@ -17,6 +17,7 @@ const ProductCardContainer = ({ className, id, title, imageUrl, cost }) => {
 			<div className='product-card-container'>
 				<Link to={`/product/${id}`}>
 					<img
+						className='card-image'
 						alt={imageUrl}
 						src={imageUrl}
 					/>
@@ -51,6 +52,8 @@ export const ProductCard = styled(ProductCardContainer)`
 	}
 	& img {
 		border-radius: 10px;
+		width: 280px;
+		height: 150px;
 	}
 
 	& .card-cost {

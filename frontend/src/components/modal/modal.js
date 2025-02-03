@@ -6,6 +6,7 @@ import { productSelector } from '../../selectors/product-selectors/product-selec
 import { useEffect, useState } from 'react'
 import { CLOSE_MODAL } from '../../actions/close-modal'
 import { Button } from '../button/button'
+import { Icon } from '../icon/icon'
 
 const ModalContainer = ({ className }) => {
 	const isOpen = useSelector(selectModalIsOpen)
@@ -18,8 +19,9 @@ const ModalContainer = ({ className }) => {
 	const [category, setCategory] = useState(product.category)
 	const [cost, setCost] = useState(product.cost)
 	const [storeAmount, setStoreAmount] = useState(product.storeAmount)
-	const [imageUrl, setImageUrl] = useState(product.imageUrl)
+	const [image, setImage] = useState(null)
 	const [info, setInfo] = useState(product.info)
+	const [isTypingUrl, setIsTypingUrl] = useState(false)
 
 	useEffect(() => {
 		if (product) {
@@ -27,9 +29,9 @@ const ModalContainer = ({ className }) => {
 			setCategory(product.category)
 			setCost(product.cost)
 			setStoreAmount(product.storeAmount)
-			setImageUrl(product.imageUrl)
 			setInfo(product.info)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [product])
 
 	const resetInputs = () => {
@@ -37,8 +39,27 @@ const ModalContainer = ({ className }) => {
 		setCategory('')
 		setCost('')
 		setStoreAmount('')
-		setImageUrl('')
+		setImage(null)
 		setInfo('')
+		setIsTypingUrl(false)
+	}
+	const handleImageChange = (target) => {
+		const selectedFile = target.files[0]
+		setImage(selectedFile)
+	}
+
+	const handleSubmit = () => {
+		const formData = new FormData()
+		formData.append('title', title)
+		formData.append('category', category)
+		formData.append('cost', cost)
+		formData.append('storeAmount', storeAmount)
+
+		formData.append('image', image)
+
+		formData.append('info', info)
+
+		onConfirm(product.id, formData, resetInputs)
 	}
 
 	const onCancel = () => {
@@ -60,6 +81,7 @@ const ModalContainer = ({ className }) => {
 						<span>Название</span>
 						<input
 							value={title}
+							type='text'
 							placeholder='Введите название товара'
 							onChange={({ target }) => setTitle(target.value)}
 						/>
@@ -68,6 +90,7 @@ const ModalContainer = ({ className }) => {
 						<span>Категория</span>
 						<input
 							value={category}
+							type='text'
 							placeholder='Введите категорию товара'
 							onChange={({ target }) => setCategory(target.value)}
 						/>
@@ -76,6 +99,7 @@ const ModalContainer = ({ className }) => {
 						<span>Стоимость</span>
 						<input
 							value={cost}
+							type='text'
 							placeholder='Введите стоимость товара'
 							onChange={({ target }) => setCost(target.value)}
 						/>
@@ -84,18 +108,41 @@ const ModalContainer = ({ className }) => {
 						<span>Количество</span>
 						<input
 							value={storeAmount}
+							type='text'
 							placeholder='Введите количество товара'
 							onChange={({ target }) => setStoreAmount(target.value)}
 						/>
 					</div>
-					<div>
+					<div className='image-choice-div'>
 						<span>Изображение</span>
-						<input
-							value={imageUrl}
-							placeholder='Введите url картинки товара'
-							onChange={({ target }) => setImageUrl(target.value)}
-						/>
+						<div className='image-typing-choice'>
+							<Icon
+								className='change-typing-image-icon'
+								transActive={true}
+								id='fa-pencil'
+								margin='10px 0px 0px 16px'
+								onClick={() => setIsTypingUrl(!isTypingUrl)}
+							/>
+							{!isTypingUrl ? (
+								<label className='image-choice-label'>
+									Загрузить изображение
+									<input
+										className='image-choice'
+										type='file'
+										onChange={({ target }) => handleImageChange(target)}
+									/>
+								</label>
+							) : (
+								<input
+									className='typing-image-url'
+									type='text'
+									placeholder='Введите URL изображения товара'
+									onChange={({ target }) => setImage(target.value)}
+								/>
+							)}
+						</div>
 					</div>
+
 					<div>
 						<span>Описание</span>
 						<textarea
@@ -108,20 +155,8 @@ const ModalContainer = ({ className }) => {
 				<div className='buttons'>
 					<Button
 						width='120px'
-						onClick={() =>
-							onConfirm(
-								product.id,
-								{
-									title,
-									category,
-									cost,
-									storeAmount,
-									imageUrl,
-									info,
-								},
-								resetInputs
-							)
-						}>
+						type='submit'
+						onClick={handleSubmit}>
 						Сохранить
 					</Button>
 					<Button
@@ -143,15 +178,51 @@ export const Modal = styled(ModalContainer)`
 	bottom: 0;
 	left: 0;
 
+	& .image-typing-choice {
+		position: relative;
+		margin-bottom: 5px;
+	}
+	& .change-typing-image-icon {
+		position: absolute;
+		right: 24px;
+		top: -10px;
+	}
+
+	& .image-choice-label {
+		display: inline-block;
+		padding: 5px 15px;
+		background-color: rgb(184, 166, 68);
+		color: white;
+		border: none;
+		border-radius: 5px;
+		font-weight: 500;
+		font-size: 18px;
+	}
+
+	.image-choice-label:hover {
+		box-shadow: inset 1px 1px 50px 1px rgba(255, 255, 255, 0.2);
+		transform: translate(0, -1px);
+	}
+
 	& input {
 		padding: 10px;
 		width: 300px;
+		border: 1px solid rgb(139, 139, 139);
+		border-radius: 10px;
+	}
+	& .image-choice {
+		display: none;
+	}
+
+	& .typing-image-url {
+		padding-right: 30px;
 	}
 
 	& span {
 		display: block;
 		font-weight: 500;
-		margin-bottom: 5px;
+
+		margin-bottom: 10px;
 	}
 
 	& h3 {
@@ -162,6 +233,8 @@ export const Modal = styled(ModalContainer)`
 		resize: none;
 		padding: 10px;
 		width: 300px;
+		border: 1px solid rgb(139, 139, 139);
+		border-radius: 10px;
 	}
 
 	& .modal-inputs {

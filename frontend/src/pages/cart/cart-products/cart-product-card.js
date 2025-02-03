@@ -11,6 +11,7 @@ import { Button } from '../../../components/button/button'
 import { onAddCartProduct } from '../../../utils/on-add-cart-product'
 import { cartProductsSelector } from '../../../selectors/cart-selectors/cart-products-selector'
 import { isLoadingSelector } from '../../../selectors/app-selectors/is-loading-selector'
+import { Loader } from '../../../components/loader/loader'
 
 const CartProductCardContainer = ({ className, cartProduct }) => {
 	const dispatch = useDispatch()
@@ -19,6 +20,7 @@ const CartProductCardContainer = ({ className, cartProduct }) => {
 	const isLoading = useSelector(isLoadingSelector)
 
 	const onRemoveCartProduct = (id) => {
+		dispatch(setIsLoading(true, true))
 		dispatch(removeCartProductAsync(id))
 	}
 
@@ -34,60 +36,69 @@ const CartProductCardContainer = ({ className, cartProduct }) => {
 	return (
 		<div className={className}>
 			<div className='cart-product-card-container'>
-				<div className='cart-product-info'>
-					<Link
-						className='cart-image'
-						to={`/product/${
-							products.find((product) => product.title === cartProduct.title)
-								?.id
-						}`}>
-						<img
-							alt={cartProduct.imageUrl}
-							src={cartProduct.imageUrl}
+				{isLoading.loader ? (
+					<Loader />
+				) : (
+					<>
+						<div className='cart-product-info'>
+							<Link
+								className='cart-image'
+								to={`/product/${
+									products.find(
+										(product) => product.title === cartProduct.title
+									)?.id
+								}`}>
+								<img
+									alt={cartProduct.imageUrl}
+									src={cartProduct.imageUrl}
+								/>
+							</Link>
+							<div className='right-cart-block'>
+								<div className='cart-cart-text'>
+									<span className='cart-card-title'>{cartProduct.title}</span>
+									<span className='cart-card-cost'>
+										{cartProduct.cost + '₽'}
+									</span>
+									<span className='cart-card-cost'>
+										{'x' + cartProduct.quantity}
+									</span>
+								</div>
+								<div className='cart-quantity-buttons'>
+									<Button
+										background='rgb(201, 165, 89)'
+										width='30px'
+										disabled={isLoading.status}
+										onClick={() =>
+											onAddCartProduct(
+												dispatch,
+												cartProducts,
+												cartProduct.title,
+												cartProduct.id
+											)
+										}>
+										+
+									</Button>
+									<Button
+										background='rgb(201, 165, 89)'
+										width='30px'
+										disabled={isLoading.status}
+										onClick={() =>
+											onReduceCartProduce(cartProduct.id, cartProduct.quantity)
+										}>
+										-
+									</Button>
+								</div>
+							</div>
+						</div>
+						<Icon
+							size='40px'
+							className='cart-remove-icon'
+							id='fa fa-times'
+							margin='0px 0px 0px 0px'
+							onClick={() => onRemoveCartProduct(cartProduct.id)}
 						/>
-					</Link>
-					<div className='right-cart-block'>
-						<div className='cart-cart-text'>
-							<span className='cart-card-title'>{cartProduct.title}</span>
-							<span className='cart-card-cost'>{cartProduct.cost + '₽'}</span>
-							<span className='cart-card-cost'>
-								{'x' + cartProduct.quantity}
-							</span>
-						</div>
-						<div className='cart-quantity-buttons'>
-							<Button
-								background='rgb(201, 165, 89)'
-								width='30px'
-								disabled={isLoading.status}
-								onClick={() =>
-									onAddCartProduct(
-										dispatch,
-										cartProducts,
-										cartProduct.title,
-										cartProduct.id
-									)
-								}>
-								+
-							</Button>
-							<Button
-								background='rgb(201, 165, 89)'
-								width='30px'
-								disabled={isLoading.status}
-								onClick={() =>
-									onReduceCartProduce(cartProduct.id, cartProduct.quantity)
-								}>
-								-
-							</Button>
-						</div>
-					</div>
-				</div>
-				<Icon
-					size='40px'
-					className='cart-remove-icon'
-					id='fa fa-times'
-					margin='0px 0px 0px 0px'
-					onClick={() => onRemoveCartProduct(cartProduct.id)}
-				/>
+					</>
+				)}
 			</div>
 		</div>
 	)

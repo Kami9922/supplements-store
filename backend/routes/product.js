@@ -1,4 +1,6 @@
 const express = require('express')
+const fileMiddleware = require('../middlewares/file')
+
 const {
 	getProducts,
 	getProduct,
@@ -45,34 +47,52 @@ router.get('/:id', async (req, res) => {
 	res.send({ data: mapProduct(post) })
 })
 
-router.post('/', authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-	const newProduct = await addProduct({
-		title: req.body.title,
-		category: req.body.category,
-		cost: req.body.cost,
-		storeAmount: req.body.storeAmount,
-		image: req.body.imageUrl,
-		info: req.body.info,
-	})
+router.post(
+	'/',
+	authenticated,
+	hasRole([ROLES.ADMIN]),
+	fileMiddleware.single('image'),
+	async (req, res) => {
+		try {
+			const newProduct = await addProduct({
+				title: req.body.title,
+				category: req.body.category,
+				cost: req.body.cost,
+				storeAmount: req.body.storeAmount,
+				image: req.file ? req.file.path : req.body.image,
+				info: req.body.info,
+			})
 
-	res.send({ data: mapProduct(newProduct) })
-})
+			res.send({ data: mapProduct(newProduct) })
+		} catch (error) {
+			console.error(error)
+		}
+	}
+)
 
 router.patch(
 	'/:id',
 	authenticated,
+	fileMiddleware.single('image'),
 	hasRole([ROLES.ADMIN]),
 	async (req, res) => {
-		const updatedProduct = await editProduct(req.params.id, {
-			title: req.body.title,
-			category: req.body.category,
-			cost: req.body.cost,
-			storeAmount: req.body.storeAmount,
-			image: req.body.imageUrl,
-			info: req.body.info,
-		})
+		try {
+			const updatedProduct = await editProduct(req.params.id, {
+				title: req.body.title,
+				category: req.body.category,
+				cost: req.body.cost,
+				storeAmount: req.body.storeAmount,
+				image: req.file ? req.file.path : req.body.image,
+				info: req.body.info,
+			})
 
-		res.send({ data: mapProduct(updatedProduct) })
+			res.send({ data: mapProduct(updatedProduct) })
+		} catch (error) {
+			console.error(error)
+			res
+				.status(400)
+				.send({ error: 'Failed to update product', details: error })
+		}
 	}
 )
 

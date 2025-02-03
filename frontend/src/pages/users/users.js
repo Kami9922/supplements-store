@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { H2 } from '../../components/h2/h2'
 import { UserRow } from './components/user-row/user-row'
 import { TableRow } from './components/table-row/table-row'
 import { useEffect, useState } from 'react'
@@ -59,7 +58,7 @@ const UsersContainer = ({ className }) => {
 			access={[ROLE.ADMIN]}
 			error={errorMessage}>
 			<div className={className}>
-				<H2>Пользователи</H2>
+				<h2>Пользователи</h2>
 				<div>
 					<TableRow>
 						<div className='login-column column-title'>Логин</div>

@@ -12,7 +12,10 @@ const app = express()
 app.use(express.static(path.resolve('..', 'frontend', 'build')))
 
 app.use(cookieParser())
-app.use(express.json())
+
+app.use(express.json({ extended: true }))
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.use('/api', routes)
 

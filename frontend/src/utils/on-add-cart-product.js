@@ -1,4 +1,4 @@
-import { addCartProductAsync } from '../actions/add-product-cart-async'
+import { addCartProductAsync } from '../actions/add-cart-product-async'
 import { editCartProductAsync } from '../actions/edit-cart-product-async'
 import { setIsLoading } from '../actions/set-is-loading'
 
