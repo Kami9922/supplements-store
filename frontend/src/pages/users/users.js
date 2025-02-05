@@ -10,7 +10,7 @@ import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 import { request } from '../../utils/request'
 import { Loader } from '../../components/loader/loader'
 import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-selector'
-import { setIsLoading } from '../../actions/set-is-loading'
+import { setIsLoading } from '../../actions/other/set-is-loading'
 
 const UsersContainer = ({ className }) => {
 	const [users, setUsers] = useState([])
@@ -72,17 +72,21 @@ const UsersContainer = ({ className }) => {
 					{isLoading.loader ? (
 						<Loader size='40px' />
 					) : (
-						users.map(({ id, login, registeredAt, roleId }) => (
-							<UserRow
-								id={id}
-								key={id}
-								login={login}
-								registeredAt={registeredAt}
-								roleId={roleId}
-								roles={roles.filter(({ id: roleId }) => roleId !== ROLE.GUEST)}
-								onUserRemove={() => onUserRemove(id)}
-							/>
-						))
+						users
+							.sort((a, b) => a.roleId - b.roleId)
+							.map(({ id, login, registeredAt, roleId }) => (
+								<UserRow
+									id={id}
+									key={id}
+									login={login}
+									registeredAt={registeredAt}
+									roleId={roleId}
+									roles={roles.filter(
+										({ id: roleId }) => roleId !== ROLE.GUEST
+									)}
+									onUserRemove={() => onUserRemove(id)}
+								/>
+							))
 					)}
 				</div>
 			</div>

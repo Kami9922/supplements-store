@@ -4,9 +4,9 @@ import { selectModalIsOpen } from '../../selectors/modal-selectors/select-modal-
 import { selectModalOnConfirm } from '../../selectors/modal-selectors/select-modal-on-confirm'
 import { productSelector } from '../../selectors/product-selectors/product-selector'
 import { useEffect, useState } from 'react'
-import { CLOSE_MODAL } from '../../actions/close-modal'
-import { Button } from '../button/button'
-import { Icon } from '../icon/icon'
+import { CLOSE_MODAL } from '../../actions/modal/close-modal'
+import { ModalInputs } from './modal-inputs/modal-inputs'
+import { ModalButtons } from './modal-buttons/modal-buttons'
 
 const ModalContainer = ({ className }) => {
 	const isOpen = useSelector(selectModalIsOpen)
@@ -26,6 +26,7 @@ const ModalContainer = ({ className }) => {
 	useEffect(() => {
 		if (product) {
 			setTitle(product.title)
+			setImage(product.imageUrl)
 			setCategory(product.category)
 			setCost(product.cost)
 			setStoreAmount(product.storeAmount)
@@ -42,10 +43,6 @@ const ModalContainer = ({ className }) => {
 		setImage(null)
 		setInfo('')
 		setIsTypingUrl(false)
-	}
-	const handleImageChange = (target) => {
-		const selectedFile = target.files[0]
-		setImage(selectedFile)
 	}
 
 	const handleSubmit = () => {
@@ -67,7 +64,12 @@ const ModalContainer = ({ className }) => {
 		resetInputs()
 	}
 
-	if (!isOpen) {
+	const checkToOpen = () => {
+		const isTrueValue = Object.values(isOpen).some((value) => value === true)
+		return isTrueValue
+	}
+
+	if (!checkToOpen()) {
 		return null
 	}
 
@@ -75,96 +77,34 @@ const ModalContainer = ({ className }) => {
 		<div className={className}>
 			<div className='overlay'></div>
 			<div className='box'>
-				<h3>Добавление товара</h3>
-				<div className='modal-inputs'>
-					<div>
-						<span>Название</span>
-						<input
-							value={title}
-							type='text'
-							placeholder='Введите название товара'
-							onChange={({ target }) => setTitle(target.value)}
+				{!isOpen.cart ? (
+					<>
+						<h3>Добавление товара</h3>
+						<ModalInputs
+							title={title}
+							category={category}
+							cost={cost}
+							storeAmount={storeAmount}
+							info={info}
+							isTypingUrl={isTypingUrl}
+							setTitle={setTitle}
+							setCategory={setCategory}
+							setCost={setCost}
+							setStoreAmount={setStoreAmount}
+							setImage={setImage}
+							setInfo={setInfo}
+							setIsTypingUrl={setIsTypingUrl}
 						/>
+					</>
+				) : (
+					<div className='cart-warning-modal'>
+						<span>Корзина доступна только авторизованным пользователям!</span>
 					</div>
-					<div>
-						<span>Категория</span>
-						<input
-							value={category}
-							type='text'
-							placeholder='Введите категорию товара'
-							onChange={({ target }) => setCategory(target.value)}
-						/>
-					</div>
-					<div>
-						<span>Стоимость</span>
-						<input
-							value={cost}
-							type='text'
-							placeholder='Введите стоимость товара'
-							onChange={({ target }) => setCost(target.value)}
-						/>
-					</div>
-					<div>
-						<span>Количество</span>
-						<input
-							value={storeAmount}
-							type='text'
-							placeholder='Введите количество товара'
-							onChange={({ target }) => setStoreAmount(target.value)}
-						/>
-					</div>
-					<div className='image-choice-div'>
-						<span>Изображение</span>
-						<div className='image-typing-choice'>
-							<Icon
-								className='change-typing-image-icon'
-								transActive={true}
-								id='fa-pencil'
-								margin='10px 0px 0px 16px'
-								onClick={() => setIsTypingUrl(!isTypingUrl)}
-							/>
-							{!isTypingUrl ? (
-								<label className='image-choice-label'>
-									Загрузить изображение
-									<input
-										className='image-choice'
-										type='file'
-										onChange={({ target }) => handleImageChange(target)}
-									/>
-								</label>
-							) : (
-								<input
-									className='typing-image-url'
-									type='text'
-									placeholder='Введите URL изображения товара'
-									onChange={({ target }) => setImage(target.value)}
-								/>
-							)}
-						</div>
-					</div>
-
-					<div>
-						<span>Описание</span>
-						<textarea
-							value={info}
-							placeholder='Введите описание товара'
-							onChange={({ target }) => setInfo(target.value)}
-						/>
-					</div>
-				</div>
-				<div className='buttons'>
-					<Button
-						width='120px'
-						type='submit'
-						onClick={handleSubmit}>
-						Сохранить
-					</Button>
-					<Button
-						width='120px'
-						onClick={onCancel}>
-						Отмена
-					</Button>
-				</div>
+				)}
+				<ModalButtons
+					handleSubmit={handleSubmit}
+					onCancel={onCancel}
+				/>
 			</div>
 		</div>
 	)
@@ -178,70 +118,15 @@ export const Modal = styled(ModalContainer)`
 	bottom: 0;
 	left: 0;
 
-	& .image-typing-choice {
-		position: relative;
-		margin-bottom: 5px;
-	}
-	& .change-typing-image-icon {
-		position: absolute;
-		right: 24px;
-		top: -10px;
-	}
-
-	& .image-choice-label {
-		display: inline-block;
-		padding: 5px 15px;
-		background-color: rgb(184, 166, 68);
-		color: white;
-		border: none;
-		border-radius: 5px;
-		font-weight: 500;
-		font-size: 18px;
-	}
-
-	.image-choice-label:hover {
-		box-shadow: inset 1px 1px 50px 1px rgba(255, 255, 255, 0.2);
-		transform: translate(0, -1px);
-	}
-
-	& input {
-		padding: 10px;
-		width: 300px;
-		border: 1px solid rgb(139, 139, 139);
-		border-radius: 10px;
-	}
-	& .image-choice {
-		display: none;
-	}
-
-	& .typing-image-url {
-		padding-right: 30px;
+	& .cart-warning-modal {
+		margin-bottom: 20px;
 	}
 
 	& span {
 		display: block;
-		font-weight: 500;
-
-		margin-bottom: 10px;
-	}
-
-	& h3 {
-		margin: 0 0 20px 0;
-	}
-
-	& textarea {
-		resize: none;
-		padding: 10px;
-		width: 300px;
-		border: 1px solid rgb(139, 139, 139);
-		border-radius: 10px;
-	}
-
-	& .modal-inputs {
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		margin-bottom: 20px;
+		font-size: 20px;
+		font-weight: 600;
+		margin-bottom: 8px;
 	}
 
 	& .overlay {
@@ -259,18 +144,8 @@ export const Modal = styled(ModalContainer)`
 		margin: 0 auto;
 		padding: 30px;
 		background-color: #fff;
-		/* border: 1px solid #000; */
 		border-radius: 15px;
 		z-index: 30;
 		text-align: center;
-	}
-
-	& .buttons {
-		display: flex;
-		justify-content: center;
-		gap: 15px;
-	}
-	& .buttons button {
-		border-radius: 5px;
 	}
 `

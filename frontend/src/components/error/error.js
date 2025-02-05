@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { H2 } from '../h2/h2'
 import { PROP_TYPE } from '../../constants/prop-type'
 
 const Div = styled.div`
@@ -13,7 +12,7 @@ const Div = styled.div`
 export const Error = ({ error }) =>
 	error && (
 		<Div>
-			<H2>Ошибка</H2>
+			<h2>Ошибка</h2>
 			<div>{error}</div>
 		</Div>
 	)

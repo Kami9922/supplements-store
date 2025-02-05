@@ -6,7 +6,6 @@ const initialAppState = {
 		status: false,
 		loader: false,
 	},
-	refreshFlag: false,
 }
 
 export const appReducer = (state = initialAppState, { type, payload }) => {
@@ -20,11 +19,6 @@ export const appReducer = (state = initialAppState, { type, payload }) => {
 			return {
 				...state,
 				isLoading: payload,
-			}
-		case ACTION_TYPE.REFRESH_FLAG:
-			return {
-				...state,
-				refreshFlag: payload,
 			}
 
 		default:

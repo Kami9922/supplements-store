@@ -2,17 +2,17 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsSelector } from '../../../selectors/products-selectors/products-selector'
 import { useEffect } from 'react'
-import { setProductsAsync } from '../../../actions/set-products-async'
+import { setProductsAsync } from '../../../actions/products/async-products-actions/set-products-async'
 import { Icon } from '../../../components/icon/icon'
 import { AddingPanel } from './adding-panel'
-import { removeProductAsync } from '../../../actions/remove-product-async'
-import { editProductAsync } from '../../../actions/edit-product-async'
-import { openModal } from '../../../actions/open-modal'
-import { CLOSE_MODAL } from '../../../actions/close-modal'
-import { setIsLoading } from '../../../actions/set-is-loading'
+import { removeProductAsync } from '../../../actions/products/async-products-actions/remove-product-async'
+import { editProductAsync } from '../../../actions/products/async-products-actions/edit-product-async'
+import { openModal } from '../../../actions/modal/open-modal'
+import { CLOSE_MODAL } from '../../../actions/modal/close-modal'
+import { setIsLoading } from '../../../actions/other/set-is-loading'
 import { isLoadingSelector } from '../../../selectors/app-selectors/is-loading-selector'
 import { Loader } from '../../../components/loader/loader'
-import { setProductData } from '../../../actions/set-product-data'
+import { setProductData } from '../../../actions/products/products-actions/set-product-data'
 
 export const ProductsTableContainer = ({ className }) => {
 	const products = useSelector(productsSelector)
@@ -38,6 +38,10 @@ export const ProductsTableContainer = ({ className }) => {
 					dispatch(CLOSE_MODAL)
 					reset()
 				},
+				isOpen: {
+					product: true,
+					cart: false,
+				},
 			})
 		)
 	}
@@ -53,7 +57,7 @@ export const ProductsTableContainer = ({ className }) => {
 				<table>
 					<thead>
 						<tr>
-							<th>№</th>
+							<th className='th-image'>Изображение</th>
 							<th>Название</th>
 							<th>Категория</th>
 							<th>Стоимость</th>
@@ -65,16 +69,20 @@ export const ProductsTableContainer = ({ className }) => {
 					<tbody>
 						{products.map((product, index) => (
 							<tr key={product.id}>
-								<td>{index + 1}</td>
+								<td className='td-image'>
+									<img
+										alt={product.imageUrl}
+										src={product.imageUrl}
+									/>
+								</td>
 								<td>{product.title}</td>
 								<td>{product.category}</td>
 								<td>{product.cost + '₽'}</td>
 								<td>{product.storeAmount}</td>
 								<td className='td-info'>{product.info}</td>
-								{/* <td className='td-image'>{product.imageUrl}</td> */}
 								<td className='td-actions'>
 									<Icon
-										width='100%'
+										width='75px'
 										className='td-icon'
 										background='rgb(209, 209, 209)'
 										id='fa-pencil-square-o'
@@ -82,7 +90,7 @@ export const ProductsTableContainer = ({ className }) => {
 										onClick={() => onEditProduct(product)}
 									/>
 									<Icon
-										width='100%'
+										width='75px'
 										className='td-icon'
 										background='rgb(247, 68, 68)'
 										color='rgb(0, 0, 0)'
@@ -101,8 +109,6 @@ export const ProductsTableContainer = ({ className }) => {
 }
 
 export const ProductsTable = styled(ProductsTableContainer)`
-	padding: 5px;
-
 	& h3 {
 		text-align: center;
 		font-size: 30px;
@@ -124,18 +130,25 @@ export const ProductsTable = styled(ProductsTableContainer)`
 		border-radius: 3px;
 		padding: 5px;
 		text-align: center;
-	}
-	& .td-info {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
 	}
 
+	& td img {
+		width: 100%;
+		max-height: 70px;
+	}
+
+	& .td-image {
+		padding-bottom: 0px;
+	}
+
 	& .td-actions {
-		border: none;
 		display: flex;
-		gap: 5px;
+		flex-direction: column;
 		padding: 0 5px;
+		border: none;
 	}
 
 	& .td-icon {

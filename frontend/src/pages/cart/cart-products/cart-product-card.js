@@ -3,21 +3,23 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Icon } from '../../../components/icon/icon'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIsLoading } from '../../../actions/set-is-loading'
-import { editCartProductAsync } from '../../../actions/edit-cart-product-async'
-import { removeCartProductAsync } from '../../../actions/remove-cart-product-async'
+import { setIsLoading } from '../../../actions/other/set-is-loading'
+import { editCartProductAsync } from '../../../actions/cart-products/async-cart-product-actions/edit-cart-product-async'
+import { removeCartProductAsync } from '../../../actions/cart-products/async-cart-product-actions/remove-cart-product-async'
 import { productsSelector } from '../../../selectors/products-selectors/products-selector'
 import { Button } from '../../../components/button/button'
 import { onAddCartProduct } from '../../../utils/on-add-cart-product'
 import { cartProductsSelector } from '../../../selectors/cart-selectors/cart-products-selector'
 import { isLoadingSelector } from '../../../selectors/app-selectors/is-loading-selector'
 import { Loader } from '../../../components/loader/loader'
+import { selectUserRole } from '../../../selectors/user-selectors/select-user-role'
 
 const CartProductCardContainer = ({ className, cartProduct }) => {
 	const dispatch = useDispatch()
 	const products = useSelector(productsSelector)
 	const cartProducts = useSelector(cartProductsSelector)
 	const isLoading = useSelector(isLoadingSelector)
+	const userRole = useSelector(selectUserRole)
 
 	const onRemoveCartProduct = (id) => {
 		dispatch(setIsLoading(true, true))
@@ -71,6 +73,7 @@ const CartProductCardContainer = ({ className, cartProduct }) => {
 										onClick={() =>
 											onAddCartProduct(
 												dispatch,
+												userRole,
 												cartProducts,
 												cartProduct.title,
 												cartProduct.id

@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Icon } from '../../../components/icon/icon'
-import { openModal } from '../../../actions/open-modal'
+import { openModal } from '../../../actions/modal/open-modal'
 import { useDispatch } from 'react-redux'
-import { CLOSE_MODAL } from '../../../actions/close-modal'
-import { addProductAsync } from '../../../actions/add-product-async'
+import { CLOSE_MODAL } from '../../../actions/modal/close-modal'
+import { addProductAsync } from '../../../actions/products/async-products-actions/add-product-async'
 
 const AddingPanelContainer = ({ className }) => {
 	const dispatch = useDispatch()
@@ -16,6 +16,10 @@ const AddingPanelContainer = ({ className }) => {
 					dispatch(addProductAsync(product))
 					dispatch(CLOSE_MODAL)
 					reset()
+				},
+				isOpen: {
+					product: true,
+					cart: false,
 				},
 			})
 		)

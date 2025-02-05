@@ -1,21 +1,23 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Button } from '../../components/button/button'
-import { loadProductAsync } from '../../actions/load-product-async'
+import { loadProductAsync } from '../../actions/products/async-products-actions/load-product-async'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { productSelector } from '../../selectors/product-selectors/product-selector'
-import { setIsLoading } from '../../actions/set-is-loading'
+import { setIsLoading } from '../../actions/other/set-is-loading'
 import { Loader } from '../../components/loader/loader'
 import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-selector'
 import { onAddCartProduct } from '../../utils/on-add-cart-product'
 import { cartProductsSelector } from '../../selectors/cart-selectors/cart-products-selector'
+import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 
 const ProductContainer = ({ className }) => {
 	const params = useParams()
 
 	const dispatch = useDispatch()
 
+	const userRole = useSelector(selectUserRole)
 	const product = useSelector(productSelector)
 	const isLoading = useSelector(isLoadingSelector)
 	const cartProducts = useSelector(cartProductsSelector)
@@ -72,6 +74,7 @@ const ProductContainer = ({ className }) => {
 							onClick={() =>
 								onAddCartProduct(
 									dispatch,
+									userRole,
 									cartProducts,
 									product.title,
 									product.id
@@ -92,6 +95,8 @@ export const Product = styled(ProductContainer)`
 	flex-direction: column;
 	min-height: 70vh;
 	justify-content: space-between;
+
+	font-family: Comfortaa;
 
 	& .about-span {
 		font-weight: bold;

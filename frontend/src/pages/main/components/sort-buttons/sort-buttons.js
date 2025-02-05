@@ -25,7 +25,7 @@ const SortButtonsContainer = ({
 						className='sort-button'
 						background='transparent'
 						color='#000'
-						height='40px'
+						height='50px'
 						width='260px'
 						onClick={() => setIsChoosingSortType(true)}>
 						Сортировать по стоимости
@@ -49,7 +49,6 @@ const SortButtonsContainer = ({
 							className='choice-cost-sort-button'
 							background='transparent'
 							color='#000'
-							// width='100px'
 							onClick={() => sortProductsByCost('desc')}>
 							<Icon
 								size='40px'
@@ -66,7 +65,7 @@ const SortButtonsContainer = ({
 						className='sort-button'
 						background='transparent'
 						color='#000'
-						height='40px'
+						height='50px'
 						width='260px'
 						onClick={() => setIsChoosingCategory(true)}>
 						Категории

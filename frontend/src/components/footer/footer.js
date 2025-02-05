@@ -25,7 +25,7 @@ export const Footer = styled(FooterContainer)`
 
 	& .footer-container {
 		/* background-color: rgb(223, 223, 223); */
-		padding: 10px;
+		padding: 15px;
 		border: 1px solid rgb(219, 219, 219);
 		border-radius: 20px;
 	}

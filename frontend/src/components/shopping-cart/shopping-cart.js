@@ -4,9 +4,10 @@ import { Link, useMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { cartProductsSelector } from '../../selectors/cart-selectors/cart-products-selector'
 import { useEffect, useState } from 'react'
-import { setCartProductsAsync } from '../../actions/set-cart-products-async'
+
 import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 import { ROLE } from '../../constants/role'
+import { setCartProductsAsync } from '../../actions/cart-products/async-cart-product-actions/set-cart-products-async'
 
 const ShoppingCartContainer = ({ className }) => {
 	const [isCartLoading, setIsCartLoading] = useState(true)

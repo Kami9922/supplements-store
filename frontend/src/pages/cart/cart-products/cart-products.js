@@ -1,25 +1,24 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { setCartProductsAsync } from '../../../actions/set-cart-products-async'
 import { cartProductsSelector } from '../../../selectors/cart-selectors/cart-products-selector'
 import { CartProductCard } from './cart-product-card'
-import { setIsLoading } from '../../../actions/set-is-loading'
+
 import { isLoadingSelector } from '../../../selectors/app-selectors/is-loading-selector'
 import { Loader } from '../../../components/loader/loader'
-import { refreshFlagSelector } from '../../../selectors/app-selectors/refhresh-flag-selector'
+import { setCartProductsAsync } from '../../../actions/cart-products/async-cart-product-actions/set-cart-products-async'
+import { setIsLoading } from '../../../actions/other/set-is-loading'
 
 const CartProductsContainer = ({ className }) => {
 	const cartProducts = useSelector(cartProductsSelector)
 	const isLoading = useSelector(isLoadingSelector)
 
 	const dispatch = useDispatch()
-	const flag = useSelector(refreshFlagSelector)
 
 	useEffect(() => {
 		dispatch(setIsLoading(true, true))
 		dispatch(setCartProductsAsync())
-	}, [dispatch, flag])
+	}, [dispatch])
 
 	return (
 		<div className={className}>

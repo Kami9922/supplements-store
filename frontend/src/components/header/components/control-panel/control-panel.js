@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectUserRole } from '../../../../selectors/user-selectors/select-user-role'
 import { ROLE } from '../../../../constants/role'
 import { selectUserLogin } from '../../../../selectors/user-selectors/select-user-login'
-import { logoutAction } from '../../../../actions/logout-action'
+import { logoutAction } from '../../../../actions/other/logout-action'
 import { checkAccess } from '../../../../utils/check-access'
 
 const RightAligned = styled.div`
@@ -33,6 +33,7 @@ const ControlPanelContainer = ({ className }) => {
 	}
 
 	const isAdmin = checkAccess([ROLE.ADMIN], roleId)
+	const isModerator = checkAccess([ROLE.MODERATOR], roleId)
 
 	return (
 		<div className={className}>
@@ -57,7 +58,7 @@ const ControlPanelContainer = ({ className }) => {
 				)}
 			</RightAligned>
 			<RightAligned>
-				{isAdmin && (
+				{(isAdmin || isModerator) && (
 					<div className='links-panel'>
 						<Link to='/EditProducts'>
 							<Icon
@@ -66,13 +67,15 @@ const ControlPanelContainer = ({ className }) => {
 								transActive={true}
 							/>
 						</Link>
-						<Link to='/users'>
-							<Icon
-								transActive={true}
-								id='fa-users'
-								margin='10px 0px 0px 16px'
-							/>
-						</Link>
+						{isAdmin && (
+							<Link to='/users'>
+								<Icon
+									transActive={true}
+									id='fa-users'
+									margin='10px 0px 0px 16px'
+								/>
+							</Link>
+						)}
 					</div>
 				)}
 			</RightAligned>
@@ -81,10 +84,10 @@ const ControlPanelContainer = ({ className }) => {
 }
 
 export const ControlPanel = styled(ControlPanelContainer)`
+	font-family: Comfortaa;
 	& .login-button {
 		font-size: 24px;
 		padding: 20px;
-
 		border-left: 2px solid rgb(197, 197, 197);
 		border-bottom: 2px solid rgb(197, 197, 197);
 	}

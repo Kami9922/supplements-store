@@ -28,9 +28,9 @@ const LogoContainer = ({ className }) => {
 
 export const Logo = styled(LogoContainer)`
 	display: flex;
-
+	font-family: Comfortaa;
 	& .large-text {
-		font-size: 48px;
+		font-size: 38px;
 		font-weight: 600;
 		line-height: 48px;
 		padding: 0px 20px;

@@ -1,8 +1,28 @@
-import { addCartProductAsync } from '../actions/add-cart-product-async'
-import { editCartProductAsync } from '../actions/edit-cart-product-async'
-import { setIsLoading } from '../actions/set-is-loading'
+import { addCartProductAsync } from '../actions/cart-products/async-cart-product-actions/add-cart-product-async'
+import { editCartProductAsync } from '../actions/cart-products/async-cart-product-actions/edit-cart-product-async'
+import { openModal } from '../actions/modal/open-modal'
+import { setIsLoading } from '../actions/other/set-is-loading'
+import { ROLE } from '../constants/role'
 
-export const onAddCartProduct = (dispatch, cartProducts, title, id) => {
+export const onAddCartProduct = (
+	dispatch,
+	userRole,
+	cartProducts,
+	title,
+	id
+) => {
+	if (userRole === ROLE.GUEST) {
+		dispatch(
+			openModal({
+				isOpen: {
+					product: false,
+					cart: true,
+				},
+			})
+		)
+		return
+	}
+
 	const existingProductIndex = cartProducts.findIndex(
 		(cartProduct) => cartProduct.title === title
 	)

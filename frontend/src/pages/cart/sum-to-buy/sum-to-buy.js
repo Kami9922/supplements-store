@@ -19,7 +19,6 @@ const SumToBuyContainer = ({ className }) => {
 				</div>
 				<Button
 					className='buy-button'
-					// width='150px'
 					height='50px'>
 					Купить
 				</Button>

@@ -1,5 +1,12 @@
 @import url('fonts/font-awesome.css');
 
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('./fonts/comfortaa/Comfortaa-Medium.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -12,6 +19,7 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	background-color: #ffffff;
+	font-family: Comfortaa;
 }
 
 html,

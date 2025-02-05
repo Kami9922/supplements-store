@@ -12,9 +12,10 @@ const SearchContainer = ({ className, searchPhrase, onChange }) => {
 				onChange={onChange}
 			/>
 			<Icon
+				className='search-icon'
 				inactive={true}
 				id='fa-search'
-				size='21px'
+				size='22px'
 			/>
 		</div>
 	)
@@ -30,6 +31,11 @@ export const Search = styled(SearchContainer)`
 		padding: 10px 35px 10px 10px;
 		border-radius: 15px;
 		border: 1px solid rgb(146, 146, 146);
+	}
+
+	& .search-icon {
+		position: absolute;
+		top: 7px;
 	}
 
 	& > div {

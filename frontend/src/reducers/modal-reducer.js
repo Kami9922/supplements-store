@@ -3,7 +3,10 @@ import { ACTION_TYPE } from '../actions/action-type'
 const initialModalState = {
 	modal: {
 		onConfirm: () => {},
-		isOpen: false,
+		isOpen: {
+			cart: false,
+			product: false,
+		},
 	},
 }
 
@@ -15,7 +18,6 @@ export const modalReducer = (state = initialModalState, { type, payload }) => {
 				modal: {
 					...state.modal,
 					...payload,
-					isOpen: true,
 				},
 			}
 		case ACTION_TYPE.CLOSE_MODAL:
@@ -24,7 +26,10 @@ export const modalReducer = (state = initialModalState, { type, payload }) => {
 				modal: {
 					...state.modal,
 					onConfirm: () => {},
-					isOpen: false,
+					isOpen: {
+						cart: false,
+						product: false,
+					},
 				},
 			}
 		default:

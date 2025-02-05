@@ -24,8 +24,6 @@ const addCartProduct = async (userId, productId) => {
 	return cartProduct
 }
 
-// await newCart.populate('purchaser')
-
 const getCartProducts = async (userId) => {
 	const cart = await Cart.findOne({ purchaser: userId }).populate(
 		'cartProducts'

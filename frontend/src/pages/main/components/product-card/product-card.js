@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { cartProductsSelector } from '../../../../selectors/cart-selectors/cart-products-selector'
 import { isLoadingSelector } from '../../../../selectors/app-selectors/is-loading-selector'
 import { onAddCartProduct } from '../../../../utils/on-add-cart-product'
+import { selectUserRole } from '../../../../selectors/user-selectors/select-user-role'
 
 const ProductCardContainer = ({ className, id, title, imageUrl, cost }) => {
 	const dispatch = useDispatch()
 	const cartProducts = useSelector(cartProductsSelector)
 	const isLoading = useSelector(isLoadingSelector)
+	const userRole = useSelector(selectUserRole)
 
 	return (
 		<div className={className}>
@@ -25,8 +27,11 @@ const ProductCardContainer = ({ className, id, title, imageUrl, cost }) => {
 				<span className='card-cost'>{cost}</span>
 				<span className='card-title'>{title}</span>
 				<Button
+					className='product-card-buttons'
 					disabled={isLoading.status}
-					onClick={() => onAddCartProduct(dispatch, cartProducts, title, id)}>
+					onClick={() =>
+						onAddCartProduct(dispatch, userRole, cartProducts, title, id)
+					}>
 					В корзину
 				</Button>
 			</div>
@@ -35,6 +40,7 @@ const ProductCardContainer = ({ className, id, title, imageUrl, cost }) => {
 }
 
 export const ProductCard = styled(ProductCardContainer)`
+	font-family: Comfortaa;
 	& .product-card-container {
 		cursor: pointer;
 		display: flex;
@@ -44,6 +50,11 @@ export const ProductCard = styled(ProductCardContainer)`
 		margin: 20px;
 		border-radius: 15px;
 	}
+
+	/* & .product-card-buttons {
+		font-family: Comfortaa;
+	} */
+
 	& .card-title {
 		align-self: flex-start;
 		margin-bottom: 5px;

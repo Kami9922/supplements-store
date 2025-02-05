@@ -4,13 +4,11 @@ import { ControlPanel } from './components/control-panel/control-panel'
 
 const HeaderContainer = ({ className }) => (
 	<header className={className}>
-		<div className='logo-and-discription'>
-			<Logo />
-			<div className='header-discription'>
-				<span>Здоровье</span>
-				<span>Сила</span>
-				<span>Результат</span>
-			</div>
+		<Logo />
+		<div className='header-discription'>
+			<span>Здоровье</span>
+			<span>Сила</span>
+			<span>Результат</span>
 		</div>
 		<ControlPanel />
 	</header>
@@ -27,10 +25,6 @@ export const Header = styled(HeaderContainer)`
 	background-color: rgb(255, 255, 255);
 	z-index: 10;
 	border-bottom: 1px solid rgb(211, 211, 211);
-
-	& .logo-and-discription {
-		display: flex;
-	}
 
 	& .header-discription {
 		font-style: italic;

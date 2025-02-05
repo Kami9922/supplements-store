@@ -1,4 +1,6 @@
 const Product = require('../models/Product')
+const fs = require('fs')
+const path = require('path')
 
 const addProduct = async (product) => {
 	const newProduct = await Product.create(product)
@@ -11,12 +13,26 @@ const editProduct = async (id, product) => {
 		returnDocument: 'after',
 	})
 
-	// await newProduct.populate({ path: 'comments', populate: 'purchaser' })
-
 	return newProduct
 }
 
-const deleteProduct = (id) => Product.deleteOne({ _id: id })
+const deleteProduct = async (id) => {
+	const product = await Product.findById(id)
+
+	if (!product) {
+		throw new Error('Product not found')
+	}
+
+	const imagePath = path.join(__dirname, '..', product.image)
+
+	fs.unlink(imagePath, (err) => {
+		if (err) {
+			console.error('Error deleting file:', err)
+		}
+	})
+
+	await Product.findByIdAndDelete(id)
+}
 
 const getProducts = async (
 	search = '',
