@@ -50,6 +50,5 @@ export const CartProducts = styled(CartProductsContainer)`
 		margin: auto;
 		font-size: 20px;
 		font-style: italic;
-		/* text-align: center; */
 	}
 `

@@ -66,6 +66,7 @@ export const ShoppingCart = styled(ShoppingCartContainer)`
 
 	& .cart-products-count {
 		position: absolute;
+		padding-top: 5px;
 		width: 32px;
 		height: 32px;
 		font-size: 20px;

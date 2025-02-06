@@ -5,6 +5,7 @@ const initialAppState = {
 	isLoading: {
 		status: false,
 		loader: false,
+		locatedLoader: false,
 	},
 }
 

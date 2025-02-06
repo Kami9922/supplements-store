@@ -34,7 +34,6 @@ export const setProductsAsync =
 			.then(({ data }) => {
 				const products = data.products
 				dispatch(setAllProducts(products))
-
 				const categories = filterCategories(products)
 				dispatch(setCategories(categories))
 			})

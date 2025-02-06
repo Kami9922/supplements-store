@@ -45,6 +45,7 @@ export const SumToBuy = styled(SumToBuyContainer)`
 	& .sum-declaration {
 		font-weight: 600;
 		font-size: 22px;
+		margin-bottom: 5px;
 	}
 
 	& .buy-button {

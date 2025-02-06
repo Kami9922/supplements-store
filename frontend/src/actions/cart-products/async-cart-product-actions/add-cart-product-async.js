@@ -10,5 +10,5 @@ export const addCartProductAsync = (id) => (dispatch) => {
 		.catch((error) => {
 			console.error('Ошибка при добавлении продукта в корзину:', error)
 		})
-		.then(() => dispatch(setIsLoading(false, false)))
+		.then(() => dispatch(setIsLoading(false, false, false)))
 }

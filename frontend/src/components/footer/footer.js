@@ -4,8 +4,8 @@ const FooterContainer = ({ className }) => {
 	return (
 		<div className={className}>
 			<div className='footer-container'>
-				<div>Магазин БАДов</div>
-				<div>dietary-supplements.ru</div>
+				<span className='footer-upper-text'>Магазин БАДов</span>
+				<span>dietary-supplements.ru</span>
 			</div>
 		</div>
 	)
@@ -18,13 +18,16 @@ export const Footer = styled(FooterContainer)`
 	width: 1000px;
 	height: 120px;
 	padding: 20px 40px;
-	/* box-shadow: 0px 2px 17px #000; */
 	font-weight: bold;
 	border-radius: 15px;
 	background-color: rgb(243, 243, 243);
 
+	& .footer-upper-text {
+		display: block;
+		margin-bottom: 2px;
+	}
+
 	& .footer-container {
-		/* background-color: rgb(223, 223, 223); */
 		padding: 15px;
 		border: 1px solid rgb(219, 219, 219);
 		border-radius: 20px;

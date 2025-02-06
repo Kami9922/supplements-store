@@ -24,8 +24,7 @@ const ImageInputContainer = ({
 					onClick={() => setIsTypingUrl(!isTypingUrl)}
 				/>
 				{!isTypingUrl ? (
-					<label className='image-choice-label'>
-						Загрузить изображение
+					<label>
 						<input
 							className='image-choice'
 							type='file'
@@ -46,7 +45,11 @@ const ImageInputContainer = ({
 }
 export const ImageInput = styled(ImageInputContainer)`
 	& .image-choice {
-		display: none;
+		transition: color 0.2s;
+		cursor: pointer;
+	}
+	& .image-choice:hover {
+		color: rgb(143, 143, 143);
 	}
 	& .image-typing-choice {
 		position: relative;
@@ -54,19 +57,8 @@ export const ImageInput = styled(ImageInputContainer)`
 	}
 	& .change-typing-image-icon {
 		position: absolute;
-		right: 24px;
-		top: -10px;
-	}
-
-	& .image-choice-label {
-		display: inline-block;
-		padding: 5px 15px;
-		background-color: rgb(184, 166, 68);
-		color: white;
-		border: none;
-		border-radius: 5px;
-		font-weight: 500;
-		font-size: 18px;
+		right: 30px;
+		top: -2px;
 	}
 
 	.image-choice-label:hover {
@@ -74,6 +66,7 @@ export const ImageInput = styled(ImageInputContainer)`
 		transform: translate(0, -1px);
 	}
 	& .typing-image-url {
+		padding: 13px;
 		padding-right: 30px;
 	}
 `

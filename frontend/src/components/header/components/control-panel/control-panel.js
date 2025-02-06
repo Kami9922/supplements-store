@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Icon } from '../../../icon/icon'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '../../../button/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUserRole } from '../../../../selectors/user-selectors/select-user-role'
@@ -22,14 +22,17 @@ const Username = styled.div`
 `
 
 const ControlPanelContainer = ({ className }) => {
-	const dispatch = useDispatch()
-
 	const roleId = useSelector(selectUserRole)
 	const login = useSelector(selectUserLogin)
+
+	const dispatch = useDispatch()
+
+	const navigate = useNavigate()
 
 	const onLogout = () => {
 		dispatch(logoutAction())
 		sessionStorage.removeItem('userData')
+		navigate('/')
 	}
 
 	const isAdmin = checkAccess([ROLE.ADMIN], roleId)

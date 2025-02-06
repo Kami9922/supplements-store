@@ -68,20 +68,27 @@ const ProductContainer = ({ className }) => {
 						</div>
 					</div>
 					<div className='product-button'>
-						<Button
-							disabled={isLoading.status}
-							width='250px'
-							onClick={() =>
-								onAddCartProduct(
-									dispatch,
-									userRole,
-									cartProducts,
-									product.title,
-									product.id
-								)
-							}>
-							В корзину
-						</Button>
+						{isLoading.locatedLoaderId === product.id ? (
+							<Loader
+								size='36px'
+								className='product-loader'
+							/>
+						) : (
+							<Button
+								disabled={isLoading.status}
+								width='250px'
+								onClick={() =>
+									onAddCartProduct(
+										dispatch,
+										userRole,
+										cartProducts,
+										product.title,
+										product.id
+									)
+								}>
+								В корзину
+							</Button>
+						)}
 					</div>
 				</>
 			)}
@@ -95,13 +102,17 @@ export const Product = styled(ProductContainer)`
 	flex-direction: column;
 	min-height: 70vh;
 	justify-content: space-between;
-
 	font-family: Comfortaa;
 
 	& .about-span {
 		font-weight: bold;
 		font-size: 24px;
 		color: rgb(158, 158, 158);
+	}
+
+	& .product-loader {
+		position: inherit;
+		margin-right: 11%;
 	}
 
 	& p {
@@ -132,15 +143,10 @@ export const Product = styled(ProductContainer)`
 		border-top: 1px solid #000;
 	}
 
-	& .product-info {
-	}
-
 	& .product-image-block {
 		display: flex;
 		padding-bottom: 45px;
 		border-bottom: 1px solid #000;
-
-		/* justify-content: space-between; */
 	}
 
 	& img {
@@ -151,13 +157,13 @@ export const Product = styled(ProductContainer)`
 		display: flex;
 		flex-direction: column;
 	}
+
 	& .product-consise-description {
 		display: flex;
 		flex-direction: column;
 		margin-left: 25px;
 		padding: 20px 55px 0 0;
 		padding-top: 25px;
-		/* justify-content: center; */
 		border-top: 1px solid #000;
 		gap: 15px;
 		width: 100%;

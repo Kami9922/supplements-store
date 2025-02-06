@@ -20,7 +20,6 @@ export const Loader = styled(LoaderContainer)`
 	border-radius: 50%;
 	border-left-color: transparent;
 	animation: loader 1s infinite;
-	/* margin: ${({ margin = '0 auto' }) => margin}; */
 
 	@keyframes loader {
 		0% {

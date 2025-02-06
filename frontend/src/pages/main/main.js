@@ -26,10 +26,12 @@ const MainContainer = ({ className }) => {
 	const [selectedCategory, setSelectedCategory] = useState(null)
 	const [isChoosingCategory, setIsChoosingCategory] = useState(false)
 	const [isChoosingSortType, setIsChoosingSortType] = useState(false)
+	const [error, setError] = useState(null)
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
+		dispatch(setIsLoading(true, true))
 		dispatch(
 			setProductsAsync(
 				true,
@@ -40,7 +42,6 @@ const MainContainer = ({ className }) => {
 				selectedCategory
 			)
 		)
-		dispatch(setIsLoading(true, true))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [page, shouldSearch, sortBy, selectedCategory, dispatch])
 

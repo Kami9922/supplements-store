@@ -7,12 +7,14 @@ import { cartProductsSelector } from '../../../../selectors/cart-selectors/cart-
 import { isLoadingSelector } from '../../../../selectors/app-selectors/is-loading-selector'
 import { onAddCartProduct } from '../../../../utils/on-add-cart-product'
 import { selectUserRole } from '../../../../selectors/user-selectors/select-user-role'
+import { Loader } from '../../../../components/loader/loader'
 
 const ProductCardContainer = ({ className, id, title, imageUrl, cost }) => {
-	const dispatch = useDispatch()
 	const cartProducts = useSelector(cartProductsSelector)
 	const isLoading = useSelector(isLoadingSelector)
 	const userRole = useSelector(selectUserRole)
+
+	const dispatch = useDispatch()
 
 	return (
 		<div className={className}>
@@ -26,14 +28,21 @@ const ProductCardContainer = ({ className, id, title, imageUrl, cost }) => {
 				</Link>
 				<span className='card-cost'>{cost}</span>
 				<span className='card-title'>{title}</span>
-				<Button
-					className='product-card-buttons'
-					disabled={isLoading.status}
-					onClick={() =>
-						onAddCartProduct(dispatch, userRole, cartProducts, title, id)
-					}>
-					В корзину
-				</Button>
+				{isLoading.locatedLoaderId === id ? (
+					<Loader
+						size='35px'
+						className='product-loader'
+					/>
+				) : (
+					<Button
+						className='product-card-buttons'
+						disabled={isLoading.status}
+						onClick={() =>
+							onAddCartProduct(dispatch, userRole, cartProducts, title, id)
+						}>
+						В корзину
+					</Button>
+				)}
 			</div>
 		</div>
 	)
@@ -51,9 +60,9 @@ export const ProductCard = styled(ProductCardContainer)`
 		border-radius: 15px;
 	}
 
-	/* & .product-card-buttons {
-		font-family: Comfortaa;
-	} */
+	& .product-loader {
+		position: static;
+	}
 
 	& .card-title {
 		align-self: flex-start;

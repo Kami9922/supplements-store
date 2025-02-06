@@ -21,6 +21,11 @@ export const productReducer = (
 				...state,
 				...payload,
 			}
+		case ACTION_TYPE.RESET_PRODUCT_DATA:
+			return {
+				...state,
+				...initialProductState,
+			}
 
 		default:
 			return state

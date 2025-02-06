@@ -11,8 +11,8 @@ import { Button } from '../../../components/button/button'
 import { onAddCartProduct } from '../../../utils/on-add-cart-product'
 import { cartProductsSelector } from '../../../selectors/cart-selectors/cart-products-selector'
 import { isLoadingSelector } from '../../../selectors/app-selectors/is-loading-selector'
-import { Loader } from '../../../components/loader/loader'
 import { selectUserRole } from '../../../selectors/user-selectors/select-user-role'
+import { Loader } from '../../../components/loader/loader'
 
 const CartProductCardContainer = ({ className, cartProduct }) => {
 	const dispatch = useDispatch()
@@ -22,86 +22,82 @@ const CartProductCardContainer = ({ className, cartProduct }) => {
 	const userRole = useSelector(selectUserRole)
 
 	const onRemoveCartProduct = (id) => {
-		dispatch(setIsLoading(true, true))
+		dispatch(setIsLoading(true, false, id))
 		dispatch(removeCartProductAsync(id))
 	}
 
-	const onReduceCartProduce = (id, quantity) => {
+	const onReduceCartProduct = (id, quantity) => {
 		if (quantity <= 1) {
-			dispatch(removeCartProductAsync(id))
+			onRemoveCartProduct(id)
 			return
 		}
-		dispatch(setIsLoading(true, false))
+		dispatch(setIsLoading(true, false, id))
 		dispatch(editCartProductAsync(id, quantity, 'reduce'))
 	}
 
 	return (
 		<div className={className}>
 			<div className='cart-product-card-container'>
-				{isLoading.loader ? (
-					<Loader />
-				) : (
-					<>
-						<div className='cart-product-info'>
-							<Link
-								className='cart-image'
-								to={`/product/${
-									products.find(
-										(product) => product.title === cartProduct.title
-									)?.id
-								}`}>
-								<img
-									alt={cartProduct.imageUrl}
-									src={cartProduct.imageUrl}
-								/>
-							</Link>
-							<div className='right-cart-block'>
-								<div className='cart-cart-text'>
-									<span className='cart-card-title'>{cartProduct.title}</span>
-									<span className='cart-card-cost'>
-										{cartProduct.cost + '₽'}
-									</span>
-									<span className='cart-card-cost'>
-										{'x' + cartProduct.quantity}
-									</span>
-								</div>
-								<div className='cart-quantity-buttons'>
-									<Button
-										background='rgb(201, 165, 89)'
-										width='30px'
-										disabled={isLoading.status}
-										onClick={() =>
-											onAddCartProduct(
-												dispatch,
-												userRole,
-												cartProducts,
-												cartProduct.title,
-												cartProduct.id
-											)
-										}>
-										+
-									</Button>
-									<Button
-										background='rgb(201, 165, 89)'
-										width='30px'
-										disabled={isLoading.status}
-										onClick={() =>
-											onReduceCartProduce(cartProduct.id, cartProduct.quantity)
-										}>
-										-
-									</Button>
-								</div>
+				<div className='cart-product-info'>
+					<Link
+						className='cart-image'
+						to={`/product/${
+							products.find((product) => product.title === cartProduct.title)
+								?.id
+						}`}>
+						<img
+							alt={cartProduct.imageUrl}
+							src={cartProduct.imageUrl}
+						/>
+					</Link>
+					{isLoading.locatedLoaderId === cartProduct.id ? (
+						<Loader className='cart-product-loader' />
+					) : (
+						<div className='right-cart-block'>
+							<div className='cart-cart-text'>
+								<span className='cart-card-title'>{cartProduct.title}</span>
+								<span className='cart-card-cost'>{cartProduct.cost + '₽'}</span>
+								<span className='cart-card-cost'>
+									{'x' + cartProduct.quantity}
+								</span>
+							</div>
+							<div className='cart-quantity-buttons'>
+								<Button
+									background='rgb(201, 165, 89)'
+									width='30px'
+									disabled={isLoading.status}
+									onClick={() =>
+										onAddCartProduct(
+											dispatch,
+											userRole,
+											cartProducts,
+											cartProduct.title,
+											cartProduct.id
+										)
+									}>
+									+
+								</Button>
+								<Button
+									background='rgb(201, 165, 89)'
+									width='30px'
+									disabled={isLoading.status}
+									onClick={() =>
+										onReduceCartProduct(cartProduct.id, cartProduct.quantity)
+									}>
+									-
+								</Button>
 							</div>
 						</div>
-						<Icon
-							size='40px'
-							className='cart-remove-icon'
-							id='fa fa-times'
-							margin='0px 0px 0px 0px'
-							onClick={() => onRemoveCartProduct(cartProduct.id)}
-						/>
-					</>
-				)}
+					)}
+				</div>
+
+				<Icon
+					size='40px'
+					className='cart-remove-icon'
+					id='fa fa-times'
+					margin='0px 0px 0px 0px'
+					onClick={() => onRemoveCartProduct(cartProduct.id)}
+				/>
 			</div>
 		</div>
 	)
@@ -119,6 +115,11 @@ export const CartProductCard = styled(CartProductCardContainer)`
 
 	& .cart-product-info {
 		display: flex;
+	}
+
+	& .cart-product-loader {
+		position: inherit;
+		margin: 50px 50px 50px 125px;
 	}
 
 	& .cart-quantity-buttons {

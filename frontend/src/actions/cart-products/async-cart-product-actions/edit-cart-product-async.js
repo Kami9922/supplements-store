@@ -10,5 +10,5 @@ export const editCartProductAsync = (id, quantity, operation) => (dispatch) => {
 		.catch((error) => {
 			console.error('Ошибка при редактировании продукта в корзине:', error)
 		})
-		.finally(() => dispatch(setIsLoading(false, false)))
+		.finally(() => dispatch(setIsLoading(false, false, false)))
 }
