@@ -4,8 +4,9 @@ const initialModalState = {
 	modal: {
 		onConfirm: () => {},
 		isOpen: {
-			cart: false,
+			alertCart: false,
 			product: false,
+			alertOnBuy: false,
 		},
 	},
 }
@@ -27,8 +28,9 @@ export const modalReducer = (state = initialModalState, { type, payload }) => {
 					...state.modal,
 					onConfirm: () => {},
 					isOpen: {
-						cart: false,
+						alertCart: false,
 						product: false,
+						alertOnBuy: false,
 					},
 				},
 			}

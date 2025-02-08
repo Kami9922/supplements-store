@@ -14,7 +14,7 @@ const ImageInputContainer = ({
 
 	return (
 		<div className={className}>
-			<span>Изображение</span>
+			<span className='heading-span'>Изображение</span>
 			<div className='image-typing-choice'>
 				<Icon
 					className='change-typing-image-icon'
@@ -60,8 +60,7 @@ export const ImageInput = styled(ImageInputContainer)`
 		right: 30px;
 		top: -2px;
 	}
-
-	.image-choice-label:hover {
+	& .image-choice-label:hover {
 		box-shadow: inset 1px 1px 50px 1px rgba(255, 255, 255, 0.2);
 		transform: translate(0, -1px);
 	}

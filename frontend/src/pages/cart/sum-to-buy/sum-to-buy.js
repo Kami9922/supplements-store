@@ -1,10 +1,23 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { cartProductsSelector } from '../../../selectors/cart-selectors/cart-products-selector'
 import { Button } from '../../../components/button/button'
+import { openModal } from '../../../actions/modal/open-modal'
 
 const SumToBuyContainer = ({ className }) => {
 	const cartProducts = useSelector(cartProductsSelector)
+
+	const dispatch = useDispatch()
+
+	const onBuy = () => {
+		dispatch(
+			openModal({
+				isOpen: {
+					alertOnBuy: true,
+				},
+			})
+		)
+	}
 
 	return (
 		<div className={className}>
@@ -19,7 +32,8 @@ const SumToBuyContainer = ({ className }) => {
 				</div>
 				<Button
 					className='buy-button'
-					height='50px'>
+					height='50px'
+					onClick={onBuy}>
 					Купить
 				</Button>
 			</div>

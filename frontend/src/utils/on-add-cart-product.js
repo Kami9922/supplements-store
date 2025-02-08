@@ -15,8 +15,7 @@ export const onAddCartProduct = (
 		dispatch(
 			openModal({
 				isOpen: {
-					product: false,
-					cart: true,
+					alertCart: true,
 				},
 			})
 		)

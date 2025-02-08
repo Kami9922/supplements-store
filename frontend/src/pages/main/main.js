@@ -26,7 +26,6 @@ const MainContainer = ({ className }) => {
 	const [selectedCategory, setSelectedCategory] = useState(null)
 	const [isChoosingCategory, setIsChoosingCategory] = useState(false)
 	const [isChoosingSortType, setIsChoosingSortType] = useState(false)
-	const [error, setError] = useState(null)
 
 	const dispatch = useDispatch()
 

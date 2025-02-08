@@ -3,11 +3,6 @@ import { ImageInput } from './image-input/image-input'
 
 const ModalInputsContainer = ({
 	className,
-	title,
-	category,
-	cost,
-	storeAmount,
-	info,
 	isTypingUrl,
 	setTitle,
 	setCategory,
@@ -16,47 +11,61 @@ const ModalInputsContainer = ({
 	setImage,
 	setInfo,
 	setIsTypingUrl,
+	register,
+	errors,
 }) => {
 	return (
 		<div className={className}>
 			<div>
-				<span>Название</span>
+				<span className='heading-span'>Название</span>
 				<input
-					value={title}
+					{...register('formTitle', {})}
 					type='text'
 					placeholder='Введите название товара'
 					onChange={({ target }) => setTitle(target.value)}
 				/>
+				{errors.formTitle && (
+					<span className='error-span'>{errors.formTitle.message}</span>
+				)}
 			</div>
 
 			<div>
-				<span>Категория</span>
+				<span className='heading-span'>Категория</span>
 				<input
-					value={category}
+					{...register('formCategory', {})}
 					type='text'
 					placeholder='Введите категорию товара'
 					onChange={({ target }) => setCategory(target.value)}
 				/>
+				{errors.formCategory && (
+					<span className='error-span'>{errors.formCategory.message}</span>
+				)}
 			</div>
 
 			<div>
-				<span>Стоимость</span>
+				<span className='heading-span'>Стоимость</span>
 				<input
-					value={cost}
-					type='text'
+					{...register('formCost', {})}
+					type='number'
 					placeholder='Введите стоимость товара'
 					onChange={({ target }) => setCost(target.value)}
 				/>
+				{errors.formCost && (
+					<span className='error-span'>{errors.formCost.message}</span>
+				)}
 			</div>
 
 			<div>
-				<span>Количество</span>
+				<span className='heading-span'>Количество</span>
 				<input
-					value={storeAmount}
-					type='text'
+					{...register('formStoreAmount', {})}
+					type='number'
 					placeholder='Введите количество товара'
 					onChange={({ target }) => setStoreAmount(target.value)}
 				/>
+				{errors.formStoreAmount && (
+					<span className='error-span'>{errors.formStoreAmount.message}</span>
+				)}
 			</div>
 
 			<ImageInput
@@ -66,12 +75,15 @@ const ModalInputsContainer = ({
 			/>
 
 			<div>
-				<span>Описание</span>
+				<span className='heading-span'>Описание</span>
 				<textarea
-					value={info}
+					{...register('formInfo', {})}
 					placeholder='Введите описание товара'
 					onChange={({ target }) => setInfo(target.value)}
 				/>
+				{errors.formInfo && (
+					<span className='error-span'>{errors.formInfo.message}</span>
+				)}
 			</div>
 		</div>
 	)
@@ -89,15 +101,18 @@ export const ModalInputs = styled(ModalInputsContainer)`
 		border-radius: 10px;
 	}
 
-	& span {
+	& .heading-span {
 		display: block;
-		font-weight: 500;
-
+		font-weight: 600;
 		margin-bottom: 10px;
+		font-size: 20px;
+		margin-bottom: 15px;
 	}
 
-	& h3 {
-		margin: 0 0 20px 0;
+	& .error-span {
+		padding-top: 5px;
+		font-size: 12px;
+		color: rgb(236, 32, 32);
 	}
 
 	& textarea {

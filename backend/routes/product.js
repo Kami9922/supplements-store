@@ -16,35 +16,43 @@ const ROLES = require('../constants/roles')
 const router = express.Router({ mergeParams: true })
 
 router.get('/', async (req, res) => {
-	const { search, limit, page, sortBy, category } = req.query
+	try {
+		const { search, limit, page, sortBy, category } = req.query
 
-	const sort = {}
-	if (sortBy === 'costAsc') {
-		sort.cost = 1
-	} else if (sortBy === 'costDesc') {
-		sort.cost = -1
+		const sort = {}
+		if (sortBy === 'costAsc') {
+			sort.cost = 1
+		} else if (sortBy === 'costDesc') {
+			sort.cost = -1
+		}
+
+		const filter = {}
+		if (category) {
+			filter.category = category
+		}
+
+		const { products, lastPage } = await getProducts(
+			search,
+			limit,
+			page,
+			sort,
+			filter
+		)
+
+		res.send({ data: { lastPage, products: products.map(mapProduct) } })
+	} catch (error) {
+		res.send({ error: 'Failed to get products', details: error })
 	}
-
-	const filter = {}
-	if (category) {
-		filter.category = category
-	}
-
-	const { products, lastPage } = await getProducts(
-		search,
-		limit,
-		page,
-		sort,
-		filter
-	)
-
-	res.send({ data: { lastPage, products: products.map(mapProduct) } })
 })
 
 router.get('/:id', async (req, res) => {
-	const post = await getProduct(req.params.id)
+	try {
+		const post = await getProduct(req.params.id)
 
-	res.send({ data: mapProduct(post) })
+		res.send({ data: mapProduct(post) })
+	} catch (error) {
+		res.send({ error: 'Failed to get product', details: error })
+	}
 })
 
 router.post(
@@ -65,7 +73,7 @@ router.post(
 
 			res.send({ data: mapProduct(newProduct) })
 		} catch (error) {
-			console.error(error)
+			res.send({ error: 'Failed to post product', details: error })
 		}
 	}
 )
@@ -101,9 +109,13 @@ router.delete(
 	authenticated,
 	hasRole([ROLES.ADMIN]),
 	async (req, res) => {
-		await deleteProduct(req.params.id)
+		try {
+			await deleteProduct(req.params.id)
 
-		res.send({ error: null })
+			res.send({ error: null })
+		} catch (error) {
+			res.send({ error: 'Failed to delete product', details: error })
+		}
 	}
 )
 

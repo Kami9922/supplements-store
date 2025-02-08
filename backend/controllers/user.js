@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const User = require('../models/User')
 const { generate } = require('../helpers/token')
 const ROLES = require('../constants/roles')
+const Cart = require('../models/Cart')
 
 const register = async (login, password) => {
 	if (!password) {
@@ -43,7 +44,10 @@ const getRoles = () => [
 	{ id: ROLES.USER, name: 'User' },
 ]
 
-const deleteUser = (id) => User.deleteOne({ _id: id })
+const deleteUser = async (id) => {
+	await Cart.deleteOne({ _id: id })
+	return User.deleteOne({ _id: id })
+}
 
 const updateUser = (id, userData) =>
 	User.findByIdAndUpdate(id, userData, { returnDocument: 'after' })

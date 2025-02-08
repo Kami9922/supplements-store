@@ -12,8 +12,8 @@ router.post('/register', async (req, res) => {
 		res
 			.cookie('token', token, { httpOnly: true })
 			.send({ error: null, user: mapUser(user), newCart })
-	} catch (e) {
-		res.send({ error: e.message || 'Unknown error' })
+	} catch (error) {
+		res.send({ error: 'Failed to register', details: error })
 	}
 })
 
@@ -24,13 +24,17 @@ router.post('/login', async (req, res) => {
 		res
 			.cookie('token', token, { httpOnly: true })
 			.send({ error: null, user: mapUser(user) })
-	} catch (e) {
-		res.send({ error: e.message || 'Unknown error' })
+	} catch (error) {
+		res.send({ error: 'Failed to login', details: error })
 	}
 })
 
 router.post('/logout', (req, res) => {
-	res.cookie('token', '', { httpOnly: true }).send({})
+	try {
+		res.cookie('token', '', { httpOnly: true }).send({})
+	} catch (error) {
+		res.send({ error: 'Failed to logout', details: error })
+	}
 })
 
 module.exports = router

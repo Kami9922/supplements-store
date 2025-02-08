@@ -2,9 +2,7 @@ const Cart = require('../models/Cart')
 const CartProduct = require('../models/CartProduct')
 const Product = require('../models/Product')
 
-const addNewCart = async (userId) => {
-	return await Cart.create({ purchaser: userId })
-}
+const addNewCart = async (userId) => Cart.create({ purchaser: userId })
 
 const addCartProduct = async (userId, productId) => {
 	const { id } = productId

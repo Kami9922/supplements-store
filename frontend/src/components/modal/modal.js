@@ -1,3 +1,6 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectModalIsOpen } from '../../selectors/modal-selectors/select-modal-is-open'
@@ -5,8 +8,48 @@ import { selectModalOnConfirm } from '../../selectors/modal-selectors/select-mod
 import { productSelector } from '../../selectors/product-selectors/product-selector'
 import { useEffect, useState } from 'react'
 import { CLOSE_MODAL } from '../../actions/modal/close-modal'
-import { ModalInputs } from './modal-inputs/modal-inputs'
-import { ModalButtons } from './modal-buttons/modal-buttons'
+import { ModalInputs } from './form-modal-inputs/form-modal-inputs'
+import { FormModalButtons } from './form-modal-buttons/form-modal-buttons'
+import { AlertModal } from './alert-modal/alert-modal'
+
+const authFormSchema = yup.object().shape({
+	formTitle: yup
+		.string()
+		.required('Введите название товара')
+		.matches(/^[A-Za-zА-Яа-яЁё0-9\s]+$/, 'Недопустимое название товара')
+		.min(3, 'Недопустимое название товара. Минимум 3 символа')
+		.max(20, 'Недопустимое название товара. Максмиум 20 символов'),
+	formCategory: yup
+		.string()
+		.required('Введите категорию товара')
+		.matches(
+			/^[A-Za-zА-Яа-яЁё0-9\s]+$/,
+			'Недопустимое название категории товара'
+		)
+		.min(3, 'Недопустимое название категории. Минимум 6 символов')
+		.max(15, 'Недопустимое название категории. Максиум 15 символов'),
+	formCost: yup
+		.number()
+		.required('Введите стоимость товара')
+		.typeError('Стоимость должна быть числом')
+		.integer('Стоимость должна быть целым числом')
+		.min(1, 'Стоимость должна быть больше 0')
+		.max(999999999999999, 'Слишком большая стоимость'),
+	formStoreAmount: yup
+		.number()
+		.required('Введите количество товара')
+		.typeError('Количество товара должно быть числом')
+		.integer('Количество товара должно быть целым числом')
+
+		.min(1, 'Количество товара должно быть больше 0')
+		.max(999999999999999, 'Слишком большое количестово товара'),
+	formInfo: yup
+		.string()
+		.required('Введите описание товара')
+		.matches(/^(?!.* {2}).*$/, 'Недопустимое описание товара')
+		.min(3, 'Недопустимое описание товара. Минимум 3 символа')
+		.max(99, 'Недопустимое описание товара. Максмиум 99 символов'),
+})
 
 const ModalContainer = ({ className }) => {
 	const isOpen = useSelector(selectModalIsOpen)
@@ -19,42 +62,59 @@ const ModalContainer = ({ className }) => {
 	const [category, setCategory] = useState(product.category)
 	const [cost, setCost] = useState(product.cost)
 	const [storeAmount, setStoreAmount] = useState(product.storeAmount)
-	const [image, setImage] = useState(null)
 	const [info, setInfo] = useState(product.info)
+	const [image, setImage] = useState(null)
 	const [isTypingUrl, setIsTypingUrl] = useState(false)
+	const [error, setError] = useState(null)
+
+	const {
+		register,
+		reset,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		defaultValues: {
+			title: title,
+			category: category,
+			cost: cost,
+			storeAmount: storeAmount,
+			info: info,
+		},
+		resolver: yupResolver(authFormSchema),
+	})
 
 	useEffect(() => {
 		if (product) {
-			setTitle(product.title)
-			setImage(product.imageUrl)
-			setCategory(product.category)
-			setCost(product.cost)
-			setStoreAmount(product.storeAmount)
-			setInfo(product.info)
+			reset({
+				formTitle: product.title,
+				formCategory: product.category,
+				formCost: product.cost,
+				formStoreAmount: product.storeAmount,
+				formInfo: product.info,
+			})
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [product])
+	}, [product, reset])
 
 	const resetInputs = () => {
-		setTitle('')
-		setCategory('')
-		setCost('')
-		setStoreAmount('')
+		reset()
 		setImage(null)
-		setInfo('')
 		setIsTypingUrl(false)
 	}
 
-	const handleSubmit = () => {
+	const onSubmit = ({
+		formTitle,
+		formCategory,
+		formCost,
+		formStoreAmount,
+		formInfo,
+	}) => {
 		const formData = new FormData()
-		formData.append('title', title)
-		formData.append('category', category)
-		formData.append('cost', cost)
-		formData.append('storeAmount', storeAmount)
-
+		formData.append('title', formTitle)
+		formData.append('category', formCategory)
+		formData.append('cost', formCost)
+		formData.append('storeAmount', formStoreAmount)
 		formData.append('image', image)
-
-		formData.append('info', info)
+		formData.append('info', formInfo)
 
 		onConfirm(product.id, formData, resetInputs)
 	}
@@ -65,7 +125,7 @@ const ModalContainer = ({ className }) => {
 	}
 
 	const checkToOpen = () => {
-		const isTrueValue = Object.values(isOpen).some((value) => value === true)
+		const isTrueValue = Object.values(isOpen).includes(true)
 		return isTrueValue
 	}
 
@@ -77,15 +137,11 @@ const ModalContainer = ({ className }) => {
 		<div className={className}>
 			<div className='overlay'></div>
 			<div className='box'>
-				{!isOpen.cart ? (
-					<>
+				{isOpen.product ? (
+					<form onSubmit={handleSubmit(onSubmit)}>
 						<h3>Добавление товара</h3>
 						<ModalInputs
-							title={title}
-							category={category}
-							cost={cost}
-							storeAmount={storeAmount}
-							info={info}
+							register={register}
 							isTypingUrl={isTypingUrl}
 							setTitle={setTitle}
 							setCategory={setCategory}
@@ -94,17 +150,13 @@ const ModalContainer = ({ className }) => {
 							setImage={setImage}
 							setInfo={setInfo}
 							setIsTypingUrl={setIsTypingUrl}
+							errors={errors}
 						/>
-					</>
+						<FormModalButtons onCancel={onCancel} />
+					</form>
 				) : (
-					<div className='cart-warning-modal'>
-						<span>Корзина доступна только авторизованным пользователям!</span>
-					</div>
+					<AlertModal onCancel={onCancel} />
 				)}
-				<ModalButtons
-					handleSubmit={handleSubmit}
-					onCancel={onCancel}
-				/>
 			</div>
 		</div>
 	)
@@ -118,15 +170,8 @@ export const Modal = styled(ModalContainer)`
 	bottom: 0;
 	left: 0;
 
-	& .cart-warning-modal {
-		margin-bottom: 20px;
-	}
-
-	& span {
-		display: block;
-		font-size: 20px;
-		font-weight: 600;
-		margin-bottom: 8px;
+	& h3 {
+		font-size: 22px;
 	}
 
 	& .overlay {

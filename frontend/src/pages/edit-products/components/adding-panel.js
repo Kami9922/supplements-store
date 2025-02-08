@@ -21,7 +21,6 @@ const AddingPanelContainer = ({ className }) => {
 				},
 				isOpen: {
 					product: true,
-					cart: false,
 				},
 			})
 		)

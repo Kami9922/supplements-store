@@ -54,7 +54,7 @@ const SortButtonsContainer = ({
 								size='40px'
 								className='sort-icon'
 								id='fa-sort-desc'
-								margin='0px 0px 25px 0px'
+								margin='0px 0px 20px 0px'
 							/>
 						</Button>
 					</div>

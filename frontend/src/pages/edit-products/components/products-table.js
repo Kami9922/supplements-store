@@ -40,7 +40,6 @@ export const ProductsTableContainer = ({ className }) => {
 				},
 				isOpen: {
 					product: true,
-					cart: false,
 				},
 			})
 		)

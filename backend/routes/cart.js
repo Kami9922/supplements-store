@@ -33,7 +33,7 @@ router.get('/', authenticated, async (req, res) => {
 		const cartProducts = await getCartProducts(req.userId)
 		res.send({ data: { cartProducts: cartProducts.map(mapCartProduct) } })
 	} catch (error) {
-		res.status(500).send({ error: error.message })
+		res.send({ error: 'Failed to get product', details: error })
 	}
 })
 
@@ -42,7 +42,7 @@ router.post('/', authenticated, async (req, res) => {
 		const newCartProduct = await addCartProduct(req.userId, { id: req.body.id })
 		res.send({ data: mapCartProduct(newCartProduct) })
 	} catch (error) {
-		res.status(500).send({ error: error.message })
+		res.send({ error: 'Failed to add product', details: error })
 	}
 })
 
@@ -58,7 +58,7 @@ router.patch('/:id', authenticated, async (req, res) => {
 		)
 		res.send({ data: mapCartProduct(updatedCartProduct) })
 	} catch (error) {
-		res.status(500).send({ error: error.message })
+		res.send({ error: 'Failed to edit product', details: error })
 	}
 })
 
@@ -67,7 +67,7 @@ router.delete('/:id', authenticated, async (req, res) => {
 		await deleteCartProduct(req.userId, req.params.id)
 		res.send({ error: null })
 	} catch (error) {
-		res.status(500).send({ error: error.message })
+		res.send({ error: 'Failed to delete product', details: error })
 	}
 })
 

@@ -23,9 +23,13 @@ router.get(
 	authenticated,
 	hasRole([ROLES.ADMIN]),
 	async (req, res) => {
-		const roles = getRoles()
+		try {
+			const roles = getRoles()
 
-		res.send({ data: roles })
+			res.send({ data: roles })
+		} catch (error) {
+			res.send({ error: 'Failed to get roles', details: error })
+		}
 	}
 )
 
@@ -34,11 +38,15 @@ router.patch(
 	authenticated,
 	hasRole([ROLES.ADMIN]),
 	async (req, res) => {
-		const newUser = await updateUser(req.params.id, {
-			role: req.body.roleId,
-		})
+		try {
+			const newUser = await updateUser(req.params.id, {
+				role: req.body.roleId,
+			})
 
-		res.send({ data: mapUser(newUser) })
+			res.send({ data: mapUser(newUser) })
+		} catch (error) {
+			res.send({ error: 'Failed to edit role', details: error })
+		}
 	}
 )
 
@@ -47,9 +55,13 @@ router.delete(
 	authenticated,
 	hasRole([ROLES.ADMIN]),
 	async (req, res) => {
-		await deleteUser(req.params.id)
+		try {
+			await deleteUser(req.params.id)
 
-		res.send({ error: null })
+			res.send({ error: null })
+		} catch (error) {
+			res.send({ error: 'Failed to delete user', details: error })
+		}
 	}
 )
 
