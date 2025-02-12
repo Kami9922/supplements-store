@@ -157,6 +157,8 @@ export const CartProductCard = styled(CartProductCardContainer)`
 
 	& img {
 		border-radius: 10px;
+		width: 280px;
+		height: 150px;
 	}
 
 	& .cart-card-title {

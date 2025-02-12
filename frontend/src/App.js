@@ -16,6 +16,7 @@ import { Product } from './pages/product/product'
 import { Cart } from './pages/cart/cart'
 import { ShoppingCart } from './components/shopping-cart/shopping-cart'
 import { Modal } from './components/modal/modal'
+import { ErrorBubble } from './components/error-bubble/error-bubble'
 
 const AppContainer = ({ className }) => {
 	const dispatch = useDispatch()
@@ -78,6 +79,7 @@ const AppContainer = ({ className }) => {
 					</Routes>
 				</div>
 				<Footer />
+				<ErrorBubble />
 				<Modal />
 				<ShoppingCart />
 			</div>

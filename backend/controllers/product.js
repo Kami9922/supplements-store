@@ -5,10 +5,15 @@ const path = require('path')
 const handleImageAndCheckProduct = async (id) => {
 	const product = await Product.findById(id)
 	if (!product) {
-		throw new Error('Product not found')
+		return
 	}
 
 	const imagePath = path.join(__dirname, '..', product.image)
+
+	if (!fs.existsSync(imagePath)) {
+		return
+	}
+
 	await new Promise((resolve, reject) => {
 		fs.unlink(imagePath, (err) => {
 			if (err) {
@@ -19,7 +24,7 @@ const handleImageAndCheckProduct = async (id) => {
 		})
 	})
 
-	return product
+	return
 }
 
 const addProduct = async (product) => {
@@ -37,7 +42,7 @@ const editProduct = async (id, updatedProductData) => {
 
 const deleteProduct = async (id) => {
 	await handleImageAndCheckProduct(id)
-	return Product.findByIdAndDelete(id)
+	await Product.findByIdAndDelete(id)
 }
 
 const getProducts = async (
@@ -66,9 +71,7 @@ const getProducts = async (
 	}
 }
 
-const getProduct = (id) => {
-	return Product.findById(id)
-}
+const getProduct = (id) => Product.findById(id)
 
 module.exports = {
 	addProduct,

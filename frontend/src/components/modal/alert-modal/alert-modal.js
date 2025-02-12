@@ -32,9 +32,9 @@ const AlertModalContainer = ({ className, onCancel }) => {
 					</Link>
 				)}
 				<Button
-					width='120px'
+					width='145px'
 					onClick={onCancel}>
-					Отмена
+					Вернуться
 				</Button>
 			</div>
 		</div>

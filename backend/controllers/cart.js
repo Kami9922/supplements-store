@@ -5,27 +5,44 @@ const Product = require('../models/Product')
 const addNewCart = async (userId) => Cart.create({ purchaser: userId })
 
 const addCartProduct = async (userId, productId) => {
-	const { id } = productId
+	try {
+		const { id } = productId
 
-	const { title, cost, image } = await Product.findById(id)
-	let quantity = 1
+		const product = await Product.findById(id)
+		if (!product) {
+			throw new Error('Product not found')
+		}
 
-	const cart = await Cart.findOne({ purchaser: userId })
-	if (!cart) {
-		throw new Error('Cart not found')
+		const { title, cost, image } = product
+		let quantity = 1
+
+		const cart = await Cart.findOne({ purchaser: userId })
+		if (!cart) {
+			throw new Error('Cart not found')
+		}
+
+		const newCartProduct = await CartProduct.create({
+			title,
+			cost,
+			image,
+			quantity,
+		})
+
+		cart.cartProducts.push(newCartProduct._id)
+		await cart.save()
+		return newCartProduct
+	} catch (error) {
+		console.error('Error adding cart product:', error)
+		throw error // Чтобы ошибка могла быть обработана выше
 	}
-
-	const cartProduct = await CartProduct.create({ title, cost, image, quantity })
-	cart.cartProducts.push(cartProduct._id)
-	await cart.save()
-
-	return cartProduct
 }
 
 const getCartProducts = async (userId) => {
-	const cart = await Cart.findOne({ purchaser: userId }).populate(
-		'cartProducts'
-	)
+	const cart = await Cart.findOne({ purchaser: userId }).populate({
+		path: 'cartProducts',
+		model: 'CartProduct',
+	})
+
 	if (!cart) {
 		return []
 	}

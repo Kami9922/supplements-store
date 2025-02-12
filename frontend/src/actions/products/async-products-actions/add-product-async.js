@@ -1,5 +1,6 @@
 import { request } from '../../../utils/request'
 import { CLOSE_MODAL } from '../../modal/close-modal'
+import { setErrorMessage } from '../../other/set-error-message'
 import { addProduct } from '../products-actions/add-product'
 
 export const addProductAsync = (newProduct) => (dispatch) => {
@@ -9,6 +10,7 @@ export const addProductAsync = (newProduct) => (dispatch) => {
 			dispatch(CLOSE_MODAL)
 		})
 		.catch((error) => {
-			console.error('Ошибка при добавлении продукта:', error)
+			console.error(error.message)
+			dispatch(setErrorMessage('Ошибка при добавлении продукта'))
 		})
 }

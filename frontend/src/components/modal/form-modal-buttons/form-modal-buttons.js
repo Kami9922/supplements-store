@@ -11,6 +11,7 @@ const FormModalButtonsContainer = ({ className, onCancel }) => {
 			</Button>
 			<Button
 				width='145px'
+				type='button'
 				onClick={onCancel}>
 				Отмена
 			</Button>

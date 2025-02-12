@@ -11,12 +11,13 @@ import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-sele
 import { onAddCartProduct } from '../../utils/on-add-cart-product'
 import { cartProductsSelector } from '../../selectors/cart-selectors/cart-products-selector'
 import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
+// import { BASE_URL } from '../../constants/base-url'
 
 const ProductContainer = ({ className }) => {
 	const params = useParams()
 
 	const dispatch = useDispatch()
-
+	const BASE_URL = `${window.location.protocol}//${window.location.host}/`
 	const userRole = useSelector(selectUserRole)
 	const product = useSelector(productSelector)
 	const isLoading = useSelector(isLoadingSelector)
@@ -38,7 +39,7 @@ const ProductContainer = ({ className }) => {
 							<div className='product-image-block'>
 								<img
 									alt={product.imageUrl}
-									src={product.imageUrl}
+									src={`${BASE_URL}${product.imageUrl}`}
 								/>
 								<div className='product-consise-description'>
 									<span className='about-span'>О товаре</span>
@@ -119,8 +120,9 @@ export const Product = styled(ProductContainer)`
 		padding-left: 15px;
 	}
 
-	& img {
-		width: 450px;
+	& .product-image-block > img {
+		width: 350px;
+		border-radius: 10px;
 	}
 
 	& .product-title {
@@ -147,10 +149,6 @@ export const Product = styled(ProductContainer)`
 		display: flex;
 		padding-bottom: 45px;
 		border-bottom: 1px solid #000;
-	}
-
-	& img {
-		border-radius: 10px;
 	}
 
 	& .product-container {

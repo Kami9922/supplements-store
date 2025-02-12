@@ -21,9 +21,8 @@ export const onAddCartProduct = (
 		)
 		return
 	}
-
 	const existingProductIndex = cartProducts.findIndex(
-		(cartProduct) => cartProduct.title === title
+		(cartProduct) => cartProduct?.title === title
 	)
 	dispatch(setIsLoading(true, false, id))
 

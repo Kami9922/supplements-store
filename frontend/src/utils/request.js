@@ -22,9 +22,11 @@ export const request = (path, method, data) => {
 			  }
 	).then((res) => {
 		if (!res.ok) {
-			return Promise.reject(
-				new Error(`Ошибка ${res.status}: ${res.statusText}`)
-			)
+			return res.json().then((err) => {
+				const errorMessage =
+					err.error || `Ошибка ${res.status}: ${res.statusText}`
+				return Promise.reject(new Error(errorMessage))
+			})
 		}
 		return res.json()
 	})

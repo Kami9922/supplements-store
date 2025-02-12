@@ -47,9 +47,9 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
 	try {
-		const post = await getProduct(req.params.id)
+		const product = await getProduct(req.params.id)
 
-		res.send({ data: mapProduct(post) })
+		res.send({ data: mapProduct(product) })
 	} catch (error) {
 		res.send({ error: 'Failed to get product', details: error })
 	}
@@ -58,7 +58,7 @@ router.get('/:id', async (req, res) => {
 router.post(
 	'/',
 	authenticated,
-	hasRole([ROLES.ADMIN]),
+	hasRole([ROLES.ADMIN, ROLES.MODERATOR]),
 	fileMiddleware.single('image'),
 	async (req, res) => {
 		try {
@@ -82,7 +82,7 @@ router.patch(
 	'/:id',
 	authenticated,
 	fileMiddleware.single('image'),
-	hasRole([ROLES.ADMIN]),
+	hasRole([ROLES.ADMIN, ROLES.MODERATOR]),
 	async (req, res) => {
 		try {
 			const updatedProduct = await editProduct(req.params.id, {
@@ -107,7 +107,7 @@ router.patch(
 router.delete(
 	'/:id',
 	authenticated,
-	hasRole([ROLES.ADMIN]),
+	hasRole([ROLES.ADMIN, ROLES.MODERATOR]),
 	async (req, res) => {
 		try {
 			await deleteProduct(req.params.id)

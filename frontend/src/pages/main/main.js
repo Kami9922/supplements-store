@@ -33,7 +33,6 @@ const MainContainer = ({ className }) => {
 		dispatch(setIsLoading(true, true))
 		dispatch(
 			setProductsAsync(
-				true,
 				searchPhrase,
 				page,
 				PAGINTATION_LIMIT,

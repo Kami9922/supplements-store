@@ -2,6 +2,7 @@ import { ACTION_TYPE } from '../actions/action-type'
 
 const initialAppState = {
 	wasLogout: false,
+	errorMessage: '',
 	isLoading: {
 		status: false,
 		loader: false,
@@ -20,6 +21,11 @@ export const appReducer = (state = initialAppState, { type, payload }) => {
 			return {
 				...state,
 				isLoading: payload,
+			}
+		case ACTION_TYPE.SET_ERROR_MESSAGE:
+			return {
+				...state,
+				errorMessage: payload,
 			}
 
 		default:
