@@ -100,7 +100,7 @@ const MainContainer = ({ className }) => {
 						))}
 					</div>
 				) : (
-					<div className='no-products-found'>Статьи не найдены</div>
+					<div className='no-products-found'>Продукты не найдены</div>
 				)}
 			</div>
 			{lastPage > 1 && products.length > 0 && (
@@ -124,11 +124,5 @@ export const Main = styled(MainContainer)`
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-	}
-
-	& .no-products-found {
-		text-align: center;
-		font-size: 18px;
-		margin-top: 40px;
 	}
 `

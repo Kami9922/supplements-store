@@ -11,12 +11,12 @@ import { setUser } from './actions/other/set-user'
 import { Main } from './pages/main/main'
 import { Error } from './components/error/error'
 import { ERROR } from './constants/error'
-import { EditProducts } from './pages/edit-products/edit-products'
 import { Product } from './pages/product/product'
 import { Cart } from './pages/cart/cart'
 import { ShoppingCart } from './components/shopping-cart/shopping-cart'
 import { Modal } from './components/modal/modal'
 import { ErrorBubble } from './components/error-bubble/error-bubble'
+import { AdminPanel } from './pages/admin-panel/admin-panel'
 
 const AppContainer = ({ className }) => {
 	const dispatch = useDispatch()
@@ -61,8 +61,8 @@ const AppContainer = ({ className }) => {
 							element={<Users />}
 						/>
 						<Route
-							path='/editProducts'
-							element={<EditProducts />}
+							path='/admin-panel'
+							element={<AdminPanel />}
 						/>
 						<Route
 							path='/product/:id'
@@ -101,5 +101,11 @@ export const App = styled(AppContainer)`
 
 	& .page {
 		padding: 120px 0 20px;
+	}
+
+	.no-products-found {
+		text-align: center;
+		font-size: 18px;
+		padding-top: 45px;
 	}
 `

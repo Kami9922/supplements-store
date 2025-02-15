@@ -15,7 +15,7 @@ const ShoppingCartContainer = ({ className }) => {
 	const cartProducts = useSelector(cartProductsSelector)
 	const roleId = useSelector(selectUserRole)
 
-	const editProductsMatch = useMatch('/editProducts')
+	const adminPanelMatch = useMatch('/admin-panel')
 	const usersMatch = useMatch('/users')
 
 	const dispatch = useDispatch()
@@ -29,7 +29,7 @@ const ShoppingCartContainer = ({ className }) => {
 		}
 	}, [dispatch, roleId])
 
-	if (roleId === ROLE.GUEST || editProductsMatch || usersMatch) {
+	if (roleId === ROLE.GUEST || adminPanelMatch || usersMatch) {
 		return null
 	}
 

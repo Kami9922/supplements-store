@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { Button } from '../../components/button/button'
+
 import { loadProductAsync } from '../../actions/products/async-products-actions/load-product-async'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,20 +8,17 @@ import { productSelector } from '../../selectors/product-selectors/product-selec
 import { setIsLoading } from '../../actions/other/set-is-loading'
 import { Loader } from '../../components/loader/loader'
 import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-selector'
-import { onAddCartProduct } from '../../utils/on-add-cart-product'
-import { cartProductsSelector } from '../../selectors/cart-selectors/cart-products-selector'
-import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
-// import { BASE_URL } from '../../constants/base-url'
+
+import { ProductButton } from './product-button/product-button'
+import { checkUrlAndDisplayImg } from '../../utils/check-url-and-display-img'
 
 const ProductContainer = ({ className }) => {
+	const product = useSelector(productSelector)
+	const isLoading = useSelector(isLoadingSelector)
+
 	const params = useParams()
 
 	const dispatch = useDispatch()
-	const BASE_URL = `${window.location.protocol}//${window.location.host}/`
-	const userRole = useSelector(selectUserRole)
-	const product = useSelector(productSelector)
-	const isLoading = useSelector(isLoadingSelector)
-	const cartProducts = useSelector(cartProductsSelector)
 
 	useEffect(() => {
 		dispatch(loadProductAsync(params.id))
@@ -39,7 +36,7 @@ const ProductContainer = ({ className }) => {
 							<div className='product-image-block'>
 								<img
 									alt={product.imageUrl}
-									src={`${BASE_URL}${product.imageUrl}`}
+									src={checkUrlAndDisplayImg(product.imageUrl)}
 								/>
 								<div className='product-consise-description'>
 									<span className='about-span'>О товаре</span>
@@ -68,29 +65,7 @@ const ProductContainer = ({ className }) => {
 							</div>
 						</div>
 					</div>
-					<div className='product-button'>
-						{isLoading.locatedLoaderId === product.id ? (
-							<Loader
-								size='36px'
-								className='product-loader'
-							/>
-						) : (
-							<Button
-								disabled={isLoading.status}
-								width='250px'
-								onClick={() =>
-									onAddCartProduct(
-										dispatch,
-										userRole,
-										cartProducts,
-										product.title,
-										product.id
-									)
-								}>
-								В корзину
-							</Button>
-						)}
-					</div>
+					<ProductButton product={product} />
 				</>
 			)}
 		</div>
@@ -101,7 +76,7 @@ export const Product = styled(ProductContainer)`
 	padding: 40px 40px;
 	display: flex;
 	flex-direction: column;
-	min-height: 70vh;
+	min-height: 72vh;
 	justify-content: space-between;
 	font-family: Comfortaa;
 
@@ -122,6 +97,7 @@ export const Product = styled(ProductContainer)`
 
 	& .product-image-block > img {
 		width: 350px;
+		height: 250px;
 		border-radius: 10px;
 	}
 

@@ -28,7 +28,7 @@ router.get(
 
 			res.send({ data: roles })
 		} catch (error) {
-			res.send({ error: 'Failed to get roles', details: error })
+			res.send({ error: 'Failed to get roles' })
 		}
 	}
 )
@@ -45,7 +45,7 @@ router.patch(
 
 			res.send({ data: mapUser(newUser) })
 		} catch (error) {
-			res.send({ error: 'Failed to edit role', details: error })
+			res.send({ error: 'Failed to edit role' })
 		}
 	}
 )
@@ -60,7 +60,7 @@ router.delete(
 
 			res.send({ error: null })
 		} catch (error) {
-			res.send({ error: 'Failed to delete user', details: error })
+			res.send({ error: 'Failed to delete user' })
 		}
 	}
 )

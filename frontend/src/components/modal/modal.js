@@ -43,6 +43,25 @@ const authFormSchema = yup.object().shape({
 
 		.min(1, 'Количество товара должно быть больше 0')
 		.max(999999999999999, 'Слишком большое количестово товара'),
+	formImage: yup
+		.mixed()
+		.nullable()
+		.test('fileSize', 'Размер файла должен быть меньше 10 МБ', (value) => {
+			if (!value || (value instanceof FileList && value.length === 0)) {
+				return true
+			}
+			return value[0].size <= 10 * 1024 * 1024
+		})
+		.test(
+			'fileType',
+			'Поддерживаются только изображения (jpg, jpeg, png)',
+			(value) => {
+				if (!value || (value instanceof FileList && value.length === 0)) {
+					return true
+				}
+				return ['image/jpg', 'image/jpeg', 'image/png'].includes(value[0].type)
+			}
+		),
 	formInfo: yup
 		.string()
 		.required('Введите описание товара')
@@ -58,14 +77,13 @@ const ModalContainer = ({ className }) => {
 
 	const dispatch = useDispatch()
 
-	const [title, setTitle] = useState(product.title)
-	const [category, setCategory] = useState(product.category)
-	const [cost, setCost] = useState(product.cost)
-	const [storeAmount, setStoreAmount] = useState(product.storeAmount)
-	const [info, setInfo] = useState(product.info)
+	const [title, setTitle] = useState(``)
+	const [category, setCategory] = useState(``)
+	const [cost, setCost] = useState(``)
+	const [storeAmount, setStoreAmount] = useState(``)
+	const [info, setInfo] = useState(``)
 	const [image, setImage] = useState(null)
 	const [isTypingUrl, setIsTypingUrl] = useState(false)
-	const [error, setError] = useState(null)
 
 	const {
 		register,
@@ -74,11 +92,13 @@ const ModalContainer = ({ className }) => {
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
-			title: title,
-			category: category,
-			cost: cost,
-			storeAmount: storeAmount,
-			info: info,
+			formTitle: title,
+			formCategory: category,
+			formCost: cost,
+			formStoreAmount: storeAmount,
+			formInfo: info,
+			formImage: null,
+			formTextUrl: null,
 		},
 		resolver: yupResolver(authFormSchema),
 	})
@@ -90,14 +110,16 @@ const ModalContainer = ({ className }) => {
 				formCategory: product.category,
 				formCost: product.cost,
 				formStoreAmount: product.storeAmount,
+				formImage: null,
+				formTextUrl: null,
 				formInfo: product.info,
 			})
+			setImage(product.imageUrl)
 		}
 	}, [product, reset])
 
 	const resetInputs = () => {
 		reset()
-		setImage(null)
 		setIsTypingUrl(false)
 	}
 
@@ -107,13 +129,17 @@ const ModalContainer = ({ className }) => {
 		formCost,
 		formStoreAmount,
 		formInfo,
+		formImage,
+		formTextUrl,
 	}) => {
+		const imageToSubmit = formTextUrl || (formImage && formImage[0]) || image
+
 		const formData = new FormData()
 		formData.append('title', formTitle)
 		formData.append('category', formCategory)
 		formData.append('cost', formCost)
 		formData.append('storeAmount', formStoreAmount)
-		formData.append('image', image)
+		formData.append('image', imageToSubmit)
 		formData.append('info', formInfo)
 
 		onConfirm(product.id, formData, resetInputs)
@@ -147,9 +173,9 @@ const ModalContainer = ({ className }) => {
 							setCategory={setCategory}
 							setCost={setCost}
 							setStoreAmount={setStoreAmount}
-							setImage={setImage}
 							setInfo={setInfo}
 							setIsTypingUrl={setIsTypingUrl}
+							setImage={setImage}
 							errors={errors}
 						/>
 						<FormModalButtons onCancel={onCancel} />

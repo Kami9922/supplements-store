@@ -14,7 +14,7 @@ const router = express.Router({ mergeParams: true })
 const getUserFromToken = (req, res, next) => {
 	const token = req.cookies.token
 	if (!token) {
-		return res.status(401).send({ error: 'Unauthorized: No token provided' })
+		return send({ error: 'Unauthorized: No token provided' })
 	}
 
 	try {
@@ -22,7 +22,7 @@ const getUserFromToken = (req, res, next) => {
 		req.userId = decodedToken.id
 		next()
 	} catch (error) {
-		return res.status(401).send({ error: 'Unauthorized: Invalid token' })
+		return send({ error: 'Unauthorized: Invalid token' })
 	}
 }
 
@@ -33,7 +33,7 @@ router.get('/', authenticated, async (req, res) => {
 		const cartProducts = await getCartProducts(req.userId)
 		res.send({ data: { cartProducts: cartProducts.map(mapCartProduct) } })
 	} catch (error) {
-		res.send({ error: 'Failed to get product', details: error })
+		res.send({ error: 'Failed to get product' })
 	}
 })
 
@@ -42,7 +42,7 @@ router.post('/', authenticated, async (req, res) => {
 		const newCartProduct = await addCartProduct(req.userId, { id: req.body.id })
 		res.send({ data: mapCartProduct(newCartProduct) })
 	} catch (error) {
-		res.send({ error: 'Failed to add product', details: error })
+		res.send({ error: 'Failed to add product' })
 	}
 })
 
@@ -58,7 +58,7 @@ router.patch('/:id', authenticated, async (req, res) => {
 		)
 		res.send({ data: mapCartProduct(updatedCartProduct) })
 	} catch (error) {
-		res.send({ error: 'Failed to edit product', details: error })
+		res.send({ error: 'Failed to edit product' })
 	}
 })
 
@@ -67,7 +67,7 @@ router.delete('/:id', authenticated, async (req, res) => {
 		await deleteCartProduct(req.userId, req.params.id)
 		res.send({ error: null })
 	} catch (error) {
-		res.send({ error: 'Failed to delete product', details: error })
+		res.send({ error: 'Failed to delete product' })
 	}
 })
 

@@ -4,6 +4,7 @@ const path = require('path')
 
 const handleImageAndCheckProduct = async (id) => {
 	const product = await Product.findById(id)
+
 	if (!product) {
 		return
 	}
@@ -33,11 +34,16 @@ const addProduct = async (product) => {
 	return newProduct
 }
 
-const editProduct = async (id, updatedProductData) => {
-	await handleImageAndCheckProduct(id)
-	return Product.findByIdAndUpdate(id, updatedProductData, {
-		new: true,
+const editProduct = async (id, updatedProductData, imgStatus) => {
+	if (imgStatus) {
+		await handleImageAndCheckProduct(id)
+	}
+
+	const finalProduct = await Product.findByIdAndUpdate(id, updatedProductData, {
+		returnDocument: 'after',
 	})
+
+	return finalProduct
 }
 
 const deleteProduct = async (id) => {

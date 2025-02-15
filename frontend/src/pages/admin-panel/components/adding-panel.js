@@ -32,7 +32,6 @@ const AddingPanelContainer = ({ className }) => {
 				className='add-product-icon'
 				size='42px'
 				id='fa-plus-square-o'
-				margin='0px 0px 10px 0px'
 				color='rgb(32 153 25)'
 				transActive={true}
 				onClick={onAddProduct}
@@ -42,6 +41,8 @@ const AddingPanelContainer = ({ className }) => {
 }
 
 export const AddingPanel = styled(AddingPanelContainer)`
+	padding-top: 15px;
+
 	.add-product-icon {
 		display: flex;
 		justify-self: center;

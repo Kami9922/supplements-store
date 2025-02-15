@@ -6,12 +6,9 @@ const ImageInputContainer = ({
 	isTypingUrl,
 	setImage,
 	setIsTypingUrl,
+	register,
+	errors,
 }) => {
-	const handleImageChange = (target) => {
-		const selectedFile = target.files[0]
-		setImage(selectedFile)
-	}
-
 	return (
 		<div className={className}>
 			<span className='heading-span'>Изображение</span>
@@ -26,18 +23,23 @@ const ImageInputContainer = ({
 				{!isTypingUrl ? (
 					<label>
 						<input
+							{...register('formImage', {})}
 							className='image-choice'
 							type='file'
-							onChange={({ target }) => handleImageChange(target)}
+							onChange={({ target }) => setImage(target.value)}
 						/>
 					</label>
 				) : (
 					<input
 						className='typing-image-url'
 						type='text'
+						{...register('formTextUrl', {})}
 						placeholder='Введите URL изображения товара'
 						onChange={({ target }) => setImage(target.value)}
 					/>
+				)}
+				{errors.formImage && (
+					<span className='error-span'>{errors.formImage.message}</span>
 				)}
 			</div>
 		</div>
@@ -66,6 +68,6 @@ export const ImageInput = styled(ImageInputContainer)`
 	}
 	& .typing-image-url {
 		padding: 13px;
-		padding-right: 30px;
+		padding-right: 35px;
 	}
 `

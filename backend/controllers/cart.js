@@ -33,7 +33,7 @@ const addCartProduct = async (userId, productId) => {
 		return newCartProduct
 	} catch (error) {
 		console.error('Error adding cart product:', error)
-		throw error // Чтобы ошибка могла быть обработана выше
+		throw error
 	}
 }
 

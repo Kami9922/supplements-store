@@ -63,7 +63,7 @@ const ControlPanelContainer = ({ className }) => {
 			<RightAligned>
 				{(isAdmin || isModerator) && (
 					<div className='links-panel'>
-						<Link to='/EditProducts'>
+						<Link to='/admin-panel'>
 							<Icon
 								id='fa-pencil-square-o'
 								margin='10px 0px 0px 16px'

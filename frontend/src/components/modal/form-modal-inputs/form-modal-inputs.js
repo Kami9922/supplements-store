@@ -1,5 +1,10 @@
 import styled from 'styled-components'
 import { ImageInput } from './image-input/image-input'
+import { TitleInput } from './title-input/title-input'
+import { CategoryInput } from './category-input/category-input'
+import { CostInput } from './cost-input/cost-input'
+import { StoreAmountInput } from './store-amount-input/store-amount-input'
+import { InfoInput } from './info-input/info-input'
 
 const ModalInputsContainer = ({
 	className,
@@ -16,75 +21,38 @@ const ModalInputsContainer = ({
 }) => {
 	return (
 		<div className={className}>
-			<div>
-				<span className='heading-span'>Название</span>
-				<input
-					{...register('formTitle', {})}
-					type='text'
-					placeholder='Введите название товара'
-					onChange={({ target }) => setTitle(target.value)}
-				/>
-				{errors.formTitle && (
-					<span className='error-span'>{errors.formTitle.message}</span>
-				)}
-			</div>
-
-			<div>
-				<span className='heading-span'>Категория</span>
-				<input
-					{...register('formCategory', {})}
-					type='text'
-					placeholder='Введите категорию товара'
-					onChange={({ target }) => setCategory(target.value)}
-				/>
-				{errors.formCategory && (
-					<span className='error-span'>{errors.formCategory.message}</span>
-				)}
-			</div>
-
-			<div>
-				<span className='heading-span'>Стоимость</span>
-				<input
-					{...register('formCost', {})}
-					type='number'
-					placeholder='Введите стоимость товара'
-					onChange={({ target }) => setCost(target.value)}
-				/>
-				{errors.formCost && (
-					<span className='error-span'>{errors.formCost.message}</span>
-				)}
-			</div>
-
-			<div>
-				<span className='heading-span'>Количество</span>
-				<input
-					{...register('formStoreAmount', {})}
-					type='number'
-					placeholder='Введите количество товара'
-					onChange={({ target }) => setStoreAmount(target.value)}
-				/>
-				{errors.formStoreAmount && (
-					<span className='error-span'>{errors.formStoreAmount.message}</span>
-				)}
-			</div>
-
+			<TitleInput
+				setTitle={setTitle}
+				register={register}
+				errors={errors}
+			/>
+			<CategoryInput
+				setCategory={setCategory}
+				register={register}
+				errors={errors}
+			/>
+			<CostInput
+				setCost={setCost}
+				register={register}
+				errors={errors}
+			/>
+			<StoreAmountInput
+				setStoreAmount={setStoreAmount}
+				register={register}
+				errors={errors}
+			/>
 			<ImageInput
+				register={register}
 				isTypingUrl={isTypingUrl}
 				setImage={setImage}
 				setIsTypingUrl={setIsTypingUrl}
+				errors={errors}
 			/>
-
-			<div>
-				<span className='heading-span'>Описание</span>
-				<textarea
-					{...register('formInfo', {})}
-					placeholder='Введите описание товара'
-					onChange={({ target }) => setInfo(target.value)}
-				/>
-				{errors.formInfo && (
-					<span className='error-span'>{errors.formInfo.message}</span>
-				)}
-			</div>
+			<InfoInput
+				setInfo={setInfo}
+				register={register}
+				errors={errors}
+			/>
 		</div>
 	)
 }

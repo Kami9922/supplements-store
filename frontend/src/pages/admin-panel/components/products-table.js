@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { productsSelector } from '../../../selectors/products-selectors/products-selector'
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { setProductsAsync } from '../../../actions/products/async-products-actions/set-products-async'
 import { Icon } from '../../../components/icon/icon'
 import { AddingPanel } from './adding-panel'
@@ -13,6 +13,8 @@ import { setIsLoading } from '../../../actions/other/set-is-loading'
 import { isLoadingSelector } from '../../../selectors/app-selectors/is-loading-selector'
 import { Loader } from '../../../components/loader/loader'
 import { setProductData } from '../../../actions/products/products-actions/set-product-data'
+import { debounce } from '../../main/utils/debounce'
+import { Search } from '../../main/search'
 
 export const ProductsTableContainer = ({ className }) => {
 	const products = useSelector(productsSelector)
@@ -20,15 +22,20 @@ export const ProductsTableContainer = ({ className }) => {
 
 	const dispatch = useDispatch()
 
+	const [searchPhrase, setSearchPhrase] = useState('')
+	const [shouldSearch, setShouldSearch] = useState(false)
+
 	useEffect(() => {
 		dispatch(setIsLoading(true, true))
-		dispatch(setProductsAsync())
-	}, [dispatch])
+		dispatch(setProductsAsync(searchPhrase))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [shouldSearch, dispatch])
 
 	const onRemoveProduct = (id) => {
 		dispatch(removeProductAsync(id))
 		dispatch(setIsLoading(true, true))
 	}
+
 	const onEditProduct = (product) => {
 		dispatch(setProductData(product))
 		dispatch(
@@ -44,15 +51,25 @@ export const ProductsTableContainer = ({ className }) => {
 			})
 		)
 	}
+	const onSearch = ({ target }) => {
+		setSearchPhrase(target.value)
+		startDelayedSearch(!shouldSearch)
+	}
+
+	const startDelayedSearch = useMemo(() => debounce(setShouldSearch, 1000), [])
 
 	return (
 		<div className={className}>
 			<h3>Таблица товаров</h3>
+			<Search
+				searchPhrase={searchPhrase}
+				onChange={onSearch}
+			/>
 			<AddingPanel />
 
 			{isLoading.loader ? (
 				<Loader size='40px' />
-			) : (
+			) : products?.length > 0 ? (
 				<table>
 					<thead>
 						<tr>
@@ -66,7 +83,7 @@ export const ProductsTableContainer = ({ className }) => {
 						</tr>
 					</thead>
 					<tbody>
-						{products.map((product, index) => (
+						{products.map((product) => (
 							<tr key={product.id}>
 								<td className='td-image'>
 									<img
@@ -102,12 +119,17 @@ export const ProductsTableContainer = ({ className }) => {
 						))}
 					</tbody>
 				</table>
+			) : (
+				<div className='no-products-found'>Продукты не найдены</div>
 			)}
 		</div>
 	)
 }
 
 export const ProductsTable = styled(ProductsTableContainer)`
+	display: flex;
+	flex-direction: column;
+
 	& h3 {
 		text-align: center;
 		font-size: 30px;
@@ -118,6 +140,7 @@ export const ProductsTable = styled(ProductsTableContainer)`
 	& table {
 		table-layout: fixed;
 		width: 100%;
+		padding-top: 15px;
 	}
 
 	& th {

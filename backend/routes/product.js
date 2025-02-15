@@ -12,6 +12,7 @@ const authenticated = require('../middlewares/authenticated')
 const hasRole = require('../middlewares/hasRole')
 const mapProduct = require('../helpers/mapProduct')
 const ROLES = require('../constants/roles')
+const Product = require('../models/Product')
 
 const router = express.Router({ mergeParams: true })
 
@@ -41,7 +42,7 @@ router.get('/', async (req, res) => {
 
 		res.send({ data: { lastPage, products: products.map(mapProduct) } })
 	} catch (error) {
-		res.send({ error: 'Failed to get products', details: error })
+		res.send({ error: 'Failed to get products' })
 	}
 })
 
@@ -51,7 +52,7 @@ router.get('/:id', async (req, res) => {
 
 		res.send({ data: mapProduct(product) })
 	} catch (error) {
-		res.send({ error: 'Failed to get product', details: error })
+		res.send({ error: 'Failed to get product' })
 	}
 })
 
@@ -70,10 +71,9 @@ router.post(
 				image: req.file ? req.file.path : req.body.image,
 				info: req.body.info,
 			})
-
 			res.send({ data: mapProduct(newProduct) })
 		} catch (error) {
-			res.send({ error: 'Failed to post product', details: error })
+			res.send({ error: 'Failed to post product' })
 		}
 	}
 )
@@ -85,21 +85,29 @@ router.patch(
 	hasRole([ROLES.ADMIN, ROLES.MODERATOR]),
 	async (req, res) => {
 		try {
-			const updatedProduct = await editProduct(req.params.id, {
+			const imagePath = req.file ? req.file.path : req.body.image
+
+			const imgStatus = req.file || req.body.image ? true : false
+
+			const updatedData = {
 				title: req.body.title,
 				category: req.body.category,
 				cost: req.body.cost,
 				storeAmount: req.body.storeAmount,
-				image: req.file ? req.file.path : req.body.image,
+				image: imagePath,
 				info: req.body.info,
-			})
+			}
+
+			const updatedProduct = await editProduct(
+				req.params.id,
+				updatedData,
+				imgStatus
+			)
 
 			res.send({ data: mapProduct(updatedProduct) })
 		} catch (error) {
 			console.error(error)
-			res
-				.status(400)
-				.send({ error: 'Failed to update product', details: error })
+			send({ error: 'Failed to update product' })
 		}
 	}
 )
@@ -114,7 +122,7 @@ router.delete(
 
 			res.send({ error: null })
 		} catch (error) {
-			res.send({ error: 'Failed to delete product', details: error })
+			res.send({ error: 'Failed to delete product' })
 		}
 	}
 )
