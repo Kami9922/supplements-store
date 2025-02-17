@@ -13,7 +13,7 @@ const port = 5000
 
 app.use(
 	cors({
-		origin: 'http://localhost:3001',
+		origin: 'http://80.90.187.152:3000',
 		methods: ['GET', 'POST', 'PATCH', 'DELETE'],
 		credentials: true,
 	})
