@@ -47,4 +47,9 @@ export const ProductButton = styled(ProductButtonContainer)`
 	justify-content: end;
 	padding-top: 25px;
 	border-top: 1px solid #000;
+
+	& .product-loader {
+		position: inherit;
+		margin-right: 11%;
+	}
 `

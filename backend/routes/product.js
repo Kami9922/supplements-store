@@ -13,6 +13,7 @@ const hasRole = require('../middlewares/hasRole')
 const mapProduct = require('../helpers/mapProduct')
 const ROLES = require('../constants/roles')
 const Product = require('../models/Product')
+const { DEFAULT_IMG } = require('../constants/defalut-img')
 
 const router = express.Router({ mergeParams: true })
 
@@ -63,12 +64,14 @@ router.post(
 	fileMiddleware.single('image'),
 	async (req, res) => {
 		try {
+			const imagePath = req.file ? req.file.path : req.body.image
+
 			const newProduct = await addProduct({
 				title: req.body.title,
 				category: req.body.category,
 				cost: req.body.cost,
 				storeAmount: req.body.storeAmount,
-				image: req.file ? req.file.path : req.body.image,
+				image: !imagePath ? DEFAULT_IMG : imagePath,
 				info: req.body.info,
 			})
 			res.send({ data: mapProduct(newProduct) })
@@ -87,8 +90,6 @@ router.patch(
 		try {
 			const imagePath = req.file ? req.file.path : req.body.image
 
-			const imgStatus = req.file || req.body.image ? true : false
-
 			const updatedData = {
 				title: req.body.title,
 				category: req.body.category,
@@ -100,8 +101,8 @@ router.patch(
 
 			const updatedProduct = await editProduct(
 				req.params.id,
-				updatedData,
-				imgStatus
+				req.body.deleteImageFlag,
+				updatedData
 			)
 
 			res.send({ data: mapProduct(updatedProduct) })

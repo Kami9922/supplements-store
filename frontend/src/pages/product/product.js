@@ -11,6 +11,7 @@ import { isLoadingSelector } from '../../selectors/app-selectors/is-loading-sele
 
 import { ProductButton } from './product-button/product-button'
 import { checkUrlAndDisplayImg } from '../../utils/check-url-and-display-img'
+import { ProductConsiceDescription } from './product-consice-description/product-consice-description'
 
 const ProductContainer = ({ className }) => {
 	const product = useSelector(productSelector)
@@ -38,26 +39,8 @@ const ProductContainer = ({ className }) => {
 									alt={product.imageUrl}
 									src={checkUrlAndDisplayImg(product.imageUrl)}
 								/>
-								<div className='product-consise-description'>
-									<span className='about-span'>О товаре</span>
-									<div>
-										<span className='bold-span product-title'>
-											{product.title}
-										</span>
-									</div>
-									<div className='description-span'>
-										<span className='bold-span'>Осталось в магазине: </span>
-										<span>{product.storeAmount + ' ед.'}</span>
-									</div>
-									<div className='description-span'>
-										<span className='bold-span'>Категория: </span>
-										<span>{product.category}</span>
-									</div>
-									<div className='description-span'>
-										<span className='bold-span'>Цена: </span>
-										<span>{product.cost + '₽'}</span>
-									</div>
-								</div>
+
+								<ProductConsiceDescription product={product} />
 							</div>
 							<div className='product-info'>
 								<h3>Описание: </h3>
@@ -80,45 +63,10 @@ export const Product = styled(ProductContainer)`
 	justify-content: space-between;
 	font-family: Comfortaa;
 
-	& .about-span {
-		font-weight: bold;
-		font-size: 24px;
-		color: rgb(158, 158, 158);
-	}
-
-	& .product-loader {
-		position: inherit;
-		margin-right: 11%;
-	}
-
-	& p {
-		padding-left: 15px;
-	}
-
 	& .product-image-block > img {
 		width: 350px;
 		height: 250px;
 		border-radius: 10px;
-	}
-
-	& .product-title {
-		font-size: 24px;
-	}
-
-	& .bold-span {
-		font-weight: 500;
-	}
-
-	& .description-span {
-		border-top: 1px solid rgba(204, 214, 228, 0.6);
-		padding-top: 5px;
-	}
-
-	& .product-button {
-		display: flex;
-		justify-content: end;
-		padding-top: 25px;
-		border-top: 1px solid #000;
 	}
 
 	& .product-image-block {
@@ -130,16 +78,5 @@ export const Product = styled(ProductContainer)`
 	& .product-container {
 		display: flex;
 		flex-direction: column;
-	}
-
-	& .product-consise-description {
-		display: flex;
-		flex-direction: column;
-		margin-left: 25px;
-		padding: 20px 55px 0 0;
-		padding-top: 25px;
-		border-top: 1px solid #000;
-		gap: 15px;
-		width: 100%;
 	}
 `

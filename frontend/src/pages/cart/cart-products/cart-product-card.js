@@ -4,36 +4,26 @@ import styled from 'styled-components'
 import { Icon } from '../../../components/icon/icon'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIsLoading } from '../../../actions/other/set-is-loading'
-import { editCartProductAsync } from '../../../actions/cart-products/async-cart-product-actions/edit-cart-product-async'
 import { removeCartProductAsync } from '../../../actions/cart-products/async-cart-product-actions/remove-cart-product-async'
 import { productsSelector } from '../../../selectors/products-selectors/products-selector'
-import { Button } from '../../../components/button/button'
-import { onAddCartProduct } from '../../../utils/on-add-cart-product'
-import { cartProductsSelector } from '../../../selectors/cart-selectors/cart-products-selector'
 import { isLoadingSelector } from '../../../selectors/app-selectors/is-loading-selector'
-import { selectUserRole } from '../../../selectors/user-selectors/select-user-role'
 import { Loader } from '../../../components/loader/loader'
+import { CartQuantityButtons } from './cart-quantity-buttons'
 
 const CartProductCardContainer = ({ className, cartProduct }) => {
 	const dispatch = useDispatch()
 	const products = useSelector(productsSelector)
-	const cartProducts = useSelector(cartProductsSelector)
+
 	const isLoading = useSelector(isLoadingSelector)
-	const userRole = useSelector(selectUserRole)
 
 	const onRemoveCartProduct = (id) => {
 		dispatch(setIsLoading(true, false, id))
 		dispatch(removeCartProductAsync(id))
 	}
 
-	const onReduceCartProduct = (id, quantity) => {
-		if (quantity <= 1) {
-			onRemoveCartProduct(id)
-			return
-		}
-		dispatch(setIsLoading(true, false, id))
-		dispatch(editCartProductAsync(id, quantity, 'reduce'))
-	}
+	const matchedTitle = `/product/${
+		products.find((product) => product.title === cartProduct.title)?.id
+	}`
 
 	return (
 		<div className={className}>
@@ -41,10 +31,7 @@ const CartProductCardContainer = ({ className, cartProduct }) => {
 				<div className='cart-product-info'>
 					<Link
 						className='cart-image'
-						to={`/product/${
-							products.find((product) => product.title === cartProduct.title)
-								?.id
-						}`}>
+						to={matchedTitle}>
 						<img
 							alt={cartProduct.imageUrl}
 							src={cartProduct.imageUrl}
@@ -54,39 +41,17 @@ const CartProductCardContainer = ({ className, cartProduct }) => {
 						<Loader className='cart-product-loader' />
 					) : (
 						<div className='right-cart-block'>
-							<div className='cart-cart-text'>
+							<div className='cart-card-text'>
 								<span className='cart-card-title'>{cartProduct.title}</span>
 								<span className='cart-card-cost'>{cartProduct.cost + '₽'}</span>
 								<span className='cart-card-cost'>
 									{'x' + cartProduct.quantity}
 								</span>
 							</div>
-							<div className='cart-quantity-buttons'>
-								<Button
-									background='rgb(201, 165, 89)'
-									width='30px'
-									disabled={isLoading.status}
-									onClick={() =>
-										onAddCartProduct(
-											dispatch,
-											userRole,
-											cartProducts,
-											cartProduct.title,
-											cartProduct.id
-										)
-									}>
-									+
-								</Button>
-								<Button
-									background='rgb(201, 165, 89)'
-									width='30px'
-									disabled={isLoading.status}
-									onClick={() =>
-										onReduceCartProduct(cartProduct.id, cartProduct.quantity)
-									}>
-									-
-								</Button>
-							</div>
+							<CartQuantityButtons
+								onRemoveCartProduct={onRemoveCartProduct}
+								cartProduct={cartProduct}
+							/>
 						</div>
 					)}
 				</div>
@@ -122,11 +87,6 @@ export const CartProductCard = styled(CartProductCardContainer)`
 		margin: 50px 50px 50px 125px;
 	}
 
-	& .cart-quantity-buttons {
-		display: flex;
-		gap: 5px;
-	}
-
 	& .right-cart-block {
 		display: flex;
 		flex-direction: column;
@@ -135,7 +95,7 @@ export const CartProductCard = styled(CartProductCardContainer)`
 		margin-bottom: 10px;
 	}
 
-	& .cart-cart-text {
+	& .cart-card-text {
 		display: flex;
 		flex-direction: column;
 	}

@@ -16,9 +16,9 @@ const authFormSchema = yup.object().shape({
 	formTitle: yup
 		.string()
 		.required('Введите название товара')
-		.matches(/^[A-Za-zА-Яа-яЁё0-9\s]+$/, 'Недопустимое название товара')
+		.matches(/^[A-Za-zА-Яа-яЁё0-9\s-]+$/, 'Недопустимое название товара')
 		.min(3, 'Недопустимое название товара. Минимум 3 символа')
-		.max(20, 'Недопустимое название товара. Максмиум 20 символов'),
+		.max(40, 'Недопустимое название товара. Максмиум 40 символов'),
 	formCategory: yup
 		.string()
 		.required('Введите категорию товара')
@@ -27,7 +27,7 @@ const authFormSchema = yup.object().shape({
 			'Недопустимое название категории товара'
 		)
 		.min(3, 'Недопустимое название категории. Минимум 6 символов')
-		.max(15, 'Недопустимое название категории. Максиум 15 символов'),
+		.max(25, 'Недопустимое название категории. Максиум 25 символов'),
 	formCost: yup
 		.number()
 		.required('Введите стоимость товара')
@@ -67,7 +67,7 @@ const authFormSchema = yup.object().shape({
 		.required('Введите описание товара')
 		.matches(/^(?!.* {2}).*$/, 'Недопустимое описание товара')
 		.min(3, 'Недопустимое описание товара. Минимум 3 символа')
-		.max(99, 'Недопустимое описание товара. Максмиум 99 символов'),
+		.max(250, 'Недопустимое описание товара. Максмиум 250 символов'),
 })
 
 const ModalContainer = ({ className }) => {
@@ -132,6 +132,9 @@ const ModalContainer = ({ className }) => {
 		formImage,
 		formTextUrl,
 	}) => {
+		const deleteImageFlag =
+			!formImage || !formImage || formImage.length <= 0 ? 'false' : 'true'
+
 		const imageToSubmit = formTextUrl || (formImage && formImage[0]) || image
 
 		const formData = new FormData()
@@ -141,6 +144,7 @@ const ModalContainer = ({ className }) => {
 		formData.append('storeAmount', formStoreAmount)
 		formData.append('image', imageToSubmit)
 		formData.append('info', formInfo)
+		formData.append('deleteImageFlag', deleteImageFlag)
 
 		onConfirm(product.id, formData, resetInputs)
 	}

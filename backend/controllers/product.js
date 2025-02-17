@@ -2,9 +2,8 @@ const Product = require('../models/Product')
 const fs = require('fs')
 const path = require('path')
 
-const handleImageAndCheckProduct = async (id) => {
-	const product = await Product.findById(id)
-
+const deleteImage = async (productId) => {
+	const product = await Product.findById(productId)
 	if (!product) {
 		return
 	}
@@ -15,17 +14,12 @@ const handleImageAndCheckProduct = async (id) => {
 		return
 	}
 
-	await new Promise((resolve, reject) => {
-		fs.unlink(imagePath, (err) => {
-			if (err) {
-				console.error('Error deleting file:', err)
-				return reject(err)
-			}
-			resolve()
-		})
+	fs.unlink(imagePath, (err) => {
+		if (err) {
+			console.error('Error deleting file:', err)
+			return err
+		}
 	})
-
-	return
 }
 
 const addProduct = async (product) => {
@@ -34,13 +28,13 @@ const addProduct = async (product) => {
 	return newProduct
 }
 
-const editProduct = async (id, updatedProductData, imgStatus) => {
-	if (imgStatus) {
-		await handleImageAndCheckProduct(id)
+const editProduct = async (id, deleteImageFlag, updatedProductData) => {
+	if (deleteImageFlag === 'true') {
+		await deleteImage(id)
 	}
 
 	const finalProduct = await Product.findByIdAndUpdate(id, updatedProductData, {
-		returnDocument: 'after',
+		new: true,
 	})
 
 	return finalProduct

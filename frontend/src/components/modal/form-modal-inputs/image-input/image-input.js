@@ -57,6 +57,7 @@ export const ImageInput = styled(ImageInputContainer)`
 		position: relative;
 		margin-bottom: 5px;
 	}
+
 	& .change-typing-image-icon {
 		position: absolute;
 		right: 30px;
@@ -68,6 +69,8 @@ export const ImageInput = styled(ImageInputContainer)`
 	}
 	& .typing-image-url {
 		padding: 13px;
+	}
+	& input {
 		padding-right: 35px;
 	}
 `

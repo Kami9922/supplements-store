@@ -3,15 +3,15 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Button } from '../../components/button/button'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../../actions/other/set-user'
 import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 import { ROLE } from '../../constants/role'
-import { AuthFormError } from '../../components/auth-form-error/auth-form-error'
 import { useResetForm } from '../../hooks/use-reset-form'
 import { request } from '../../utils/request'
+import { AuthInputs } from './auth-inputs'
+import { AuthButtonAndLink } from './auth-buttons-and-link'
 
 const authFormSchema = yup.object().shape({
 	login: yup
@@ -76,32 +76,14 @@ const AuthorizationContainer = ({ className }) => {
 		<div className={className}>
 			<h2>Авторизация</h2>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<input
-					type='text'
-					placeholder='Логин...'
-					{...register('login', {
-						onChange: () => setServerError(null),
-					})}
+				<AuthInputs
+					register={register}
+					setServerError={setServerError}
 				/>
-				<input
-					type='password'
-					placeholder='Пароль...'
-					{...register('password', {
-						onChange: () => setServerError(null),
-					})}
+				<AuthButtonAndLink
+					errorMessage={errorMessage}
+					formError={formError}
 				/>
-				<Button
-					height='40px'
-					type='submit'
-					disabled={!!formError}>
-					Авторизоваться
-				</Button>
-				{errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}
-				<Link
-					className='to-register-link'
-					to='/register'>
-					Регистрация
-				</Link>
 			</form>
 		</div>
 	)

@@ -12,6 +12,7 @@ import { ROLE } from '../../constants/role'
 import { AuthFormError } from '../../components/auth-form-error/auth-form-error'
 import { useResetForm } from '../../hooks/use-reset-form'
 import { request } from '../../utils/request'
+import { RegistrationInputs } from './registration-inputs.'
 
 const regFormSchema = yup.object().shape({
 	login: yup
@@ -85,26 +86,9 @@ const RegistrationContainer = ({ className }) => {
 		<div className={className}>
 			<h2>Регистрация</h2>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<input
-					type='text'
-					placeholder='Логин...'
-					{...register('login', {
-						onChange: () => setServerError(null),
-					})}
-				/>
-				<input
-					type='password'
-					placeholder='Пароль...'
-					{...register('password', {
-						onChange: () => setServerError(null),
-					})}
-				/>
-				<input
-					type='password'
-					placeholder='Проверка пароля...'
-					{...register('passcheck', {
-						onChange: () => setServerError(null),
-					})}
+				<RegistrationInputs
+					register={register}
+					setServerError={setServerError}
 				/>
 				<Button
 					height='40px'
