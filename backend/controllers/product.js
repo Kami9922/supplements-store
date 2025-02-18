@@ -41,7 +41,7 @@ const editProduct = async (id, deleteImageFlag, updatedProductData) => {
 }
 
 const deleteProduct = async (id) => {
-	await handleImageAndCheckProduct(id)
+	await deleteImage(id)
 	await Product.findByIdAndDelete(id)
 }
 
