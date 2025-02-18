@@ -1,7 +1,7 @@
 require('dotenv').config()
 const path = require('path')
 
-const cors = require('cors')
+// const cors = require('cors')
 
 const express = require('express')
 const mongoose = require('mongoose')
@@ -9,15 +9,7 @@ const cookieParser = require('cookie-parser')
 const routes = require('./routes')
 
 const app = express()
-const port = 5000
-
-app.use(
-	cors({
-		origin: 'http://80.90.187.152:3000',
-		methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-		credentials: true,
-	})
-)
+const port = 3000
 
 app.use(cookieParser())
 app.use(express.json({ extended: true }))
