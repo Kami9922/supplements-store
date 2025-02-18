@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { Icon } from '../../../../components/icon/icon'
 
 const PaginationContainer = ({ className, page, lastPage, setPage }) => {
@@ -71,8 +70,3 @@ export const Pagination = styled(PaginationContainer)`
 		text-align: center;
 	}
 `
-Pagination.propTypes = {
-	page: PropTypes.number.isRequired,
-	lastPage: PropTypes.number.isRequired,
-	setPage: PropTypes.func.isRequired,
-}

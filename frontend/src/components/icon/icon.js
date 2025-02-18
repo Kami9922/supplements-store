@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 
 const IconContainer = ({
 	className,
@@ -34,8 +33,3 @@ export const Icon = styled(IconContainer)`
 			transActive ? 'translate(0px, -1px)' : 'translate(0px, 0px)'};
 	}
 `
-Icon.propTypes = {
-	id: PropTypes.string.isRequired,
-	inactive: PropTypes.bool,
-	active: PropTypes.bool,
-}
