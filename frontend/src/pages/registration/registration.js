@@ -1,18 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '../../components/button/button'
 import { Navigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../../actions/other/set-user'
 import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 import { ROLE } from '../../constants/role'
 import { AuthFormError } from '../../components/auth-form-error/auth-form-error'
 import { useResetForm } from '../../hooks/use-reset-form'
-import { request } from '../../utils/request'
 import { RegistrationInputs } from './registration-inputs.'
+import { loginOrRegisterAsync } from '../../actions/other/login-or-register-async'
 
 const regFormSchema = yup.object().shape({
 	login: yup
@@ -36,8 +34,6 @@ const regFormSchema = yup.object().shape({
 })
 
 const RegistrationContainer = ({ className }) => {
-	const dispatch = useDispatch()
-
 	const {
 		register,
 		reset,
@@ -52,31 +48,21 @@ const RegistrationContainer = ({ className }) => {
 		resolver: yupResolver(regFormSchema),
 	})
 
-	const [serverError, setServerError] = useState(null)
+	const dispatch = useDispatch()
 
 	const roleId = useSelector(selectUserRole)
 
 	useResetForm(reset)
 
 	const onSubmit = ({ login, password }) => {
-		request('/register', 'POST', { login, password }).then(
-			({ error, user }) => {
-				if (error) {
-					setServerError(`Ошибка запроса: ${error}`)
-					return
-				}
-
-				dispatch(setUser(user))
-				sessionStorage.setItem('userData', JSON.stringify(user))
-			}
-		)
+		dispatch(loginOrRegisterAsync(login, password, 'reg'))
 	}
 
 	const formError =
 		errors?.login?.message ||
 		errors?.password?.message ||
 		errors?.passcheck?.message
-	const errorMessage = formError || serverError
+	const errorMessage = formError
 
 	if (roleId !== ROLE.GUEST) {
 		return <Navigate to='/'></Navigate>
@@ -86,10 +72,7 @@ const RegistrationContainer = ({ className }) => {
 		<div className={className}>
 			<h2>Регистрация</h2>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<RegistrationInputs
-					register={register}
-					setServerError={setServerError}
-				/>
+				<RegistrationInputs register={register} />
 				<Button
 					height='40px'
 					type='submit'

@@ -1,19 +1,15 @@
-export const AuthInputs = ({ register, setServerError }) => {
+export const AuthInputs = ({ register }) => {
 	return (
 		<>
 			<input
 				type='text'
 				placeholder='Логин...'
-				{...register('login', {
-					onChange: () => setServerError(null),
-				})}
+				{...register('login', {})}
 			/>
 			<input
 				type='password'
 				placeholder='Пароль...'
-				{...register('password', {
-					onChange: () => setServerError(null),
-				})}
+				{...register('password', {})}
 			/>
 		</>
 	)

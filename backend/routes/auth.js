@@ -8,10 +8,8 @@ const router = express.Router({ mergeParams: true })
 router.post('/register', async (req, res) => {
 	try {
 		const { user, token } = await register(req.body.login, req.body.password)
-		const newCart = await addNewCart(user._id)
-		res
-			.cookie('token', token, { httpOnly: true })
-			.send({ error: null, user: mapUser(user), newCart })
+		await addNewCart(user._id)
+		res.cookie('token', token, { httpOnly: true }).send({ user: mapUser(user) })
 	} catch (error) {
 		res.send({ error: 'Failed to register' })
 	}
@@ -21,9 +19,7 @@ router.post('/login', async (req, res) => {
 	try {
 		const { user, token } = await login(req.body.login, req.body.password)
 
-		res
-			.cookie('token', token, { httpOnly: true })
-			.send({ error: null, user: mapUser(user) })
+		res.cookie('token', token, { httpOnly: true }).send({ user: mapUser(user) })
 	} catch (error) {
 		res.send({ error: 'Failed to login' })
 	}

@@ -1,17 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { useState } from 'react'
 import styled from 'styled-components'
 import { Navigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../../actions/other/set-user'
 import { selectUserRole } from '../../selectors/user-selectors/select-user-role'
 import { ROLE } from '../../constants/role'
 import { useResetForm } from '../../hooks/use-reset-form'
-import { request } from '../../utils/request'
 import { AuthInputs } from './auth-inputs'
 import { AuthButtonAndLink } from './auth-buttons-and-link'
+import { loginOrRegisterAsync } from '../../actions/other/login-or-register-async'
+import { useDispatch, useSelector } from 'react-redux'
 
 const authFormSchema = yup.object().shape({
 	login: yup
@@ -32,8 +30,6 @@ const authFormSchema = yup.object().shape({
 })
 
 const AuthorizationContainer = ({ className }) => {
-	const dispatch = useDispatch()
-
 	const {
 		register,
 		reset,
@@ -47,26 +43,18 @@ const AuthorizationContainer = ({ className }) => {
 		resolver: yupResolver(authFormSchema),
 	})
 
-	const [serverError, setServerError] = useState(null)
-
 	const roleId = useSelector(selectUserRole)
+
+	const dispatch = useDispatch()
 
 	useResetForm(reset)
 
 	const onSubmit = ({ login, password }) => {
-		request('/login', 'POST', { login, password }).then(({ error, user }) => {
-			if (error) {
-				setServerError(`Ошибка запроса: ${error}`)
-				return
-			}
-
-			dispatch(setUser(user))
-			sessionStorage.setItem('userData', JSON.stringify(user))
-		})
+		dispatch(loginOrRegisterAsync(login, password, 'auth'))
 	}
 
 	const formError = errors?.login?.message || errors?.password?.message
-	const errorMessage = formError || serverError
+	const errorMessage = formError
 
 	if (roleId !== ROLE.GUEST) {
 		return <Navigate to='/'></Navigate>
@@ -75,11 +63,9 @@ const AuthorizationContainer = ({ className }) => {
 	return (
 		<div className={className}>
 			<h2>Авторизация</h2>
+
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<AuthInputs
-					register={register}
-					setServerError={setServerError}
-				/>
+				<AuthInputs register={register} />
 				<AuthButtonAndLink
 					errorMessage={errorMessage}
 					formError={formError}

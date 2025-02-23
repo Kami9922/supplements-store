@@ -1,26 +1,20 @@
-export const RegistrationInputs = ({ register, setServerError }) => {
+export const RegistrationInputs = ({ register }) => {
 	return (
 		<>
 			<input
 				type='text'
 				placeholder='Логин...'
-				{...register('login', {
-					onChange: () => setServerError(null),
-				})}
+				{...register('login', {})}
 			/>
 			<input
 				type='password'
 				placeholder='Пароль...'
-				{...register('password', {
-					onChange: () => setServerError(null),
-				})}
+				{...register('password', {})}
 			/>
 			<input
 				type='password'
 				placeholder='Проверка пароля...'
-				{...register('passcheck', {
-					onChange: () => setServerError(null),
-				})}
+				{...register('passcheck', {})}
 			/>
 		</>
 	)

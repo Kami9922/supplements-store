@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser')
 const routes = require('./routes')
 
 const app = express()
-const port = 3000
+const port = 5000
 
 app.use(cookieParser())
 app.use(express.json({ extended: true }))
